@@ -80,6 +80,7 @@ class _HomePageState extends State<HomePage> {
       point = int.parse(jsonData["point"]);
       bank = jsonData["bank"];
     });
+    changeSortTextToMonth();
   }
 
   @override
@@ -149,9 +150,7 @@ class _HomePageState extends State<HomePage> {
                     if (index == 1){
                       showDatePickerDialog();
                     }else {
-                      String monthAgo = today.subtract(Duration(days:30)).toString().split(' ')[0];
-                      String todayDate = today.toString().split(' ')[0];
-                      setSortDateText(monthAgo, todayDate);
+                      changeSortTextToMonth();
                     }
                   },              
                   children: const [
@@ -285,6 +284,12 @@ class _HomePageState extends State<HomePage> {
       )
     )
   );
+
+  void changeSortTextToMonth(){
+    String monthAgo = today.subtract(Duration(days:30)).toString().split(' ')[0];
+    String todayDate = today.toString().split(' ')[0];
+    setSortDateText(monthAgo, todayDate);
+  }
 
   showDatePickerDialog()=>
     showDialog(

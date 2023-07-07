@@ -1,5 +1,4 @@
 import 'package:data_project/main.dart';
-import 'package:data_project/screens/start/service_terms.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterfire_ui/auth.dart';

@@ -61,7 +61,6 @@ class _BasicInfoState extends State<BasicInfo> {
       Map jsonData = jsonDecode(jsonString);
       basicInfoList = jsonData["basicInfo"];
       isFirstLogin = widget.isNewUser;
-      print(isFirstLogin);
     });
     selected = [selected1, selected2, selected3, selected4, selected5, selected6];
   }

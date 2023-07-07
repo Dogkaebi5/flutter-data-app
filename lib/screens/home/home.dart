@@ -95,6 +95,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text("데이플러스"),
+        automaticallyImplyLeading: false,
         actions: [
           IconButton(
             onPressed: (){

@@ -60,8 +60,6 @@ passwordDialog(context, callback) {
                     if(isCorrect){
                       Navigator.pop(context);
                       callbackFunc();
-                      // ignore: use_build_context_synchronously
-                      // 
                     } else {
                       print("wrong");
                     }

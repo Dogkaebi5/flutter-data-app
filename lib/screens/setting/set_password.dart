@@ -1,3 +1,4 @@
+import 'package:data_project/data/new_user_storage.dart';
 import 'package:data_project/data/password_setter.dart';
 import 'package:data_project/main.dart';
 import 'package:data_project/screens/setting/basic_info.dart';
@@ -13,6 +14,7 @@ class SetPassword extends StatefulWidget {
 
 class _SetPassword extends State<SetPassword> {
   PasswordStorage storage = PasswordStorage();
+  NewUserStorage userStorage = NewUserStorage();
   bool _isVisibility = false;
   String _newPassword = "";
   String _checkNewPassword = ".";
@@ -24,7 +26,18 @@ class _SetPassword extends State<SetPassword> {
   bool isFirstLogin = true;
 
   @override
+  void initState() {
+    super.initState();
+    var fileContent = userStorage.read();
+    // ignore: unrelated_type_equality_checks
+    if (fileContent == "false"){
+      setState(() {
+        isFirstLogin = false;
+      });
+    }
+  }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(

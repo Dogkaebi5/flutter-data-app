@@ -76,7 +76,7 @@ class _InterestState extends State<Interest> {
                     if(isFirstLogin){
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => AddInfo()),
+                        MaterialPageRoute(builder: (context) => AddInfo(isFirstLogin)),
                       );
                     }else{
                       Navigator.push(

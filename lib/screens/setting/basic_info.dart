@@ -1,9 +1,12 @@
 import 'dart:convert';
 
+import 'package:data_project/screens/setting/data_setting.dart';
+import 'package:data_project/screens/setting/interest_info.dart';
 import 'package:flutter/material.dart';
 
 class BasicInfo extends StatefulWidget {
-  const BasicInfo({super.key});
+  final bool isNewUser;
+  const BasicInfo({super.key, required this.isNewUser});
 
   @override
   State<BasicInfo> createState() => _BasicInfoState();
@@ -49,7 +52,7 @@ class _BasicInfoState extends State<BasicInfo> {
   String? selected4;
   String? selected5;
   String? selected6;
-
+  bool isFirstLogin = false;
 
   @override
   void initState(){
@@ -57,10 +60,10 @@ class _BasicInfoState extends State<BasicInfo> {
     setState(() {
       Map jsonData = jsonDecode(jsonString);
       basicInfoList = jsonData["basicInfo"];
-      print(basicInfoList[0]['title']);
+      isFirstLogin = widget.isNewUser;
+      print(isFirstLogin);
     });
     selected = [selected1, selected2, selected3, selected4, selected5, selected6];
-
   }
 
   @override
@@ -69,7 +72,7 @@ class _BasicInfoState extends State<BasicInfo> {
       appBar: AppBar(
         title: Text('기본정보'),
         centerTitle: true,
-
+        automaticallyImplyLeading: false,
         ),
       body: SingleChildScrollView(
         child: Container(
@@ -97,7 +100,23 @@ class _BasicInfoState extends State<BasicInfo> {
               Container(
                 margin: EdgeInsets.only(top: 20, bottom: 20),
                 width: double.maxFinite,
-                child: ElevatedButton(onPressed: (){}, child: Text('확인 저장')),
+                child: ElevatedButton(
+                  onPressed: (){
+                    saveBasicData();
+                    if(isFirstLogin){
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Interest(isNewUser: isFirstLogin)),
+                      );
+                    }else{
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => DataPage()),
+                      );
+                    }
+                  }, 
+                  child: Text('확인 저장')
+                ),
               ),
             ],
           ),
@@ -105,6 +124,9 @@ class _BasicInfoState extends State<BasicInfo> {
       )
       
     );
+  }
+  saveBasicData(){
+
   }
 
   createTextInput(title, initValue)=> Column(

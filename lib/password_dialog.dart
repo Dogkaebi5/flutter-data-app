@@ -58,7 +58,6 @@ passwordDialog(context, callback) {
                   :() async{
                     var isCorrect = await checkPassword(password);
                     if(isCorrect){
-                      print(isCorrect);
                       Navigator.pop(context);
                       callbackFunc();
                       // ignore: use_build_context_synchronously

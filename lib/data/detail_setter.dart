@@ -57,7 +57,6 @@ class DetailStorage {
   }
 }
 
-
 Details detailsFromJson(String str) => Details.fromJson(json.decode(str));
 String detailsToJson(Details data) => json.encode(data.toJson());
 

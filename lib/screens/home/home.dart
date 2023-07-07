@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:data_project/data/password_setter.dart';
 import 'package:data_project/screens/home/home_dialog.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:data_project/screens/home/notifications.dart';
@@ -107,9 +108,9 @@ class _HomePageState extends State<HomePage> {
           IconButton(
             onPressed: (){
               Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const SettingPage()),
-                );
+                context,
+                MaterialPageRoute(builder: (context) => const SettingPage()),
+              );
             }, 
             icon: Icon(Icons.settings)
           ),
@@ -199,6 +200,12 @@ class _HomePageState extends State<HomePage> {
             TextButton(
               onPressed: () => FirebaseAuth.instance.signOut(),
               child: Text("로그아웃")
+            ),
+            TextButton(
+              onPressed: () {
+                PasswordStorage().writePassword("");
+              },
+              child: Text("비번del"),
             ),
           ]
         ),

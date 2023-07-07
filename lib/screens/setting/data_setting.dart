@@ -20,7 +20,7 @@ class DataPage extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const BasicInfo()),
+                  MaterialPageRoute(builder: (context) => const BasicInfo(isNewUser:false)),
                 );
               },
               child: Container(
@@ -43,7 +43,7 @@ class DataPage extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const Interest()),
+                  MaterialPageRoute(builder: (context) => const Interest(isNewUser:false)),
                 );
               },
               child: Container(

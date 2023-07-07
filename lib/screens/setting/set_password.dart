@@ -75,20 +75,25 @@ class _SetPassword extends State<SetPassword> {
               width: double.infinity,
               height: 40, 
               child: ElevatedButton(
-                onPressed: checkPassword()?
-                  (){
-                    storage.writePassword(_newPassword);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) =>  MyApp()),
-                    );
-                    // else {
-                    //   Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(builder: (context) =>  BasicInfo()),
-                    //   );
-                    // }
-                  } : null,
+                onPressed: 
+                  checkPassword()
+                  ?(){
+                      storage.writePassword(_newPassword);
+                      if (isFirstLogin) {
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(builder: (context) =>  BasicInfo(isNewUser: isFirstLogin)),
+                          ModalRoute.withName('/'),
+                        );
+                      }else {
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(builder: (context) =>  MyApp()),
+                          ModalRoute.withName('/'),
+                        );
+                      }
+                    }
+                  : null,                   
                 child: Text('확인'), 
               )
             ),

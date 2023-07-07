@@ -13,7 +13,6 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(const MyApp());
-  
 }
 
 class MyApp extends StatelessWidget {
@@ -43,8 +42,11 @@ class Authentication extends StatefulWidget {
 class _AuthenticationState extends State<Authentication> {
   String _password = "";
   bool isUserHasPassword(){
-    if(_password.length >=4){ return true;
-    } else { return false; }
+    if(_password.length >=4){ 
+      return true;
+    }else{ 
+      return false;
+    }
   }
 
   @override

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AddInfo extends StatefulWidget {
+
   const AddInfo({super.key});
 
   @override
@@ -12,8 +13,8 @@ class _AddInfoState extends State<AddInfo> {
   List _Interest = ["보험설계", '대출', '예금/적금', ];
   final _haveChild = ['미기입', '없음', '있음'];
   var _selected2 = '미기입';
+  bool isFirstLogin = false;
 
-  
   @override
   Widget build(BuildContext context) {
     return Scaffold(

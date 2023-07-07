@@ -1,4 +1,6 @@
+import 'package:data_project/data/new_user_storage.dart';
 import 'package:data_project/screens/home/home.dart';
+import 'package:data_project/screens/setting/data_setting.dart';
 import 'package:flutter/material.dart';
 
 class AddInfo extends StatefulWidget {
@@ -43,6 +45,7 @@ class _AddInfoState extends State<AddInfo> {
               Text('입력된 정보는 3개월간 수정 불가합니다.'),
               Text('2023.01.01 ~ 2023. 03. 01'),
               SizedBox(height: 20,),
+
               Center(
                 child: ToggleButtons(
                   onPressed: (index) {
@@ -63,6 +66,7 @@ class _AddInfoState extends State<AddInfo> {
                 ),
               ),
               SizedBox(height: 20,),
+
               Container(margin: EdgeInsets.only(top:20), child: Text('자녀유무')),
                 SizedBox(
                   width: double.maxFinite,
@@ -88,11 +92,26 @@ class _AddInfoState extends State<AddInfo> {
                   child: ElevatedButton(
                     onPressed: (){
                       if (_selections[2] && isFirstLogin){
+                        NewUserStorage().write("false");
                         Navigator.pushAndRemoveUntil(
                           context, 
                           MaterialPageRoute(builder: (context) => HomePage()),
                           ModalRoute.withName('/'),
                         );
+                      }else if (_selections[2]) {
+                        Navigator.pushAndRemoveUntil(
+                          context, 
+                          MaterialPageRoute(builder: (context) => DataPage()),
+                          ModalRoute.withName('/'),
+                        );
+                      }else if (_selections[1]) {
+                        setState(() {
+                          _selections = [false, false, true];
+                        });
+                      }else {
+                        setState(() {
+                          _selections = [false, true, false];
+                        });
                       }
                     }, 
                     child: Text('확인 저장')

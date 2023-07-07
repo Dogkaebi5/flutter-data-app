@@ -1,4 +1,4 @@
-import 'package:data_project/data/data_setter.dart';
+import 'package:data_project/data/password_setter.dart';
 import 'package:data_project/firebase_options.dart';
 import 'package:data_project/screens/home/home.dart';
 import 'package:data_project/screens/start/service_terms.dart';
@@ -13,6 +13,7 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(const MyApp());
+  
 }
 
 class MyApp extends StatelessWidget {

@@ -1,4 +1,4 @@
-import 'package:data_project/screens/setting/Interest_info.dart';
+import 'package:data_project/screens/setting/interest_info.dart';
 import 'package:data_project/screens/setting/additional_info.dart';
 import 'package:data_project/screens/setting/basic_info.dart';
 import 'package:data_project/screens/setting/permission.dart';

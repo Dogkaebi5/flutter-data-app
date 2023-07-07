@@ -1,3 +1,0 @@
-class PasswordSetter {
-  String password = "";
-}

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:data_project/screens/home/home_dialog.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:data_project/screens/home/notifications.dart';
 import 'package:data_project/screens/setting/setting.dart';
@@ -15,21 +16,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  // List<Details> details = <Details>[];
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   Service.getInfo().then((value){
-  //     setState(() {
-  //       details = value;
-  //     });
-  //   });
-  // }
+
   String jsonString = ''' 
     { "details": 
       [{
-        "id": "10000",
         "title": "데이터 판매",
+        "id": "10000",
         "type": "리워드",
         "date": "2023-01-01 23:59:59",
         "point": "+ 20,000 P",
@@ -37,14 +29,28 @@ class _HomePageState extends State<HomePage> {
         "info": ["닉네임", "연령층",  "이메일", "성함", "휴대폰", "성별","출생연도","결혼정보","자녀정보","최종학력","직업","소득수준","거주지역","관심사 1","관심사 2","관심사 3"]
       },
       {
-        "id": "20000",
         "title": "텔레마케팅 판매",
+        "id": "20000",
         "type": "리워드",
         "date": "2023-01-01 23:59:59",
         "point": "+ 20,000 P",
         "buyer": "(주)테스트회사",
         "info": ["닉네임", "연령층",  "이메일", "성함", "휴대폰","텔레마케팅","성별","출생연도","결혼정보","자녀정보","최종학력","직업","소득수준","거주지역","관심사 1"]
-      }],
+      },
+      {
+        "title": "출금",
+        "id": "30000",
+        "type": "출금",
+        "date": "2023-01-01 23:59:59",
+        "point": "- 10,000 P",
+        "withdraw": "10,000 P",
+        "fee": "0 P",
+        "tax": "660 원",
+        "amount": "9,340 원",
+        "account": ["홍길동", "카카오뱅크 3333123456789"],
+        "status" : "접수"
+      }
+      ],
 
       "bank": {
         "username": "홍길동",
@@ -113,10 +119,12 @@ class _HomePageState extends State<HomePage> {
         margin: EdgeInsets.only(left:20, right:20,),
         child: Column(
           children: [
+            //포인트 표기
             Center(
               heightFactor: 3,
               child: Text("$point P", style: TextStyle(fontSize: 28),)
             ),
+            //출금신청 링크
             InkWell(
               onTap: () {
                 Navigator.push(
@@ -129,17 +137,17 @@ class _HomePageState extends State<HomePage> {
                 color: const Color.fromARGB(255, 194, 226, 241) ,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
-                    Text("출금신청"),
-                    Icon(Icons.arrow_forward_ios),
+                  children: const [Text("출금신청"), Icon(Icons.arrow_forward_ios),
                 ]),
               ),
             ),
             Divider(thickness: 2,),
+            
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                //소팅선택
                 ToggleButtons(
                   isSelected: _selections,
                   onPressed: (index) {
@@ -147,9 +155,9 @@ class _HomePageState extends State<HomePage> {
                       _selections = [false, false];
                       _selections[index] = !_selections[index];
                     });
-                    if (index == 1){
+                    if (index == 1) {
                       showDatePickerDialog();
-                    }else {
+                    } else {
                       changeSortTextToMonth();
                     }
                   },              
@@ -165,44 +173,28 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
                 SizedBox(height: 8,),
-                Text(
-                  '검색기간 : $sortStartDate ~ $sortEndDate', 
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 12,
-                  ),  
-                ),
+                
+                if(_selections[1])
+                  Text(
+                    '검색기간 : $sortStartDate ~ $sortEndDate', 
+                    style: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 12,
+                    ),  
+                  ),
               ],
             ),
-            for(var i = 0; i < newDetails.length; i++)
-              InkWell(
-                onTap: () => detailDialog(i), 
-                child: Container(
-                  margin: EdgeInsets.all(8),
-                  padding: EdgeInsets.all(12),
-                  color: const Color.fromARGB(255, 194, 226, 241) ,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(newDetails[i]['title'] + "  " + newDetails[i]['point'],),
-                          SizedBox(height: 4,),
-                          Text(
-                            newDetails[i]['date'].split(' ')[0], 
-                            style: TextStyle(
-                              color: Colors.black45, 
-                              fontSize: 12
-                            ),
-                          ),
-                        ],
-                      ),
-                      Icon(Icons.arrow_forward_ios),
-                  ]),
-                ),
-              ),
-            
+            SizedBox(height: 20,),
+
+            //디테일 링크
+            if(newDetails.length < 0)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: const [Text("기록이 없습니다.")],
+              )
+              else 
+                for(var i = 0; i < newDetails.length; i++)
+                  createDetailCards(i),
             Spacer(),
             TextButton(
               onPressed: () => FirebaseAuth.instance.signOut(),
@@ -214,77 +206,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
   
-  detailDialog(i) => showDialog(
-    context: context,
-    builder: (BuildContext context) => Dialog.fullscreen(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          IconButton(
-            onPressed: (){
-              Navigator.pop(context);
-            }, 
-            icon: Icon(Icons.close)
-          ),
-          Padding(
-            padding: EdgeInsets.all(20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(newDetails[i]['title'], style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
-                SizedBox(height: 15),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('거래ID'),
-                    Text(newDetails[i]['id']),
-                  ],),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('거래종류'),
-                    Text(newDetails[i]['type']),
-                  ],),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('거래일시'),
-                    Text(newDetails[i]['date']),
-                  ],),
-                Padding(
-                  padding: EdgeInsets.only(top:10),
-                  child: Divider(color: Colors.black54,),
-                ),
-                SizedBox(height: 20,),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('포인트 변화'),
-                    Text(newDetails[i]['point']),
-                ],),
-                SizedBox(height: 30,),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('구매자'),
-                    Text(newDetails[i]['buyer']),
-                ],),
-                SizedBox(height: 30,),
-                Text('구매내역'),
-                SizedBox(height: 20,),
-                for (int j = 0; j < newDetails[i]['info'].length; j++)
-                  Padding(
-                    padding: const EdgeInsets.only(left: 10),
-                    child: Text('• ' + newDetails[i]['info'][j]),
-                  )
-              ]),
-          ),
-          
-        ]
-      )
-    )
-  );
-
   void changeSortTextToMonth(){
     String monthAgo = today.subtract(Duration(days:30)).toString().split(' ')[0];
     String todayDate = today.toString().split(' ')[0];
@@ -322,4 +243,33 @@ class _HomePageState extends State<HomePage> {
       )
     );
 
+  createDetailCards(int loopInt){
+    return InkWell(
+      onTap: () => detailDialog(context, loopInt, newDetails), 
+      child: Container(
+        margin: EdgeInsets.all(8),
+        padding: EdgeInsets.all(12),
+        color: const Color.fromARGB(255, 194, 226, 241) ,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(newDetails[loopInt]['title'] + "  " + newDetails[loopInt]['point'],),
+                SizedBox(height: 4,),
+                Text(
+                  newDetails[loopInt]['date'].split(' ')[0], 
+                  style: TextStyle(
+                    color: Colors.black45, 
+                    fontSize: 12
+                  ),
+                ),
+              ],
+            ),
+            Icon(Icons.arrow_forward_ios),
+        ]),
+      ),
+    );
+  }
 }

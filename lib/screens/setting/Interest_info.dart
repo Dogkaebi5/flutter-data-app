@@ -7,8 +7,10 @@ class Interest extends StatefulWidget {
   State<Interest> createState() => _InterestState();
 }
 
+List<String> _list = ['보험설계', '대출', '예금/적금', '부동산', '주식', '가상자산'];
+
 class _InterestState extends State<Interest> {
-  List<String> _list = ['보험설계', '대출', '예금/적금', '부동산', '주식', '가상자산'];
+  
   var _choice = List.empty(growable: true);
   int _choiceCount = 0;
   List<bool> _isChecked = List.filled(6, false);
@@ -29,18 +31,10 @@ class _InterestState extends State<Interest> {
                   Text('선택된 정보는 3개월간 수정 불가합니다.'),
                   SizedBox(
                     height: 10,
+                  ),SizedBox(
+                    height: 80,
+                    child: createInterstLiskText(),
                   ),
-                  if(_choiceCount>0) Column(children: [
-                    for(var i = 0; i < _choice.length; i++)
-                      Row(children: [
-                        Padding(
-                          padding: const EdgeInsets.all(2.0),
-                          child: Text(_choice[i]),
-                        ),
-                        Spacer(),
-                        Text('2023.01.01 ~ 2023.03.31'),
-                      ],),
-                  ],),
                   Container(
                     margin: EdgeInsets.symmetric(vertical:10),
                     width: double.infinity,
@@ -62,7 +56,15 @@ class _InterestState extends State<Interest> {
                                     Card(
                                       color: _isChecked[i] ?  Colors.cyan : Colors.white,
                                       child: Center(
-                                        child:Text(
+                                        child:
+                                          _isChecked[i] ? 
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text((_list[i])),
+                                              Icon(Icons.close),
+                                            ])
+                                          : Text(
                                           _list[i],
                                           textAlign: TextAlign.center,
                                         ),
@@ -101,4 +103,23 @@ class _InterestState extends State<Interest> {
         // ),
     );
   }
+
+  createInterstLiskText(){
+    if(_choiceCount>0) {
+      return Column(
+        children: [
+          for(var i = 0; i < _choice.length; i++)
+            Row(children: [
+              Padding(
+                padding: const EdgeInsets.all(2.0),
+                child: Text(_choice[i]),
+              ),
+              Spacer(),
+              Text('2023.01.01 ~ 2023.03.31'),
+            ],),
+        ],
+      );
+    }
+  }
+
 }

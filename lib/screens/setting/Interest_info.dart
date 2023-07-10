@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:data_project/screens/setting/additional_info.dart';
 import 'package:data_project/screens/setting/data_setting.dart';
 import 'package:flutter/material.dart';
@@ -10,13 +12,34 @@ class Interest extends StatefulWidget {
   State<Interest> createState() => _InterestState();
 }
 
-List<String> _list = ["보험설계", "대출", "예금/적금", "부동산", "주식", "가상자산", "골프", "테니스", "피트니스", "요가", "건강식품", "교육", "육아용품", "자동차", "국내여행", "해외여행", "캠핑", "낚시", "반려동물"];
+String userInterest = '''{
+  "보험설계": "false", 
+  "대출": "false", 
+  "예금/적금": "false", 
+  "부동산": "false", 
+  "주식": "false", 
+  "가상자산": "false", 
+  "골프": "false", 
+  "테니스": "false", 
+  "피트니스": "false", 
+  "요가": "false", 
+  "건강식품": "false", 
+  "교육": "false", 
+  "육아용품": "false", 
+  "자동차": "false", 
+  "국내여행": "false", 
+  "해외여행": "false", 
+  "캠핑": "false", 
+  "낚시": "false", 
+  "반려동물": "false",
+  "테스트": "true"
+}''';
 
 class _InterestState extends State<Interest> {
-  bool newbool = false;
-  var _choice = List.empty(growable: true);
-  int _choiceCount = 0;
-  List<bool> _isChecked = List.filled(19, false);
+  List<String> interestList = List.empty(growable: true);
+  List<bool> isSelectedList = List.empty(growable: true);
+  List selectedList = List.empty(growable: true);
+  int selectedCount = 0;
   bool isFirstLogin = false;
 
   @override
@@ -24,6 +47,12 @@ class _InterestState extends State<Interest> {
     super.initState();
     setState(() {
       isFirstLogin = widget.isNewUser;
+      Map jsonData = jsonDecode(userInterest);
+      jsonData.forEach((key, value) {
+        interestList.add(key);
+        bool valueToBoolean = (value == "true") ? true : false;
+        isSelectedList.add(valueToBoolean);
+      });
     });
   }
 
@@ -52,17 +81,11 @@ class _InterestState extends State<Interest> {
                 margin: EdgeInsets.symmetric(vertical:10),
                 width: double.infinity,
                 child:
-                  ListView(
-                    shrinkWrap: true,
-                    scrollDirection: Axis.vertical, 
+                  Wrap(
+                    direction: Axis.horizontal, 
                     children: [
-                      Wrap(
-                        direction: Axis.horizontal, 
-                        children: [
-                          for(var i = 0; i < _list.length; i++)
-                            createInterstCard(i)
-                        ],
-                      ),
+                      for(var i = 0; i < interestList.length; i++)
+                        createInterstCard(i)
                     ],
                   ),
               ),
@@ -98,15 +121,15 @@ class _InterestState extends State<Interest> {
 
   saveInterestData(){}
   createInterstLiskText(){
-    if(_choiceCount>0) {
+    if(selectedCount>0) {
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          for(var i = 0; i < _choice.length; i++)
+          for(var i = 0; i < selectedList.length; i++)
             Row(children: [
               Padding(
                 padding: const EdgeInsets.all(2.0),
-                child: Text(_choice[i]),
+                child: Text(selectedList[i]),
               ),
               Spacer(),
               Text('저장 유지기간 : ~ 2023.03.31'),
@@ -123,21 +146,21 @@ class _InterestState extends State<Interest> {
         width: 110,
         child: 
         Card(
-          color: _isChecked[i]? Color.fromARGB(255, 142, 57, 246) : Colors.white,
+          color: isSelectedList[i]? Color.fromARGB(255, 142, 57, 246) : Colors.white,
           child: Center(
             child:
-              _isChecked[i] ? 
+              isSelectedList[i] ? 
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text((_list[i]), style: TextStyle(color: Colors.white,),),
+                    Text((interestList[i]), style: TextStyle(color: Colors.white,),),
                     Icon(Icons.close, color: Colors.white, size: 16,),
                   ]),
               )
               : Text(
-              _list[i],
+              interestList[i],
               textAlign: TextAlign.center,
             ),
           ),
@@ -145,14 +168,14 @@ class _InterestState extends State<Interest> {
       ),
       onTap: (){
         setState(() {
-          if(_choice.contains(_list[i])){
-            _isChecked[i] = false;
-            _choice.remove(_list[i]);
-            _choiceCount --;
-          }else if(_choiceCount < 3){
-            _isChecked[i] = true;
-            _choice.add(_list[i]);
-            _choiceCount ++;
+          if(selectedList.contains(interestList[i])){
+            isSelectedList[i] = false;
+            selectedList.remove(interestList[i]);
+            selectedCount --;
+          }else if(selectedCount < 3){
+            isSelectedList[i] = true;
+            selectedList.add(interestList[i]);
+            selectedCount ++;
           }
         });
       }

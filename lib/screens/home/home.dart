@@ -1,6 +1,8 @@
 import 'dart:convert';
 
+import 'package:data_project/data/new_user_storage.dart';
 import 'package:data_project/data/password_setter.dart';
+import 'package:data_project/data/user_data_setter.dart';
 import 'package:data_project/screens/home/home_dialog.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:data_project/screens/home/notifications.dart';
@@ -207,6 +209,14 @@ class _HomePageState extends State<HomePage> {
                 PasswordStorage().writePassword("");
               },
               child: Text("비번del"),
+            ),
+            TextButton(
+              onPressed: () {
+                PasswordStorage().writePassword("");
+                UserBasicDataStorage().writeData("");
+                NewUserStorage().write("");
+              },
+              child: Text("reset"),
             ),
           ]
         ),

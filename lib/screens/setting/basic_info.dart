@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:data_project/data/user_data_setter.dart';
 import 'package:data_project/screens/setting/data_setting.dart';
 import 'package:data_project/screens/setting/interest_info.dart';
 import 'package:flutter/material.dart';
@@ -40,17 +41,12 @@ String jsonBasicDataSelect = '''{
     }]
 }''';
 
-String jsonUserBasicData = '''{
-  "nickname": "홍길동",
-  "email": "email@example.com",
-  "data": ["","","","","",""],
-  "date": ["","","","","",""]
-}''';
-
 class _BasicInfoState extends State<BasicInfo> {
   List basicInfoList = List.empty(growable: true);
   List<String?> selectedList = List.empty(growable: true);
   String? selected1, selected2, selected3, selected4, selected5, selected6;
+  List dateList = List.empty(growable: true);
+  String? date1, date2, date3, date4, date5, date6;
   bool isFirstLogin = false;
   String? userNickname;
   String? userEmail;
@@ -59,15 +55,21 @@ class _BasicInfoState extends State<BasicInfo> {
   void initState(){
     super.initState();
     setState(() {
+      isFirstLogin = widget.isNewUser;
       Map mapBasicData = jsonDecode(jsonBasicDataSelect);
       basicInfoList = mapBasicData["basicInfo"];
-      isFirstLogin = widget.isNewUser;
-      Map mapUserData = jsonDecode(jsonUserBasicData);
-      userNickname = mapUserData["nickname"];
-      userEmail = mapUserData["email"];
-      isFirstLogin ? 
-      selectedList = mapUserData["data"]
-      : selectedList = [selected1, selected2, selected3, selected4, selected5, selected6]; 
+      
+      if (isFirstLogin) {
+        userNickname = "홍길동";
+        userEmail = "email@example.com";
+        selectedList = [selected1, selected2, selected3, selected4, selected5, selected6];
+        dateList = [date1, date2, date3, date4, date5, date6]; 
+      }else{
+        userNickname = "홍길동";
+        userEmail = "email@example.com";
+        selectedList = List.filled(basicInfoList.length, selected1);
+        dateList = List.filled(basicInfoList.length, date1);
+      }
     });
   }
 
@@ -99,7 +101,8 @@ class _BasicInfoState extends State<BasicInfo> {
                 createBasicDataDropDown(
                   basicInfoList[i]['title'],
                   basicInfoList[i]['option'], 
-                  selectedList[i]
+                  selectedList[i],
+                  dateList[i]
                 ),
               
               Container(
@@ -130,8 +133,18 @@ class _BasicInfoState extends State<BasicInfo> {
       
     );
   }
+  
   saveBasicData(){
-    
+    String newData = '''
+    {
+      "nickname": "$userNickname",
+      "email": "$userEmail",
+      "data": $selectedList,
+      "date": $dateList
+    }
+    ''';
+    UserBasicDataStorage().writeData(newData);
+    print(newData);
   }
 
   createTextInput(title, initValue)=> Column(
@@ -150,11 +163,16 @@ class _BasicInfoState extends State<BasicInfo> {
           border: OutlineInputBorder(),
           contentPadding: EdgeInsets.all(10),
         ),
+        onChanged: (value) {
+          (title == "닉네임")
+          ?userNickname= value 
+          :userEmail = value;
+        },
       ),
     ],
   );
 
-  createBasicDataDropDown(String title, List list, selected){ 
+  createBasicDataDropDown(String title, List list, selected, date){ 
     return StatefulBuilder(
       builder: (BuildContext context, StateSetter setState) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -170,9 +188,14 @@ class _BasicInfoState extends State<BasicInfo> {
               value: e,
               child: Text(e),
             )).toList(), 
-            onChanged: (value) => setState(() => selected = value ?? "")
+            onChanged: (value) {
+              setState((){
+                selected = value ?? "";
+                date = DateTime.now().toString().split(" ")[0];
+              });
+            }
           ),
-          SizedBox(height: 24,),
+            SizedBox(height: 24,),
         ],
       )
     );

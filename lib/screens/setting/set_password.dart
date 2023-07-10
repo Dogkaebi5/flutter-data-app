@@ -24,14 +24,14 @@ class _SetPassword extends State<SetPassword> {
     } else if (_newPassword == _checkNewPassword) { return true; 
     } else {return false;}  
   }
-  bool isFirstLogin = false;
+  bool isFirstLogin = true;
 
   @override
   void initState() {
     super.initState();
-    if (userStorage.read() == "true"){
+    if (userStorage.read() == "false"){
       setState(() {
-        isFirstLogin = true;
+        isFirstLogin = false;
       });
     }
   }

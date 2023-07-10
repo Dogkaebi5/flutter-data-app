@@ -9,7 +9,7 @@ class UserBasicDataStorage {
   }
   Future<File> get _localFile async {
     final path = await _localPath;
-    return File('$path/userBasic.json');
+    return File('$path/userBasic.txt');
   }
   Future<String> readData() async {
     try {
@@ -33,7 +33,7 @@ class UserInterestDataStorage {
   }
   Future<File> get _localFile async {
     final path = await _localPath;
-    return File('$path/userInterest.json');
+    return File('$path/userInterest.txt');
   }
   Future<String> readData() async {
     try {
@@ -57,7 +57,7 @@ class UserAdditionalDataStorage {
   }
   Future<File> get _localFile async {
     final path = await _localPath;
-    return File('$path/userAddition.json');
+    return File('$path/userAddition.txt');
   }
   Future<String> readData() async {
     try {

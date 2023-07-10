@@ -65,11 +65,12 @@ class _BasicInfoState extends State<BasicInfo> {
         selectedList = [selected1, selected2, selected3, selected4, selected5, selected6];
         dateList = [date1, date2, date3, date4, date5, date6]; 
       }else{
-        userNickname = "홍길동";
-        userEmail = "email@example.com";
+        userNickname = "홍길순";
+        userEmail = "eeemail@example.com";
         selectedList = List.filled(basicInfoList.length, selected1);
         dateList = List.filled(basicInfoList.length, date1);
       }
+      //temporary reader
     });
   }
 
@@ -97,12 +98,11 @@ class _BasicInfoState extends State<BasicInfo> {
               Text('아래 입력된 정보는 3개월간 수정 불가합니다.'),
               SizedBox(height: 40,),
               
-              for (var i = 0; i < basicInfoList.length; i++)
+              for (int i = 0; i < basicInfoList.length; i++)
                 createBasicDataDropDown(
                   basicInfoList[i]['title'],
                   basicInfoList[i]['option'], 
-                  selectedList[i],
-                  dateList[i]
+                  i
                 ),
               
               Container(
@@ -139,12 +139,12 @@ class _BasicInfoState extends State<BasicInfo> {
     {
       "nickname": "$userNickname",
       "email": "$userEmail",
-      "data": $selectedList,
-      "date": $dateList
+      "data": "$selectedList",
+      "date": "$dateList"
     }
     ''';
     UserBasicDataStorage().writeData(newData);
-    print(newData);
+    //temporary writer
   }
 
   createTextInput(title, initValue)=> Column(
@@ -172,7 +172,7 @@ class _BasicInfoState extends State<BasicInfo> {
     ],
   );
 
-  createBasicDataDropDown(String title, List list, selected, date){ 
+  createBasicDataDropDown(String title, List list, int i){ 
     return StatefulBuilder(
       builder: (BuildContext context, StateSetter setState) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -183,15 +183,15 @@ class _BasicInfoState extends State<BasicInfo> {
           ),
           DropdownButton(
             isExpanded: true,
-            value: selected,
+            value: selectedList[i],
             items: list.map((e)=> DropdownMenuItem(
               value: e,
               child: Text(e),
             )).toList(), 
             onChanged: (value) {
               setState((){
-                selected = value ?? "";
-                date = DateTime.now().toString().split(" ")[0];
+                selectedList[i] = value as String?;
+                dateList[i] = DateTime.now().toString().split(" ")[0];
               });
             }
           ),

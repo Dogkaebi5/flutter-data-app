@@ -93,16 +93,14 @@ class _AddInfoState extends State<AddInfo> {
                     onPressed: (){
                       if (_selections[2] && isFirstLogin){
                         NewUserStorage().write("false");
-                        Navigator.pushAndRemoveUntil(
-                          context, 
+                        Navigator.push(
+                          context,
                           MaterialPageRoute(builder: (context) => HomePage()),
-                          ModalRoute.withName('/'),
                         );
                       }else if (_selections[2]) {
-                        Navigator.pushAndRemoveUntil(
-                          context, 
+                        Navigator.push(
+                          context,
                           MaterialPageRoute(builder: (context) => DataPage()),
-                          ModalRoute.withName('/'),
                         );
                       }else if (_selections[1]) {
                         setState(() {

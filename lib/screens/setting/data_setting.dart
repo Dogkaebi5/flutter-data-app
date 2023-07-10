@@ -2,6 +2,7 @@ import 'package:data_project/screens/setting/interest_info.dart';
 import 'package:data_project/screens/setting/additional_info.dart';
 import 'package:data_project/screens/setting/basic_info.dart';
 import 'package:data_project/screens/setting/permission.dart';
+import 'package:data_project/screens/setting/setting.dart';
 import 'package:flutter/material.dart';
 
 class DataPage extends StatelessWidget {
@@ -10,7 +11,18 @@ class DataPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('데이터 설정')),
+      appBar: AppBar(
+        title: Text('데이터 설정'),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios_new),
+          onPressed: (){
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => SettingPage()),
+            );
+          },
+        ),  
+      ),
       body: Container(
         margin: EdgeInsets.only(top: 20, left:20, right:20,),
         child: Column(

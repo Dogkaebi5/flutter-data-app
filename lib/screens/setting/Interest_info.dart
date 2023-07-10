@@ -12,7 +12,7 @@ class Interest extends StatefulWidget {
   State<Interest> createState() => _InterestState();
 }
 
-String userInterest = '''{
+String jsonUserInterest = '''{
   "보험설계": "false", 
   "대출": "false", 
   "예금/적금": "false", 
@@ -47,7 +47,7 @@ class _InterestState extends State<Interest> {
     super.initState();
     setState(() {
       isFirstLogin = widget.isNewUser;
-      Map jsonData = jsonDecode(userInterest);
+      Map jsonData = jsonDecode(jsonUserInterest);
       jsonData.forEach((key, value) {
         interestList.add(key);
         bool valueToBoolean = (value == "true") ? true : false;

@@ -15,6 +15,7 @@ class SetPassword extends StatefulWidget {
 class _SetPassword extends State<SetPassword> {
   PasswordStorage storage = PasswordStorage();
   NewUserStorage userStorage = NewUserStorage();
+
   bool _isVisibility = false;
   String _newPassword = "";
   String _checkNewPassword = ".";
@@ -23,16 +24,14 @@ class _SetPassword extends State<SetPassword> {
     } else if (_newPassword == _checkNewPassword) { return true; 
     } else {return false;}  
   }
-  bool isFirstLogin = true;
+  bool isFirstLogin = false;
 
   @override
   void initState() {
     super.initState();
-    var fileContent = userStorage.read();
-    // ignore: unrelated_type_equality_checks
-    if (fileContent == "false"){
+    if (userStorage.read() == "true"){
       setState(() {
-        isFirstLogin = false;
+        isFirstLogin = true;
       });
     }
   }

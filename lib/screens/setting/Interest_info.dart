@@ -31,14 +31,14 @@ String jsonUserInterest = '''{
   "해외여행": "false", 
   "캠핑": "false", 
   "낚시": "false", 
-  "반려동물": "false",
-  "테스트": "true"
+  "반려동물": "false"
 }''';
 
 class _InterestState extends State<Interest> {
   List<String> interestList = List.empty(growable: true);
   List<bool> isSelectedList = List.empty(growable: true);
   List selectedList = List.empty(growable: true);
+  List selectedDate = List.empty(growable: true);
   int selectedCount = 0;
   bool isFirstLogin = false;
 
@@ -75,7 +75,7 @@ class _InterestState extends State<Interest> {
               Text('선택된 정보는 3개월간 수정 불가합니다.'),
               SizedBox(
                 height: 88,
-                child: createInterstLiskText(),
+                child: createInterestListText(),
               ),
               Container(
                 margin: EdgeInsets.symmetric(vertical:10),
@@ -119,8 +119,14 @@ class _InterestState extends State<Interest> {
     );
   }
 
-  saveInterestData(){}
-  createInterstLiskText(){
+  saveInterestData(){
+    // String newData = '''{
+    //   "${selectedList[0]}" : "${selecteddate[0]}",
+    // }''';
+  }
+
+  createInterestListText(){
+    
     if(selectedCount>0) {
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -132,7 +138,7 @@ class _InterestState extends State<Interest> {
                 child: Text(selectedList[i]),
               ),
               Spacer(),
-              Text('저장 유지기간 : ~ 2023.03.31'),
+              Text('저장 유지기간 : ~ ${selectedDate[i]}'),
             ],),
         ],
       );
@@ -167,6 +173,7 @@ class _InterestState extends State<Interest> {
         ),
       ),
       onTap: (){
+        String after30days = DateTime.now().add(Duration(days: 30)).toString().split(" ")[0];
         setState(() {
           if(selectedList.contains(interestList[i])){
             isSelectedList[i] = false;
@@ -175,6 +182,7 @@ class _InterestState extends State<Interest> {
           }else if(selectedCount < 3){
             isSelectedList[i] = true;
             selectedList.add(interestList[i]);
+            selectedDate.add(after30days);
             selectedCount ++;
           }
         });

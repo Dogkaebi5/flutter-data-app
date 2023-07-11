@@ -6,6 +6,8 @@ passwordDialog(context, callback) {
   bool isVisibility = false;
   String password = "";
   var callbackFunc = callback;
+  bool isPasswordCorrect = true;
+  int unCorrectCount = 0;
 
   return showDialog(
     context: context,
@@ -61,16 +63,27 @@ passwordDialog(context, callback) {
                       Navigator.pop(context);
                       callbackFunc();
                     } else {
-                      print("wrong");
+                      setState((){
+                        isPasswordCorrect = false;
+                        unCorrectCount++;
+                      });
                     }
                   } ,
                 child: Text('확인'), 
               )
             ),
-            // Text(
-            //   (!checkPassword(input)||)? '비밀번호가 일치하지 않습니다' : '',
-            //   style: TextStyle(color: Colors.red),
-            // )
+            SizedBox(height: 12,),
+            if (!isPasswordCorrect)
+              (unCorrectCount < 5)?
+              Text(
+                '비밀번호가 일치하지 않습니다. (${unCorrectCount.toString()}/5)',
+                style: TextStyle(color: Colors.red),
+              )
+              :Text(
+                '비밀번호를 다시 설정해주세요.',
+                style: TextStyle(color: Colors.red),
+              ),
+            OutlinedButton(onPressed: (){}, child: Text("비밀번호 찾기")),
           ],
         ),
       )

@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:data_project/provider/user_data_provider.dart';
+import 'package:data_project/provider/new_user_provider.dart';
 import 'package:data_project/screens/home/home.dart';
 import 'package:data_project/screens/setting/data_setting.dart';
 import 'package:flutter/material.dart';

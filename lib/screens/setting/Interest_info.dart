@@ -1,6 +1,7 @@
 import 'dart:convert';
 
-import 'package:data_project/provider/user_data_provider.dart';
+import 'package:data_project/provider/new_user_provider.dart';
+import 'package:data_project/provider/user_interest_data_provider.dart';
 import 'package:data_project/screens/setting/additional_info.dart';
 import 'package:data_project/screens/setting/data_setting.dart';
 import 'package:flutter/material.dart';
@@ -35,19 +36,22 @@ String jsonUserInterest = '''{
 }''';
 
 class _InterestState extends State<Interest> {
+  bool isNewUser = false;
   List<String> interestList = List.empty(growable: true);
   List<bool> isSelectedList = List.empty(growable: true);
   List selectedList = List.empty(growable: true);
   List selectedDate = List.empty(growable: true);
   int selectedCount = 0;
-  bool isNewUser = false;
+  UserInterestData userData = UserInterestData();
 
   @override
   void initState(){
     super.initState();
     setState(() {
       isNewUser = context.read<NewUserProvider>().isNewUser;
+      userData = context.read<UserInterestData>();
       Map jsonData = jsonDecode(jsonUserInterest);
+
       jsonData.forEach((key, value) {
         interestList.add(key);
         bool valueToBoolean = (value == "true") ? true : false;

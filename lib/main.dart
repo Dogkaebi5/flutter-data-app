@@ -1,5 +1,7 @@
 import 'package:data_project/firebase_options.dart';
-import 'package:data_project/provider/user_data_provider.dart';
+import 'package:data_project/provider/new_user_provider.dart';
+import 'package:data_project/provider/user_basic_data_provider.dart';
+import 'package:data_project/provider/user_interest_data_provider.dart';
 import 'package:data_project/screens/start/authentication.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -12,8 +14,9 @@ void main() async {
   );
   runApp(MultiProvider(
     providers: [
-      ChangeNotifierProvider(create: (_) => NewUserProvider(),),
-      ChangeNotifierProvider(create: (_) => UserData())
+      ChangeNotifierProvider(create: (_) => NewUserProvider()),
+      ChangeNotifierProvider(create: (_) => UserBasicData()),
+      ChangeNotifierProvider(create: (_) => UserInterestData()),
     ],
     child: MyApp(),
   ));

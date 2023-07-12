@@ -1,6 +1,6 @@
 import 'package:data_project/data/password_setter.dart';
 import 'package:data_project/main.dart';
-import 'package:data_project/provider/user_data_provider.dart';
+import 'package:data_project/provider/new_user_provider.dart';
 import 'package:data_project/screens/setting/basic_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

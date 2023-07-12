@@ -1,6 +1,7 @@
 import 'dart:convert';
 
-import 'package:data_project/provider/user_data_provider.dart';
+import 'package:data_project/provider/new_user_provider.dart';
+import 'package:data_project/provider/user_basic_data_provider.dart';
 import 'package:data_project/screens/setting/data_setting.dart';
 import 'package:data_project/screens/setting/interest_info.dart';
 import 'package:flutter/material.dart';
@@ -49,7 +50,7 @@ class _BasicInfoState extends State<BasicInfo> {
   List basicInfoList = List.empty(growable: true);
   List<String?> selectedList = List.empty(growable: true);
   List dateList = List.empty(growable: true);
-  UserData userData = UserData();
+  UserBasicData userData = UserBasicData();
 
   @override
   void initState(){
@@ -57,14 +58,14 @@ class _BasicInfoState extends State<BasicInfo> {
     setState(() {
       Map mapBasicData = jsonDecode(jsonBasicDataSelect);
       basicInfoList = mapBasicData["basicInfo"];
-      userData = context.read<UserData>();
+      userData = context.read<UserBasicData>();
       isNewUser = context.read<NewUserProvider>().isNewUser;
       userNickname = userData.nickname;
       userEmail = userData.email;
       
       if (isNewUser) {
-        selectedList = List.filled(basicInfoList.length, "");
-        dateList = List.filled(basicInfoList.length, "");
+        selectedList = List.filled(basicInfoList.length, married);
+        dateList = List.filled(basicInfoList.length, marriedDate);
       }else{
         selectedList = List.from(userData.selected);
         dateList = List.from(userData.selectedDate);
@@ -136,18 +137,18 @@ class _BasicInfoState extends State<BasicInfo> {
   saveBasicData(){
     userData.setNickname(userNickname!);
     userData.setEmail(userEmail!);
-    userData.setMarried(selectedList[0]!);
-    userData.setChildHas(selectedList[1]!);
-    userData.setEducation(selectedList[2]!);
-    userData.setOccupation(selectedList[3]!);
-    userData.setIncome(selectedList[4]!);
-    userData.setResidence(selectedList[5]!);
-    userData.setMarriedDate(dateList[0]!);
-    userData.setChildHasDate(dateList[1]!);
-    userData.setEducationDate(dateList[2]!);
-    userData.setOccupationDate(dateList[3]!);
-    userData.setIncomeDate(dateList[4]!);
-    userData.setResidenceDate(dateList[5]!);
+    userData.setMarried(selectedList[0]);
+    userData.setChildHas(selectedList[1]);
+    userData.setEducation(selectedList[2]);
+    userData.setOccupation(selectedList[3]);
+    userData.setIncome(selectedList[4]);
+    userData.setResidence(selectedList[5]);
+    userData.setMarriedDate(dateList[0]);
+    userData.setChildHasDate(dateList[1]);
+    userData.setEducationDate(dateList[2]);
+    userData.setOccupationDate(dateList[3]);
+    userData.setIncomeDate(dateList[4]);
+    userData.setResidenceDate(dateList[5]);
     //temporary writer
   }
 

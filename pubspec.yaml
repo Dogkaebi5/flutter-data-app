@@ -43,6 +43,7 @@ dependencies:
   fluttertoast: ^8.2.2
   path_provider: ^2.0.15
   syncfusion_flutter_datepicker: ^22.1.36
+  provider: ^6.0.5
 
 dev_dependencies:
   flutter_test:

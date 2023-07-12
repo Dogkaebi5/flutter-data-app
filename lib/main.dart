@@ -1,18 +1,19 @@
-import 'package:data_project/data/password_setter.dart';
 import 'package:data_project/firebase_options.dart';
-import 'package:data_project/screens/home/home.dart';
-import 'package:data_project/screens/start/service_terms.dart';
-import 'package:data_project/screens/start/start_page.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:data_project/provider/user_data_provider.dart';
+import 'package:data_project/screens/start/authentication.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  runApp(ChangeNotifierProvider(
+    create: (_) => NewUserProvider(),
+    child:  MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -25,53 +26,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.indigo,
       ),
-      home: Authentication(storage: PasswordStorage(),),
-    );
-  }
-}
-
-class Authentication extends StatefulWidget {
-  const Authentication({super.key, required this.storage});
-  
-  final PasswordStorage storage;
-
-  @override
-  State<Authentication> createState() => _AuthenticationState();
-}
-
-class _AuthenticationState extends State<Authentication> {
-  String _password = "";
-  bool isUserHasPassword(){
-    if(_password.length >=4){ 
-      return true;
-    }else{ 
-      return false;
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    widget.storage.readPassword().then((value){
-      setState(() {
-        _password = value;
-      });
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return StreamBuilder(
-      stream: FirebaseAuth.instance.authStateChanges(),
-      builder: (context, snapshot) {
-        if(!snapshot.hasData){
-          return AppStart();
-        }else if(!isUserHasPassword()) {
-          return Terms();
-        }else {
-          return HomePage();
-        }
-      },
+      home: Authentication(),
     );
   }
 }

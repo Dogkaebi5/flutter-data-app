@@ -1,13 +1,15 @@
 import 'dart:convert';
 
 import 'package:data_project/data/user_data_setter.dart';
+import 'package:data_project/provider/user_data_provider.dart';
 import 'package:data_project/screens/setting/data_setting.dart';
 import 'package:data_project/screens/setting/interest_info.dart';
+import 'package:data_project/testpage.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class BasicInfo extends StatefulWidget {
-  final bool isNewUser;
-  const BasicInfo({super.key, required this.isNewUser});
+  const BasicInfo({super.key});
 
   @override
   State<BasicInfo> createState() => _BasicInfoState();
@@ -47,19 +49,19 @@ class _BasicInfoState extends State<BasicInfo> {
   String? selected1, selected2, selected3, selected4, selected5, selected6;
   List dateList = List.empty(growable: true);
   String? date1, date2, date3, date4, date5, date6;
-  bool isFirstLogin = false;
   String? userNickname;
   String? userEmail;
+  bool isNewUser = true;
 
   @override
   void initState(){
     super.initState();
     setState(() {
-      isFirstLogin = widget.isNewUser;
       Map mapBasicData = jsonDecode(jsonBasicDataSelect);
       basicInfoList = mapBasicData["basicInfo"];
-      
-      if (isFirstLogin) {
+      isNewUser = context.read<NewUserProvider>().isNewUser;
+
+      if (isNewUser) {
         userNickname = "홍길동";
         userEmail = "email@example.com";
         selectedList = [selected1, selected2, selected3, selected4, selected5, selected6];
@@ -111,10 +113,10 @@ class _BasicInfoState extends State<BasicInfo> {
                 child: ElevatedButton(
                   onPressed: (){
                     saveBasicData();
-                    if(isFirstLogin){
+                    if(isNewUser){
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Interest(isNewUser: isFirstLogin)),
+                        MaterialPageRoute(builder: (context) => Interest()),
                       );
                     }else{
                       Navigator.push(

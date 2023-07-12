@@ -1,9 +1,11 @@
 import 'dart:convert';
 
 import 'package:data_project/data/new_user_storage.dart';
+import 'package:data_project/provider/user_data_provider.dart';
 import 'package:data_project/screens/home/home.dart';
 import 'package:data_project/screens/setting/data_setting.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 String jsonUserInterest = '''{
   "userInterest": [
@@ -124,8 +126,7 @@ String jsonUserInterest = '''{
   }''';
 
 class AddInfo extends StatefulWidget {
-  const AddInfo(this.isNewUser, {super.key});
-  final bool isNewUser;
+  const AddInfo({super.key});
 
   @override
   State<AddInfo> createState() => _AddInfoState();
@@ -134,14 +135,13 @@ class AddInfo extends StatefulWidget {
 class _AddInfoState extends State<AddInfo> {
   List<bool> _selections = [true, false, false];
   List userInterestList = List.empty(growable: true);
-
-  bool isFirstLogin = false;
+  bool isNewUser= false;
 
   @override
   void initState() {
     super.initState();
     setState(() {
-      isFirstLogin = widget.isNewUser;
+      isNewUser = context.read<NewUserProvider>().isNewUser;
       Map mapData = jsonDecode(jsonUserInterest);
       userInterestList= mapData["userInterest"];
       createQuestionDropDowns(0, 0);
@@ -209,8 +209,8 @@ class _AddInfoState extends State<AddInfo> {
                 height: 40,
                 child: ElevatedButton(
                   onPressed: (){
-                    if (_selections[2] && isFirstLogin){
-                      NewUserStorage().write("false");
+                    if (_selections[2] && isNewUser){
+                      context.read<NewUserProvider>().notNewUser();
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => HomePage()),
@@ -221,13 +221,9 @@ class _AddInfoState extends State<AddInfo> {
                         MaterialPageRoute(builder: (context) => DataPage()),
                       );
                     }else if (_selections[1]) {
-                      setState(() {
-                        _selections = [false, false, true];
-                      });
+                      setState(() => _selections = [false, false, true]);
                     }else {
-                      setState(() {
-                        _selections = [false, true, false];
-                      });
+                      setState(() => _selections = [false, true, false]);
                     }
                   }, 
                   child: Text('확인 저장')

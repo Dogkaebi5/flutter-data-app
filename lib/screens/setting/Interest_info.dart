@@ -1,13 +1,14 @@
 import 'dart:convert';
 
+import 'package:data_project/provider/user_data_provider.dart';
 import 'package:data_project/screens/setting/additional_info.dart';
 import 'package:data_project/screens/setting/data_setting.dart';
+import 'package:data_project/testpage.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class Interest extends StatefulWidget {
-  final bool isNewUser;
-  const Interest({super.key, required this.isNewUser});
-
+  const Interest({super.key});
   @override
   State<Interest> createState() => _InterestState();
 }
@@ -40,13 +41,13 @@ class _InterestState extends State<Interest> {
   List selectedList = List.empty(growable: true);
   List selectedDate = List.empty(growable: true);
   int selectedCount = 0;
-  bool isFirstLogin = false;
+  bool isNewUser = false;
 
   @override
   void initState(){
     super.initState();
     setState(() {
-      isFirstLogin = widget.isNewUser;
+      isNewUser = context.read<NewUserProvider>().isNewUser;
       Map jsonData = jsonDecode(jsonUserInterest);
       jsonData.forEach((key, value) {
         interestList.add(key);
@@ -96,10 +97,10 @@ class _InterestState extends State<Interest> {
                 child: ElevatedButton(
                   onPressed: (){
                     saveInterestData();
-                    if(isFirstLogin){
+                    if(isNewUser){
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => AddInfo(isFirstLogin)),
+                        MaterialPageRoute(builder: (context) => AddInfo()),
                       );
                     }else{
                       Navigator.push(

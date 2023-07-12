@@ -51,12 +51,11 @@ class _InterestState extends State<Interest> {
       isNewUser = context.read<NewUserProvider>().isNewUser;
       userData = context.read<UserInterestData>();
       Map jsonData = jsonDecode(jsonUserInterest);
-
-      jsonData.forEach((key, value) {
-        interestList.add(key);
-        bool valueToBoolean = (value == "true") ? true : false;
-        isSelectedList.add(valueToBoolean);
-      });
+      jsonData.forEach((key, value) => interestList.add(key));
+      isSelectedList = userData.isSelectedList;
+      selectedList = userData.selectedList;
+      selectedDate = userData.dateList;
+      selectedCount = userData.interestCount;
     });
   }
 
@@ -124,13 +123,13 @@ class _InterestState extends State<Interest> {
   }
 
   saveInterestData(){
-    // String newData = '''{
-    //   "${selectedList[0]}" : "${selecteddate[0]}",
-    // }''';
+    userData.setIsSelectedList(isSelectedList);
+    userData.setSelecedList(selectedList);
+    userData.setdateList(selectedDate);
+    userData.setCount(selectedCount);
   }
 
   createInterestListText(){
-    
     if(selectedCount>0) {
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,

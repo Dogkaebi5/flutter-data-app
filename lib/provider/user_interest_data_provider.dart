@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 
 class UserInterestData extends ChangeNotifier {
-  String? _interest1, _interest2, _interest3;
-  String? _interest1Date, _interest2Date, _interest3Date;
-
-  List get interest => [_interest1, _interest2, _interest3];
-  List get interestDate => [_interest1Date, _interest2Date, _interest3Date];
-
+  List _selectedList = List.empty(growable: true);
+  List _dateList = List.empty(growable: true);
+  List<bool> _isSelectedList = List.filled(19, false);
+  int _interestCount = 0;
   
-  void setInterest1(interest1){_interest1 = interest1; notifyListeners();}
-  void setInterest2(interest2){_interest2 = interest2; notifyListeners();}
-  void setInterest3(interest3){_interest3 = interest3; notifyListeners();}
+  get selectedList => _selectedList;
+  get dateList => _dateList;
+  get isSelectedList => _isSelectedList;
+  get interestCount => _interestCount;
 
-  void setInterest1Date(interest1Date){_interest1Date = interest1Date; notifyListeners();}
-  void setInterest2Date(interest2Date){_interest2Date = interest2Date; notifyListeners();}
-  void setInterest3Date(interest3Date){_interest3Date = interest3Date; notifyListeners();}
+  void setSelecedList(list){_selectedList = List.from(list); notifyListeners();}
+  void setdateList(list){_dateList = List.from(list); notifyListeners();}
+  void setIsSelectedList(list){_isSelectedList = List.from(list);notifyListeners();}
+  void setCount(count){_interestCount = count; notifyListeners();}
 }

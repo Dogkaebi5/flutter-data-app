@@ -10,9 +10,12 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(ChangeNotifierProvider(
-    create: (_) => NewUserProvider(),
-    child:  MyApp(),
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(create: (_) => NewUserProvider(),),
+      ChangeNotifierProvider(create: (_) => UserData())
+    ],
+    child: MyApp(),
   ));
 }
 

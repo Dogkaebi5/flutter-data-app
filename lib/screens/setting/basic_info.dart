@@ -1,10 +1,8 @@
 import 'dart:convert';
 
-import 'package:data_project/data/user_data_setter.dart';
 import 'package:data_project/provider/user_data_provider.dart';
 import 'package:data_project/screens/setting/data_setting.dart';
 import 'package:data_project/screens/setting/interest_info.dart';
-import 'package:data_project/testpage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -31,7 +29,7 @@ String jsonBasicDataSelect = '''{
     },
     {
       "title": "직종",
-      "option" : ["관리직", "사무직"]
+      "option" : ["관리직", "사무직", "학생", "무직"]
     },
     {
       "title": "소득수준",
@@ -44,14 +42,14 @@ String jsonBasicDataSelect = '''{
 }''';
 
 class _BasicInfoState extends State<BasicInfo> {
+  bool isNewUser = true;
+  String? userNickname, userEmail;
+  String? married, childHas, education, occupation, income, residence;
+  String? marriedDate, childHasDate, educationDate, occupationDate, incomeDate, residenceDate;
   List basicInfoList = List.empty(growable: true);
   List<String?> selectedList = List.empty(growable: true);
-  String? selected1, selected2, selected3, selected4, selected5, selected6;
   List dateList = List.empty(growable: true);
-  String? date1, date2, date3, date4, date5, date6;
-  String? userNickname;
-  String? userEmail;
-  bool isNewUser = true;
+  UserData userData = UserData();
 
   @override
   void initState(){
@@ -59,18 +57,17 @@ class _BasicInfoState extends State<BasicInfo> {
     setState(() {
       Map mapBasicData = jsonDecode(jsonBasicDataSelect);
       basicInfoList = mapBasicData["basicInfo"];
+      userData = context.read<UserData>();
       isNewUser = context.read<NewUserProvider>().isNewUser;
-
+      userNickname = userData.nickname;
+      userEmail = userData.email;
+      
       if (isNewUser) {
-        userNickname = "홍길동";
-        userEmail = "email@example.com";
-        selectedList = [selected1, selected2, selected3, selected4, selected5, selected6];
-        dateList = [date1, date2, date3, date4, date5, date6]; 
+        selectedList = List.filled(basicInfoList.length, "");
+        dateList = List.filled(basicInfoList.length, "");
       }else{
-        userNickname = "홍길순";
-        userEmail = "eeemail@example.com";
-        selectedList = List.filled(basicInfoList.length, selected1);
-        dateList = List.filled(basicInfoList.length, date1);
+        selectedList = List.from(userData.selected);
+        dateList = List.from(userData.selectedDate);
       }
       //temporary reader
     });
@@ -137,15 +134,20 @@ class _BasicInfoState extends State<BasicInfo> {
   }
   
   saveBasicData(){
-    String newData = '''
-    {
-      "nickname": "$userNickname",
-      "email": "$userEmail",
-      "data": "$selectedList",
-      "date": "$dateList"
-    }
-    ''';
-    UserBasicDataStorage().writeData(newData);
+    userData.setNickname(userNickname!);
+    userData.setEmail(userEmail!);
+    userData.setMarried(selectedList[0]!);
+    userData.setChildHas(selectedList[1]!);
+    userData.setEducation(selectedList[2]!);
+    userData.setOccupation(selectedList[3]!);
+    userData.setIncome(selectedList[4]!);
+    userData.setResidence(selectedList[5]!);
+    userData.setMarriedDate(dateList[0]!);
+    userData.setChildHasDate(dateList[1]!);
+    userData.setEducationDate(dateList[2]!);
+    userData.setOccupationDate(dateList[3]!);
+    userData.setIncomeDate(dateList[4]!);
+    userData.setResidenceDate(dateList[5]!);
     //temporary writer
   }
 

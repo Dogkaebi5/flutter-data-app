@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:data_project/data/new_user_storage.dart';
 import 'package:data_project/provider/user_data_provider.dart';
 import 'package:data_project/screens/home/home.dart';
 import 'package:data_project/screens/setting/data_setting.dart';

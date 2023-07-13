@@ -138,13 +138,34 @@ class _AddInfoState extends State<AddInfo> {
   List quests = List.empty(growable: true);
   
   bool isNewUser = false;
-  int trueIndex = -1;
-  int selectedCount = 0;
-  List selectedList = List.empty(growable: true);
-  List selectedDates = List.empty(growable: true);
+  int trueIndex = 0;
+  int selectedInterestCount = 0;
+  List selectedInterestList = List.empty(growable: true);
+  List selectedInterestDates = List.empty(growable: true);
+  List addSelected = List.empty(growable: true);
+  String? temporaryText;
+
+
   void setQuestValue(){
     trueIndex = _selections.indexOf(true);
     quests = userInterestList[trueIndex]["question"];
+  }
+  void setAddSelectInit(){
+    List q1 = userInterestList[0]["question"];
+    List q2 = userInterestList[1]["question"];
+    List q3 = userInterestList[2]["question"];
+    switch (selectedInterestCount) {
+      case 1: addSelected = [
+        List.filled(q1.length, temporaryText),"",""];
+      case 2: addSelected = [
+        List.filled(q1.length, temporaryText),
+        List.filled(q2.length, temporaryText),""];
+      case 3: addSelected = [
+        List.filled(q1.length, temporaryText),
+        List.filled(q2.length, temporaryText),
+        List.filled(q3.length, temporaryText)];
+      default: break;
+    }
   }
 
   @override
@@ -154,16 +175,20 @@ class _AddInfoState extends State<AddInfo> {
       isNewUser = context.read<NewUserProvider>().isNewUser;
       Map mapData = jsonDecode(jsonUserInterest);
       userInterestList= mapData["userInterest"];
-      selectedList = context.read<UserInterestData>().selectedList;
-      selectedCount = context.read<UserInterestData>().interestCount;
-      selectedDates = context.read<UserInterestData>().dateList;
-      switch(selectedCount){
+      
+      selectedInterestList = context.read<UserInterestData>().selectedList;
+      selectedInterestCount = context.read<UserInterestData>().interestCount;
+      selectedInterestDates = context.read<UserInterestData>().dateList;
+      addSelected = context.read<UserInterestData>().addData;
+      
+      switch(selectedInterestCount){
         case 1 : _selections = [true]; break;
         case 2 : _selections = [true, false]; break;
         case 3 : _selections = [true, false, false]; break;
         default : break;
       }
-      setQuestValue();
+      if(selectedInterestCount > 0){setQuestValue();}
+      if(isNewUser){setAddSelectInit();}
     });
   }
 
@@ -186,7 +211,7 @@ class _AddInfoState extends State<AddInfo> {
               Text('입력된 정보는 3개월간 수정 불가합니다.'),
               SizedBox(height: 20,),
 
-              (selectedCount > 0)
+              (selectedInterestCount > 0)
                 ?Column(
                   children: [
                     Center(
@@ -200,11 +225,11 @@ class _AddInfoState extends State<AddInfo> {
                         },
                         isSelected: _selections,
                         children: [
-                          for (int i = 0; i < selectedList.length; i++)
+                          for (int i = 0; i < selectedInterestList.length; i++)
                             Container(
                               width: 100,
                               padding: EdgeInsets.all(2),
-                              child: Text(selectedList[i], textAlign: TextAlign.center,),
+                              child: Text(selectedInterestList[i], textAlign: TextAlign.center,),
                             ),
                         ],
                       ),
@@ -227,8 +252,7 @@ class _AddInfoState extends State<AddInfo> {
                 height: 40,
                 child: ElevatedButton(
                   onPressed: (){
-                    switch (selectedCount) {
-                      case < 1 : router(); break;
+                    switch (selectedInterestCount) {
                       case 1 : setData(); router(); break;
                       case 2 : 
                         if(_selections[0]){
@@ -276,25 +300,22 @@ class _AddInfoState extends State<AddInfo> {
       );
     }
   }
-
-  createInterestDateText(){
-    if (_selections.isEmpty){                    
-      return Center(child: Text(""),);
-    }else if (_selections[0]){
-      return Center(child:Text("내용유지 : ~ ${selectedDates[0]}"));
-    }else if (_selections[1]){
-      return Center(child:Text("내용유지 : ~ ${selectedDates[1]}"));
-    }else if (_selections[2]){
-      return Center(child:Text("내용유지 : ~ ${selectedDates[2]}"));
-    }else {
-      return Text("예상하지 못한 에러");
-    }
+  setData(){
+    context.read<NewUserProvider>().notNewUser();
+    context.read<UserInterestData>().setAdd(addSelected);
   }
 
-  setData(){}
+  createInterestDateText(){
+    if (_selections.isEmpty){return Center(child: Text(""),);
+    }else if (_selections[0]){return Center(child:Text("내용유지 : ~ ${selectedInterestDates[0]}"));
+    }else if (_selections[1]){return Center(child:Text("내용유지 : ~ ${selectedInterestDates[1]}"));
+    }else if (_selections[2]){return Center(child:Text("내용유지 : ~ ${selectedInterestDates[2]}"));
+    }else {return Text("예상하지 못한 에러");}
+  }
 
-  createQuestionDropDowns(i){ 
-    String? selected;
+  createQuestionDropDowns(i){
+    List selecteds = addSelected[trueIndex];
+    String? selected = selecteds[i];
     String question = quests[i]['title'];
     List options = quests[i]['option'];
     
@@ -316,7 +337,8 @@ class _AddInfoState extends State<AddInfo> {
               )).toList(), 
             onChanged: (value) {
               setState((){
-                selected = value as String?;
+                selected = value as String? ;
+                addSelected[trueIndex][i] = value;
               });
             }
           ),

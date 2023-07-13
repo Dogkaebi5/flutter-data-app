@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:data_project/provider/new_user_provider.dart';
+import 'package:data_project/provider/user_interest_data_provider.dart';
 import 'package:data_project/screens/home/home.dart';
 import 'package:data_project/screens/setting/data_setting.dart';
 import 'package:flutter/material.dart';
@@ -132,9 +133,19 @@ class AddInfo extends StatefulWidget {
 }
 
 class _AddInfoState extends State<AddInfo> {
-  List<bool> _selections = [true, false, false];
+  List<bool> _selections = List.empty(growable: true);
   List userInterestList = List.empty(growable: true);
-  bool isNewUser= false;
+  List quests = List.empty(growable: true);
+  
+  bool isNewUser = false;
+  int trueIndex = -1;
+  int selectedCount = 0;
+  List selectedList = List.empty(growable: true);
+  List selectedDates = List.empty(growable: true);
+  void setQuestValue(){
+    trueIndex = _selections.indexOf(true);
+    quests = userInterestList[trueIndex]["question"];
+  }
 
   @override
   void initState() {
@@ -143,7 +154,16 @@ class _AddInfoState extends State<AddInfo> {
       isNewUser = context.read<NewUserProvider>().isNewUser;
       Map mapData = jsonDecode(jsonUserInterest);
       userInterestList= mapData["userInterest"];
-      createQuestionDropDowns(0, 0);
+      selectedList = context.read<UserInterestData>().selectedList;
+      selectedCount = context.read<UserInterestData>().interestCount;
+      selectedDates = context.read<UserInterestData>().dateList;
+      switch(selectedCount){
+        case 1 : _selections = [true]; break;
+        case 2 : _selections = [true, false]; break;
+        case 3 : _selections = [true, false, false]; break;
+        default : break;
+      }
+      setQuestValue();
     });
   }
 
@@ -166,63 +186,70 @@ class _AddInfoState extends State<AddInfo> {
               Text('입력된 정보는 3개월간 수정 불가합니다.'),
               SizedBox(height: 20,),
 
-              Center(
-                child: ToggleButtons(
-                  onPressed: (index) {
-                    setState(() {
-                      _selections = [false, false, false];
-                      _selections[index] = !_selections[index];
-                    });
-                  },
-                  isSelected: _selections,
+              (selectedCount > 0)
+                ?Column(
                   children: [
-                    for (var i = 0; i < userInterestList.length; i++)
-                      Container(
-                        width: 100,
-                        padding: EdgeInsets.all(2),
-                        child: Text(userInterestList[i]['title'], textAlign: TextAlign.center,),
+                    Center(
+                      child: ToggleButtons(
+                        onPressed: (index) {
+                          setState(() {
+                            _selections = List.filled(_selections.length, false);
+                            _selections[index] = !_selections[index];
+                            setQuestValue();
+                          });
+                        },
+                        isSelected: _selections,
+                        children: [
+                          for (int i = 0; i < selectedList.length; i++)
+                            Container(
+                              width: 100,
+                              padding: EdgeInsets.all(2),
+                              child: Text(selectedList[i], textAlign: TextAlign.center,),
+                            ),
+                        ],
                       ),
+                    ),
+                    SizedBox(height: 12,),
+                    createInterestDateText(),
+                    SizedBox(height: 40,),
+                    for (int i = 0; i < quests.length; i++)
+                      createQuestionDropDowns(i),
+                  ])
+                : Column(
+                  children: const [
+                    Text("선택한 관심사가 없습니다."),
+                    SizedBox(height: 80,),
                   ],
                 ),
-              ),
-              SizedBox(height: 12,),
-              if (_selections[0])
-                Center(child:Text("내용유지 : ~ ${userInterestList[0]['date']}")),
-              if (_selections[1])
-                Center(child:Text("내용유지 : ~ ${userInterestList[1]['date']}")),
-              if (_selections[2])
-                Center(child:Text("내용유지 : ~ ${userInterestList[2]['date']}")),
-              SizedBox(height: 40,),
-              if (_selections[0])
-                for (var i = 0; i < userInterestList[0]["question"].length; i++)
-                  createQuestionDropDowns(0, i),
-              if (_selections[1])
-                for (var i = 0; i < userInterestList[1]["question"].length; i++)
-                  createQuestionDropDowns(1, i),
-              if (_selections[2])
-                for (var i = 0; i < userInterestList[2]["question"].length; i++)
-                  createQuestionDropDowns(2, i),
-              
+
               SizedBox(
                 width: double.infinity,
                 height: 40,
                 child: ElevatedButton(
                   onPressed: (){
-                    if (_selections[2] && isNewUser){
-                      context.read<NewUserProvider>().notNewUser();
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => HomePage()),
-                      );
-                    }else if (_selections[2]) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => DataPage()),
-                      );
-                    }else if (_selections[1]) {
-                      setState(() => _selections = [false, false, true]);
-                    }else {
-                      setState(() => _selections = [false, true, false]);
+                    switch (selectedCount) {
+                      case < 1 : router(); break;
+                      case 1 : setData(); router(); break;
+                      case 2 : 
+                        if(_selections[0]){
+                          setState((){
+                            _selections = [false, true];
+                            setQuestValue();
+                          });
+                        }else{setData(); router(); break;}
+                      case 3 : 
+                        if(_selections[0]){
+                          setState((){
+                            _selections = [false, true, false];
+                            setQuestValue();
+                          });
+                        }else if (_selections[1]){
+                          setState((){
+                            _selections = [false, false, true];
+                            setQuestValue();
+                          });
+                        }else {setData(); router(); break;}
+                      default: router(); break;
                     }
                   }, 
                   child: Text('확인 저장')
@@ -236,11 +263,41 @@ class _AddInfoState extends State<AddInfo> {
     );
   }
 
-  createQuestionDropDowns(int interestNum, int i){ 
-    String question = userInterestList[interestNum]['question'][i]['title'];
-    String? selected;
-    List option = userInterestList[interestNum]['question'][i]['option'];
+  router(){
+    if (isNewUser){
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => HomePage()),
+      );
+    }else{
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => DataPage()),
+      );
+    }
+  }
 
+  createInterestDateText(){
+    if (_selections.isEmpty){                    
+      return Center(child: Text(""),);
+    }else if (_selections[0]){
+      return Center(child:Text("내용유지 : ~ ${selectedDates[0]}"));
+    }else if (_selections[1]){
+      return Center(child:Text("내용유지 : ~ ${selectedDates[1]}"));
+    }else if (_selections[2]){
+      return Center(child:Text("내용유지 : ~ ${selectedDates[2]}"));
+    }else {
+      return Text("예상하지 못한 에러");
+    }
+  }
+
+  setData(){}
+
+  createQuestionDropDowns(i){ 
+    String? selected;
+    String question = quests[i]['title'];
+    List options = quests[i]['option'];
+    
     return StatefulBuilder(
       builder: (BuildContext context, StateSetter setState) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -252,18 +309,18 @@ class _AddInfoState extends State<AddInfo> {
           DropdownButton(
             isExpanded: true,
             value: selected,
-            items: option.map((e)=> DropdownMenuItem(
-              value: e,
-              child: Text(e),
-            )).toList(), 
+            items: options.map((e)=> 
+              DropdownMenuItem(
+                value: e,
+                child: Text(e),
+              )).toList(), 
             onChanged: (value) {
               setState((){
                 selected = value as String?;
-                // userInterestList[interestNum]['question'][i]['selected'] = value;
               });
             }
           ),
-            SizedBox(height: 24,),
+          SizedBox(height: 24,),
         ],
       )
     );

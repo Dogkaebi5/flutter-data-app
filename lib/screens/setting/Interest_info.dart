@@ -38,7 +38,7 @@ String jsonUserInterest = '''{
 class _InterestState extends State<Interest> {
   bool isNewUser = false;
   List<String> interestList = List.empty(growable: true);
-  List<bool> isSelectedList = List.empty(growable: true);
+  List isSelectedList = List.empty(growable: true);
   List selectedList = List.empty(growable: true);
   List selectedDate = List.empty(growable: true);
   int selectedCount = 0;

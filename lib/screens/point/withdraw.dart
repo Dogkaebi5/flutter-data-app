@@ -1,14 +1,14 @@
 import 'package:data_project/password_dialog.dart';
+import 'package:data_project/provider/setting_provider.dart';
 import 'package:data_project/screens/home/home.dart';
 import 'package:data_project/screens/point/bank_select.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
 class Withdraw extends StatefulWidget {
-  const Withdraw(this.point, this.bank, {super.key});
+  const Withdraw(this.point, {super.key});
   final int point;
-  final Map bank;
-  
   @override
   State<Withdraw> createState() => _WithdrawState();
 }
@@ -23,13 +23,36 @@ class _WithdrawState extends State<Withdraw> {
   String tax() => ((inputPoint * 0.033).floor()).toString();
   String transferAmount() => inputPoint < 1034 ? "0" : (inputPoint - int.parse(fee()) - int.parse(tax())).toString();
 
+  bool isHasAcc = false;
+  List bankData = List.empty(growable: true);
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      isHasAcc = context.read<SettingProvider>().isHasAcc;
+      bankData = context.read<SettingProvider>().bankData;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     int point = widget.point;
-    Map bank = widget.bank;
 
     return Scaffold(
-      appBar: AppBar(title: Text("출금신청")),
+      appBar: AppBar(
+        title: Text("출금신청"),
+        centerTitle: true,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios_new),
+          onPressed: (){
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => HomePage()),
+            );
+          },
+        ),
+        ),
       body: Container(
         margin: EdgeInsets.only(top:20, left:20, right:20,),
         child: Column(
@@ -39,7 +62,7 @@ class _WithdrawState extends State<Withdraw> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Bank(bank))
+                  MaterialPageRoute(builder: (context) => Bank())
                 );
               },
               child: Container(
@@ -52,8 +75,9 @@ class _WithdrawState extends State<Withdraw> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("등록계좌 : ${bank['username']}"),
-                        Text(bank['bank'] + " " + bank['accountNum']),
+                        (isHasAcc)?
+                          Text("등록계좌 : ${bankData[0]??''}\n${bankData[1]}  ${bankData[2]}")
+                          :Text("등록계좌 :\n없음")
                       ]
                     ),
                     Icon(Icons.arrow_forward_ios),
@@ -95,6 +119,7 @@ class _WithdrawState extends State<Withdraw> {
             ),
             SizedBox(height: 30,),
             Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Divider(),
                 Row(
@@ -109,13 +134,17 @@ class _WithdrawState extends State<Withdraw> {
                   Text('${inputPoint.toString()} P'),
                   ],
                 ),
+                SizedBox(height: 4,),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                  Text('출금 수수료(1만 P 이상 무료)'),
+                  Text('출금 수수료'),
                   Text('${fee()} P'),
                   ],
                 ),
+                Text("10,000P 이상 신청 시 무료",style: TextStyle(fontSize: 12, color: Colors.grey),),
+                SizedBox(height: 4,),
+
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

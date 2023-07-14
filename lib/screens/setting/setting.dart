@@ -16,6 +16,7 @@ class SettingPage extends StatefulWidget {
 class _SettingPageState extends State<SettingPage> {
   bool isServiceNotice = false;
   bool isMarketNotice = false;
+  String mobile = "";
 
   @override
   void initState(){
@@ -23,6 +24,7 @@ class _SettingPageState extends State<SettingPage> {
     setState(() {
       isServiceNotice = context.read<SettingProvider>().isNotice[0];
       isMarketNotice = context.read<SettingProvider>().isNotice[1];
+      mobile = context.read<SettingProvider>().mobile;
     });
   }
 
@@ -121,7 +123,7 @@ class _SettingPageState extends State<SettingPage> {
             ),
             InkWell(
               onTap: () {
-                
+
               },
               child: Container(
                 margin: EdgeInsets.only(top: 20),
@@ -129,11 +131,12 @@ class _SettingPageState extends State<SettingPage> {
                 color: const Color.fromARGB(255, 194, 226, 241) ,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
+                  children: [
                     Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text('휴대폰 변경 설정'),
-                        Text('010-****-5678'),
+                        Text("010-****-$mobile"),
                       ],
                     ),
                     Icon(Icons.arrow_forward_ios),

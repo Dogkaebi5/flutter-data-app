@@ -1,8 +1,5 @@
 import 'dart:convert';
 
-import 'package:data_project/data/new_user_storage.dart';
-import 'package:data_project/data/password_setter.dart';
-import 'package:data_project/data/user_data_setter.dart';
 import 'package:data_project/screens/home/home_dialog.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:data_project/screens/home/notifications.dart';
@@ -66,7 +63,6 @@ class _HomePageState extends State<HomePage> {
   ''';
   List newDetails = List.empty(growable: true);
   int point = 0;
-  Map bank = {};
 
   List<bool> _selections = [true, false];
   DateTime signUpDate = DateTime(2023, 1, 1);
@@ -88,7 +84,6 @@ class _HomePageState extends State<HomePage> {
       Map jsonData = jsonDecode(jsonString);
       newDetails = jsonData["details"];
       point = int.parse(jsonData["point"]);
-      bank = jsonData["bank"];
     });
     changeSortTextToMonth();
   }
@@ -134,7 +129,7 @@ class _HomePageState extends State<HomePage> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Withdraw(point, bank)),
+                  MaterialPageRoute(builder: (context) => Withdraw(point)),
                 );
               },
               child: Container(

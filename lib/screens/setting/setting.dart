@@ -2,6 +2,7 @@ import 'package:data_project/password_dialog.dart';
 import 'package:data_project/provider/setting_provider.dart';
 import 'package:data_project/screens/home/home.dart';
 import 'package:data_project/screens/setting/data_setting.dart';
+import 'package:data_project/screens/setting/del_user_dialog.dart';
 import 'package:data_project/screens/setting/set_password.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -155,13 +156,15 @@ class _SettingPageState extends State<SettingPage> {
               padding: const EdgeInsets.only(top: 20, bottom: 20),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
+                children: const [
                   Text('버전 정보'),
                   Text('최신 1.0.0'),
                 ],
               ),
             ),
-            Center(child: TextButton(onPressed: (){}, child: Text('회원탈퇴')))
+            Center(child: OutlinedButton(onPressed: (){
+              deleteUserDialog(context);
+            }, child: Text('회원탈퇴')))
           ],
         ),
       ),

@@ -137,18 +137,12 @@ class _BasicInfoState extends State<BasicInfo> {
   saveBasicData(){
     userData.setNickname(userNickname!);
     userData.setEmail(userEmail!);
-    userData.setMarried(selectedList[0]);
-    userData.setChildHas(selectedList[1]);
-    userData.setEducation(selectedList[2]);
-    userData.setOccupation(selectedList[3]);
-    userData.setIncome(selectedList[4]);
-    userData.setResidence(selectedList[5]);
-    userData.setMarriedDate(dateList[0]);
-    userData.setChildHasDate(dateList[1]);
-    userData.setEducationDate(dateList[2]);
-    userData.setOccupationDate(dateList[3]);
-    userData.setIncomeDate(dateList[4]);
-    userData.setResidenceDate(dateList[5]);
+    userData.setMarried(selectedList[0], dateList[0]);
+    userData.setChildHas(selectedList[1], dateList[1]);
+    userData.setEducation(selectedList[2], dateList[2]);
+    userData.setOccupation(selectedList[3], dateList[3]);
+    userData.setIncome(selectedList[4], dateList[4]);
+    userData.setResidence(selectedList[5], dateList[5]);
     //temporary writer
   }
 

@@ -41,6 +41,7 @@ class _InterestState extends State<Interest> {
   List isSelectedList = List.empty(growable: true);
   List selectedList = List.empty(growable: true);
   List selectedDate = List.empty(growable: true);
+  List premissions = List.empty(growable: true);
   int selectedCount = 0;
   UserInterestData userData = UserInterestData();
 
@@ -48,14 +49,16 @@ class _InterestState extends State<Interest> {
   void initState(){
     super.initState();
     setState(() {
-      isNewUser = context.read<NewUserProvider>().isNewUser;
-      userData = context.read<UserInterestData>();
       Map jsonData = jsonDecode(jsonUserInterest);
       jsonData.forEach((key, value) => interestList.add(key));
+
+      isNewUser = context.read<NewUserProvider>().isNewUser;
+      userData = context.read<UserInterestData>();
       isSelectedList = userData.isSelectedList;
       selectedList = userData.selectedList;
       selectedDate = userData.dateList;
       selectedCount = userData.interestCount;
+      premissions = userData.interestPremissions;
     });
   }
 
@@ -99,6 +102,7 @@ class _InterestState extends State<Interest> {
                 child: ElevatedButton(
                   onPressed: (){
                     saveInterestData();
+                    setAddselectInit();
                     if(isNewUser){
                       Navigator.push(
                         context,
@@ -127,6 +131,10 @@ class _InterestState extends State<Interest> {
     userData.setSelecedList(selectedList);
     userData.setdateList(selectedDate);
     userData.setCount(selectedCount);
+    userData.setInterestPremissions(premissions);
+  }
+  setAddselectInit(){
+
   }
 
   createInterestListText(){
@@ -181,11 +189,13 @@ class _InterestState extends State<Interest> {
           if(selectedList.contains(interestList[i])){
             isSelectedList[i] = false;
             selectedList.remove(interestList[i]);
+            premissions.removeLast();
             selectedCount --;
           }else if(selectedCount < 3){
             isSelectedList[i] = true;
             selectedList.add(interestList[i]);
             selectedDate.add(after30days);
+            premissions.add(true);
             selectedCount ++;
           }
         });

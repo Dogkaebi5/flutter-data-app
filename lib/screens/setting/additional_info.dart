@@ -145,51 +145,58 @@ class _AddInfoState extends State<AddInfo> {
   List addSelected = List.empty(growable: true);
   String? temporaryText;
 
-
-  void setQuestValue(){
-    trueIndex = _selections.indexOf(true);
-    quests = userInterestList[trueIndex]["question"];
-  }
-  void setAddSelectInit(){
-    List q1 = userInterestList[0]["question"];
-    List q2 = userInterestList[1]["question"];
-    List q3 = userInterestList[2]["question"];
-    switch (selectedInterestCount) {
-      case 1: addSelected = [
-        List.filled(q1.length, temporaryText),"",""];
-      case 2: addSelected = [
-        List.filled(q1.length, temporaryText),
-        List.filled(q2.length, temporaryText),""];
-      case 3: addSelected = [
-        List.filled(q1.length, temporaryText),
-        List.filled(q2.length, temporaryText),
-        List.filled(q3.length, temporaryText)];
-      default: break;
-    }
-  }
-
   @override
   void initState() {
     super.initState();
     setState(() {
-      isNewUser = context.read<NewUserProvider>().isNewUser;
       Map mapData = jsonDecode(jsonUserInterest);
       userInterestList= mapData["userInterest"];
+      List q1 = userInterestList[0]["question"];
+      List q2 = userInterestList[1]["question"];
+      List q3 = userInterestList[2]["question"];
+
+      List addDataList = context.read<UserInterestData>().addData;
+      var addData0 = addDataList[0];
+      var addData1 = addDataList[1];
+      var addData2 = addDataList[2];
+
+      isNewUser = context.read<NewUserProvider>().isNewUser;
       
       selectedInterestList = context.read<UserInterestData>().selectedList;
       selectedInterestCount = context.read<UserInterestData>().interestCount;
       selectedInterestDates = context.read<UserInterestData>().dateList;
-      addSelected = context.read<UserInterestData>().addData;
-      
+            
       switch(selectedInterestCount){
-        case 1 : _selections = [true]; break;
-        case 2 : _selections = [true, false]; break;
-        case 3 : _selections = [true, false, false]; break;
+        case 1 : 
+          _selections = [true]; 
+          addSelected = [
+            List.filled(q1.length, temporaryText),"",""];
+          break;
+        case 2 :
+          _selections = [true, false];
+          addSelected = [
+            List.filled(q1.length, temporaryText),
+            List.filled(q2.length, temporaryText),""];
+          break;
+        case 3 : 
+          _selections = [true, false, false];
+          addSelected = [
+            List.filled(q1.length, temporaryText),
+            List.filled(q2.length, temporaryText),
+            List.filled(q3.length, temporaryText)];
+          break;
         default : break;
       }
+      if(addData0.isNotEmpty){addSelected[0] = addData0;}
+      if(addData1.isNotEmpty){addSelected[1] = addData1;}
+      if(addData2.isNotEmpty){addSelected[2] = addData2;}
       if(selectedInterestCount > 0){setQuestValue();}
-      if(isNewUser){setAddSelectInit();}
     });
+  }
+
+  void setQuestValue(){
+    trueIndex = _selections.indexOf(true);
+    quests = userInterestList[trueIndex]["question"];
   }
 
   @override

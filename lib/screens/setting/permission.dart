@@ -1,4 +1,7 @@
+import 'package:data_project/provider/user_basic_data_provider.dart';
+import 'package:data_project/provider/user_interest_data_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class InfoPremission extends StatefulWidget {
   const InfoPremission({super.key});
@@ -8,25 +11,22 @@ class InfoPremission extends StatefulWidget {
 }
 
 class _InfoPremissionState extends State<InfoPremission> {
-  // final List _dataList = ['이메일', '성함', '휴대폰', '텔레마케팅 동의', '성별', '출생연도', '결혼정보', '자녀정보', '최종학력', '직업', '소득수준', '거주지역', '관심사 1', '관심사 2', '관심사 3'];
-  // List<bool> dataStateList = List.filled(_dataList.length, false);
-  final Map<String, bool> _dataState = {
-    '이메일': false,
-    '성함': false, 
-    '휴대폰': false,
-    '텔레마케팅 동의': false,
-    '성별': false,
-    '출생연도': false,
-    '결혼정보': false,
-    '자녀정보': false,
-    '최종학력': false,
-    '직업': false,
-    '소득수준': false,
-    '거주지역': false,
-    '관심사 1': false,
-    '관심사 2': false,
-    '관심사 3': false,
-  };
+  List dateTexts = [
+    '이메일', '성함', '휴대폰', '텔레마케팅 동의', '성별', '출생연도',
+    '결혼정보', '자녀정보', '최종학력', '직업', '소득수준', '거주지역'];
+  List isBasicPremissions = List.empty(growable: true);
+  List interests = List.empty(growable: true);
+  List isInterestPremissions = List.empty(growable: true);
+  
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      interests = context.read<UserInterestData>().selectedList;
+      isBasicPremissions = context.read<UserBasicData>().basicPremissions;
+      isInterestPremissions = context.read<UserInterestData>().interestPremissions;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,22 +55,39 @@ class _InfoPremissionState extends State<InfoPremission> {
                     ]
                 ),
               ),
-              for (int i = 0; i < _dataState.length; i++)
+              for (int i = 0; i < dateTexts.length; i++)
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(_dataState.keys.toList()[i]),
+                    Text(dateTexts[i]),
                     Switch(
-                      value: _dataState.values.toList()[i],
+                      value: isBasicPremissions[i],
                       onChanged: (val){
                         setState(() {
-                          _dataState[_dataState.keys.toList()[i]] = val;
-                          // _dataState.values.toList()[i] = val;
+                          isBasicPremissions[i] = val;
+                          context.read<UserBasicData>().setBasicPremissions(isBasicPremissions);
                       });}
                     )
                   ],
                 ),
-                SizedBox(height: 20,)
+              for (int i = 0; i < interests.length; i++)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("관심사 ${(i+1).toString()} : ${interests[i]}"),
+                    //수정 필요 invalid value empty 에러 << newUser가 아님 조건 변경 필요--
+                    Switch(
+                      value: isInterestPremissions[i],
+                      onChanged: (val){
+                        setState(() {
+                          isInterestPremissions[i] = val;
+                          context.read<UserInterestData>().setInterestPremissions(isInterestPremissions);
+                      });}
+                    )
+                  ],
+                ),
+              
+              SizedBox(height: 20,)
             ],
           )
         ),

@@ -16,9 +16,10 @@ class _InfopermissionState extends State<Infopermission> {
   List userDataTexts = ["성함", "성별", "출생연도", "휴대폰", "텔레마케팅 동의"];
   List basciDataTexts = ['결혼정보', '자녀정보', '최종학력', '직업', '소득수준', '거주지역'];
   
+  List interests = List.empty(growable: true);
+
   List isPermitUsers = List.empty(growable: true);
   List isPermitBasics = List.empty(growable: true);
-  List interests = List.empty(growable: true);
   List isPremitInterest = List.empty(growable: true);
 
   String? tmDate;
@@ -67,7 +68,7 @@ class _InfopermissionState extends State<Infopermission> {
                         setState(() {
                           isPermitUsers[i] = val;
                           if(!isPermitUsers[3]){isPermitUsers[4] = false;}
-                          context.read<UserBasicData>().setBasicpermissions(isPermitUsers);
+                          context.read<SettingProvider>().setPermissions(isPermitUsers);
                       });}
                     )
                   ],
@@ -78,12 +79,15 @@ class _InfopermissionState extends State<Infopermission> {
                     Text("텔레마케팅 동의"),
                     Switch(
                       value: isPermitUsers[4],
-                      onChanged: (val){
-                        setState(() {
-                          isPermitUsers[4] = val;
-                          tmDate = DateTime.now().toString().split(" ")[0];
-                          context.read<SettingProvider>().setTmPermission(val, tmDate);
-                      });}
+                      onChanged: (isPermitUsers[3])?
+                        (val){
+                          setState(() {
+                            isPermitUsers[4] = val;
+                            tmDate = DateTime.now().toString().split(" ")[0];
+                            context.read<SettingProvider>().setTmPermission(val, tmDate);
+                          });
+                        }
+                      : null,
                     ),
                   ],
                 ),

@@ -1,4 +1,5 @@
 import 'package:data_project/data/password_setter.dart';
+import 'package:data_project/forget_password.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -83,7 +84,11 @@ passwordDialog(context, callback) {
                 '비밀번호를 다시 설정해주세요.',
                 style: TextStyle(color: Colors.red),
               ),
-            OutlinedButton(onPressed: (){}, child: Text("비밀번호 찾기")),
+            OutlinedButton(
+              onPressed: (){
+                forgetPasswordDialog(context);
+              }, 
+              child: Text("비밀번호 찾기")),
           ],
         ),
       )

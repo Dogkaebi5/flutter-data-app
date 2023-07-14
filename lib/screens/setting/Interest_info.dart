@@ -41,7 +41,7 @@ class _InterestState extends State<Interest> {
   List isSelectedList = List.empty(growable: true);
   List selectedList = List.empty(growable: true);
   List selectedDate = List.empty(growable: true);
-  List premissions = List.empty(growable: true);
+  List permissions = List.empty(growable: true);
   int selectedCount = 0;
   UserInterestData userData = UserInterestData();
 
@@ -58,7 +58,7 @@ class _InterestState extends State<Interest> {
       selectedList = userData.selectedList;
       selectedDate = userData.dateList;
       selectedCount = userData.interestCount;
-      premissions = userData.interestPremissions;
+      permissions = userData.interestPermissions;
     });
   }
 
@@ -131,7 +131,7 @@ class _InterestState extends State<Interest> {
     userData.setSelecedList(selectedList);
     userData.setdateList(selectedDate);
     userData.setCount(selectedCount);
-    userData.setInterestPremissions(premissions);
+    userData.setInterestpermissions(permissions);
   }
   setAddselectInit(){
 
@@ -189,13 +189,13 @@ class _InterestState extends State<Interest> {
           if(selectedList.contains(interestList[i])){
             isSelectedList[i] = false;
             selectedList.remove(interestList[i]);
-            premissions.removeLast();
+            permissions.removeLast();
             selectedCount --;
           }else if(selectedCount < 3){
             isSelectedList[i] = true;
             selectedList.add(interestList[i]);
             selectedDate.add(after30days);
-            premissions.add(true);
+            permissions.add(true);
             selectedCount ++;
           }
         });

@@ -1,30 +1,37 @@
+import 'package:data_project/provider/setting_provider.dart';
 import 'package:data_project/provider/user_basic_data_provider.dart';
 import 'package:data_project/provider/user_interest_data_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class InfoPremission extends StatefulWidget {
-  const InfoPremission({super.key});
+class Infopermission extends StatefulWidget {
+  const Infopermission({super.key});
 
   @override
-  State<InfoPremission> createState() => _InfoPremissionState();
+  State<Infopermission> createState() => _InfopermissionState();
 }
 
-class _InfoPremissionState extends State<InfoPremission> {
-  List dateTexts = [
-    '이메일', '성함', '휴대폰', '텔레마케팅 동의', '성별', '출생연도',
-    '결혼정보', '자녀정보', '최종학력', '직업', '소득수준', '거주지역'];
-  List isBasicPremissions = List.empty(growable: true);
+class _InfopermissionState extends State<Infopermission> {
+  List necessaryDataTexts = ["닉네임", "연령층", "이메일"];
+  List userDataTexts = ["성함", "성별", "출생연도", "휴대폰", "텔레마케팅 동의"];
+  List basciDataTexts = ['결혼정보', '자녀정보', '최종학력', '직업', '소득수준', '거주지역'];
+  
+  List isPermitUsers = List.empty(growable: true);
+  List isPermitBasics = List.empty(growable: true);
   List interests = List.empty(growable: true);
-  List isInterestPremissions = List.empty(growable: true);
+  List isPremitInterest = List.empty(growable: true);
+
+  String? tmDate;
   
   @override
   void initState() {
     super.initState();
     setState(() {
       interests = context.read<UserInterestData>().selectedList;
-      isBasicPremissions = context.read<UserBasicData>().basicPremissions;
-      isInterestPremissions = context.read<UserInterestData>().interestPremissions;
+      isPermitUsers = context.read<SettingProvider>().userDataPermissions;
+      isPermitBasics = context.read<UserBasicData>().basicPermissions;
+      isPremitInterest = context.read<UserInterestData>().interestPermissions;
+      tmDate = context.read<SettingProvider>().permitTmDate;
     });
   }
 
@@ -36,52 +43,83 @@ class _InfoPremissionState extends State<InfoPremission> {
         child : Container(
           margin: EdgeInsets.only(top:30, left:20, right:20,),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.only(bottom: 20, right: 10),
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
-                      Text('닉네임'),Text('필수'),
-                    ]
+              for (int i = 0; i < necessaryDataTexts.length; i++)
+                Padding(
+                  padding: EdgeInsets.only(bottom: 20, right: 10),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(necessaryDataTexts[i]),Text('필수'),
+                      ]
+                  ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 20, right: 10),
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
-                      Text('연령층'),Text('필수'),
-                    ]
-                ),
-              ),
-              for (int i = 0; i < dateTexts.length; i++)
+              
+              for (int i = 0; i < userDataTexts.length-1; i++)
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(dateTexts[i]),
+                    Text(userDataTexts[i]),
                     Switch(
-                      value: isBasicPremissions[i],
+                      value: isPermitUsers[i],
                       onChanged: (val){
                         setState(() {
-                          isBasicPremissions[i] = val;
-                          context.read<UserBasicData>().setBasicPremissions(isBasicPremissions);
+                          isPermitUsers[i] = val;
+                          if(!isPermitUsers[3]){isPermitUsers[4] = false;}
+                          context.read<UserBasicData>().setBasicpermissions(isPermitUsers);
                       });}
                     )
                   ],
                 ),
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("텔레마케팅 동의"),
+                    Switch(
+                      value: isPermitUsers[4],
+                      onChanged: (val){
+                        setState(() {
+                          isPermitUsers[4] = val;
+                          tmDate = DateTime.now().toString().split(" ")[0];
+                          context.read<SettingProvider>().setTmPermission(val, tmDate);
+                      });}
+                    ),
+                  ],
+                ),
+              if(isPermitUsers[4])
+                Text("____ 텔레마케팅 동의일자 : $tmDate",
+                  style: TextStyle(
+                    fontSize: 12,
+                  ),),
+
+              for (int i = 0; i < basciDataTexts.length; i++)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(basciDataTexts[i]),
+                    Switch(
+                      value: isPermitBasics[i],
+                      onChanged: (val){
+                        setState(() {
+                          isPermitBasics[i] = val;
+                          context.read<UserBasicData>().setBasicpermissions(isPermitBasics);
+                      });}
+                    )
+                  ],
+                ),
+              
               for (int i = 0; i < interests.length; i++)
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text("관심사 ${(i+1).toString()} : ${interests[i]}"),
-                    //수정 필요 invalid value empty 에러 << newUser가 아님 조건 변경 필요--
                     Switch(
-                      value: isInterestPremissions[i],
+                      value: isPremitInterest[i],
                       onChanged: (val){
                         setState(() {
-                          isInterestPremissions[i] = val;
-                          context.read<UserInterestData>().setInterestPremissions(isInterestPremissions);
+                          isPremitInterest[i] = val;
+                          context.read<UserInterestData>().setInterestpermissions(isPremitInterest);
                       });}
                     )
                   ],

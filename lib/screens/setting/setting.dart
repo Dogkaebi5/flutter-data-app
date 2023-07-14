@@ -1,8 +1,10 @@
 import 'package:data_project/password_dialog.dart';
+import 'package:data_project/provider/setting_provider.dart';
 import 'package:data_project/screens/home/home.dart';
 import 'package:data_project/screens/setting/data_setting.dart';
 import 'package:data_project/screens/setting/set_password.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class SettingPage extends StatefulWidget {
   const SettingPage({super.key});
@@ -12,8 +14,18 @@ class SettingPage extends StatefulWidget {
 }
 
 class _SettingPageState extends State<SettingPage> {
-  bool isServiceAlarm = false;
-  bool isMarketAlarm = false;
+  bool isServiceNotice = false;
+  bool isMarketNotice = false;
+
+  @override
+  void initState(){
+    super.initState();
+    setState(() {
+      isServiceNotice = context.read<SettingProvider>().isNotice[0];
+      isMarketNotice = context.read<SettingProvider>().isNotice[1];
+    });
+  }
+
   moveToData(){
     Navigator.push(
       context,
@@ -69,9 +81,10 @@ class _SettingPageState extends State<SettingPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text('서비스 알림 설정'),
-                Switch(value: isServiceAlarm, onChanged: (value){
+                Switch(value: isServiceNotice, onChanged: (value){
                   setState(() {
-                      isServiceAlarm = value;
+                      isServiceNotice = value;
+                      context.read<SettingProvider>().setNoticeService(value);
                     });
                 })
               ],
@@ -80,9 +93,10 @@ class _SettingPageState extends State<SettingPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text('마케팅 알림 설정'),
-                Switch(value: isMarketAlarm, onChanged: (value){
+                Switch(value: isMarketNotice, onChanged: (value){
                   setState(() {
-                      isMarketAlarm = value;
+                      isMarketNotice = value;
+                      context.read<SettingProvider>().setNoticeMarket(value);
                     });
                 })
               ],

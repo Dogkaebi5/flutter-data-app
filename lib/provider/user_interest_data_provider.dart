@@ -6,7 +6,7 @@ class UserInterestData extends ChangeNotifier {
   List<bool> _isSelectedList = List.filled(19, false);
   
   int _interestCount = 0;
-  List<bool> _interestPremissions = List.empty(growable: true);
+  List<bool> _isPremitInterestDatas = List.empty(growable: true);
 
   List _addData = [List.empty(growable: true), List.empty(growable: true), List.empty(growable: true)];
   //temporary list//create class
@@ -15,7 +15,7 @@ class UserInterestData extends ChangeNotifier {
   List get dateList => _dateList;
   List get isSelectedList => _isSelectedList;
   int get interestCount => _interestCount;
-  List get interestPremissions => _interestPremissions;
+  List get interestPermissions => _isPremitInterestDatas;
 
   List get addData => _addData;
 
@@ -25,5 +25,5 @@ class UserInterestData extends ChangeNotifier {
   void setCount(count){_interestCount = count; notifyListeners();}
   void setAdd(list){_addData = List.from(list); notifyListeners();}
   
-  void setInterestPremissions(list){_interestPremissions = List.from(list); notifyListeners();}
+  void setInterestpermissions(list) => _isPremitInterestDatas = List.from(list); 
 }

@@ -1,5 +1,6 @@
 import 'package:data_project/firebase_options.dart';
 import 'package:data_project/provider/new_user_provider.dart';
+import 'package:data_project/provider/setting_provider.dart';
 import 'package:data_project/provider/user_basic_data_provider.dart';
 import 'package:data_project/provider/user_interest_data_provider.dart';
 import 'package:data_project/screens/start/authentication.dart';
@@ -17,6 +18,7 @@ void main() async {
       ChangeNotifierProvider(create: (_) => NewUserProvider()),
       ChangeNotifierProvider(create: (_) => UserBasicData()),
       ChangeNotifierProvider(create: (_) => UserInterestData()),
+      ChangeNotifierProvider(create: (_) => SettingProvider()),
     ],
     child: MyApp(),
   ));

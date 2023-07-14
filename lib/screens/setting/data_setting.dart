@@ -98,7 +98,7 @@ class DataPage extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const InfoPremission()),
+                  MaterialPageRoute(builder: (context) => const Infopermission()),
                 );
               },
               child: Container(

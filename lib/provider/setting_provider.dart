@@ -23,7 +23,8 @@ class SettingProvider extends ChangeNotifier {
   void setNoticeMarket(bool isTrue) => _isNoticeMarketing = isTrue;
   void setPermissions(list) => _isPermitUserData = List.from(list);  
   void setTmPermission(bool isTrue, date){
-    _isPermitUserData[5] = isTrue;
+    _isPermitUserData[3] = isTrue;
+    _isPermitUserData[4] = isTrue;
     _permitTmDate = date;
     notifyListeners();
   }

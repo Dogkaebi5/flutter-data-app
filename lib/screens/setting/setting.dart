@@ -46,6 +46,7 @@ class _SettingPageState extends State<SettingPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('설정'),
+        centerTitle: true,
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios_new),
           onPressed: (){

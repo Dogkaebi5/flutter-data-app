@@ -63,7 +63,7 @@ class _InfopermissionState extends State<Infopermission> {
                   children: [
                     Text(userDataTexts[i]),
                     Switch(
-                      value: isPermitUsers[i],
+                      value: isPermitUsers[i], 
                       onChanged: (val){
                         setState(() {
                           isPermitUsers[i] = val;

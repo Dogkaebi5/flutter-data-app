@@ -1,5 +1,7 @@
+import 'package:data_project/provider/setting_provider.dart';
 import 'package:data_project/screens/setting/set_password.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class Terms extends StatefulWidget{
   const Terms({super.key});
@@ -131,6 +133,10 @@ class _Terms extends State<Terms>{
               child: ElevatedButton(
                 onPressed:isButtonActive()
                   ?(){
+                    if(isTMChecked){
+                      String date = DateTime.now().toString().split(' ')[0];
+                      context.read<SettingProvider>().setTmPermission(true, date);
+                    }
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => const SetPassword()),

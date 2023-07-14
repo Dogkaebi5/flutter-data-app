@@ -52,7 +52,7 @@ class _WithdrawState extends State<Withdraw> {
             );
           },
         ),
-        ),
+      ),
       body: Container(
         margin: EdgeInsets.only(top:20, left:20, right:20,),
         child: Column(

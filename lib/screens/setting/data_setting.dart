@@ -13,6 +13,7 @@ class DataPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('데이터 설정'),
+        centerTitle: true,
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios_new),
           onPressed: (){

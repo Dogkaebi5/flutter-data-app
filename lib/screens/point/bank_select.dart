@@ -32,7 +32,10 @@ class _BankState extends State<Bank> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('계좌등록')),
+      appBar: AppBar(
+        title: Text('계좌등록'),
+        centerTitle: true,
+      ),
       body: Container(
         margin: EdgeInsets.only(top:30, left:20, right:20,),
         child: Column(

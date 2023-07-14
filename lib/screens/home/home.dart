@@ -205,20 +205,6 @@ class _HomePageState extends State<HomePage> {
               onPressed: () => FirebaseAuth.instance.signOut(),
               child: Text("로그아웃")
             ),
-            TextButton(
-              onPressed: () {
-                PasswordStorage().writePassword("");
-              },
-              child: Text("비번del"),
-            ),
-            TextButton(
-              onPressed: () {
-                PasswordStorage().writePassword("");
-                UserBasicDataStorage().writeData("");
-                NewUserStorage().write("");
-              },
-              child: Text("reset"),
-            ),
           ]
         ),
       )

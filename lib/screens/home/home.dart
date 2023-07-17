@@ -91,126 +91,129 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("데이플러스"),
-        automaticallyImplyLeading: false,
-        actions: [
-          IconButton(
-            onPressed: (){
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const NotificationPage()),
-              );
-            }, 
-            icon: Icon(Icons.notifications)
-          ),
-          IconButton(
-            onPressed: (){
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const SettingPage()),
-              );
-            }, 
-            icon: Icon(Icons.settings)
-          ),
-        ],
-      ),
-      body: Container(
-        margin: EdgeInsets.only(left:20, right:20,),
-        child: Column(
-          children: [
-            //포인트 표기
-            Center(
-              heightFactor: 3.2,
-              child: Text("$point P", style: TextStyle(fontSize: 32),)
-            ),
-            //출금신청 링크
-            InkWell(
-              onTap: () {
+    return WillPopScope(
+      onWillPop: () => Future(() => false),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text("데이플러스"),
+          automaticallyImplyLeading: false,
+          actions: [
+            IconButton(
+              onPressed: (){
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Withdraw(point)),
+                  MaterialPageRoute(builder: (context) => const NotificationPage()),
                 );
-              },
-              child: Container(
-                padding: EdgeInsets.only(left: 20, right: 20, top: 28, bottom: 28),
-                color: Color.fromARGB(255, 242, 224, 255) ,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [Text("출금신청"), Icon(Icons.arrow_forward_ios),
-                ]),
-              ),
+              }, 
+              icon: Icon(Icons.notifications)
             ),
-            Divider(thickness: 2,),
-            
-            Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                //소팅선택
-                ToggleButtons(
-                  isSelected: _selections,
-                  onPressed: (index) {
-                    setState(() {
-                      _selections = [false, false];
-                      _selections[index] = !_selections[index];
-                    });
-                    if (index == 1) {
-                      showDatePickerDialog();
-                    } else {
-                      changeSortTextToMonth();
-                    }
-                  },              
-                  children: const [
-                    SizedBox(
-                      width: 160,
-                      child: Text("1개월", textAlign: TextAlign.center,)
-                    ),
-                    SizedBox(
-                      width: 160,
-                      child: Text("직접입력", textAlign: TextAlign.center,)
-                    ),
-                  ],
-                ),
-                SizedBox(height: 8,),
-                
-                if(_selections[1])
-                  Text(
-                    '검색기간 : $sortStartDate ~ $sortEndDate', 
-                    style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 12,
-                    ),  
-                  ),
-              ],
-            ),
-            SizedBox(height: 20,),
-
-            //디테일 링크
-            if(newDetails.length < 0)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: const [Text("기록이 없습니다.")],
-              )
-              else 
-                for(var i = 0; i < newDetails.length; i++)
-                  createDetailCards(i),
-            Spacer(),
-            TextButton(
+            IconButton(
               onPressed: (){
-                FirebaseAuth.instance.signOut();
-                Navigator.pushAndRemoveUntil(
+                Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) =>  Authentication()),
-                  ModalRoute.withName('/'),
+                  MaterialPageRoute(builder: (context) => const SettingPage()),
                 );
-                },
-              child: Text("로그아웃")
+              }, 
+              icon: Icon(Icons.settings)
             ),
-          ]
+          ],
         ),
-      )
+        body: Container(
+          margin: EdgeInsets.only(left:20, right:20,),
+          child: Column(
+            children: [
+              //포인트 표기
+              Center(
+                heightFactor: 3.2,
+                child: Text("$point P", style: TextStyle(fontSize: 32),)
+              ),
+              //출금신청 링크
+              InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Withdraw(point)),
+                  );
+                },
+                child: Container(
+                  padding: EdgeInsets.only(left: 20, right: 20, top: 28, bottom: 28),
+                  color: Color.fromARGB(255, 242, 224, 255) ,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: const [Text("출금신청"), Icon(Icons.arrow_forward_ios),
+                  ]),
+                ),
+              ),
+              Divider(thickness: 2,),
+              
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  //소팅선택
+                  ToggleButtons(
+                    isSelected: _selections,
+                    onPressed: (index) {
+                      setState(() {
+                        _selections = [false, false];
+                        _selections[index] = !_selections[index];
+                      });
+                      if (index == 1) {
+                        showDatePickerDialog();
+                      } else {
+                        changeSortTextToMonth();
+                      }
+                    },              
+                    children: const [
+                      SizedBox(
+                        width: 160,
+                        child: Text("1개월", textAlign: TextAlign.center,)
+                      ),
+                      SizedBox(
+                        width: 160,
+                        child: Text("직접입력", textAlign: TextAlign.center,)
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 8,),
+                  
+                  if(_selections[1])
+                    Text(
+                      '검색기간 : $sortStartDate ~ $sortEndDate', 
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 12,
+                      ),  
+                    ),
+                ],
+              ),
+              SizedBox(height: 20,),
+    
+              //디테일 링크
+              if(newDetails.length < 0)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: const [Text("기록이 없습니다.")],
+                )
+                else 
+                  for(var i = 0; i < newDetails.length; i++)
+                    createDetailCards(i),
+              Spacer(),
+              TextButton(
+                onPressed: (){
+                  FirebaseAuth.instance.signOut();
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) =>  Authentication()),
+                    ModalRoute.withName('/'),
+                  );
+                  },
+                child: Text("로그아웃")
+              ),
+            ]
+          ),
+        )
+      ),
     );
   }
   
@@ -238,18 +241,24 @@ class _HomePageState extends State<HomePage> {
               setMon();
             },
             onSubmit: (p0) {
+              String? selectSta;
+              String? selectEnd;
               if (p0 == null) {
                 Navigator.pop(context);
                 setMon();
-              }else {
-                String selectSta = p0.toString().split(' ')[1];
-                var selectEnd = p0.toString().split(' ')[4];
+              } else {
+                selectSta = p0.toString().split(' ')[1];
+                selectEnd = p0.toString().split(' ')[4];
                 if (selectEnd == 'null)'){
+                  selectSta = p0.toString().split(' ')[1];
                   setSortDateText(selectSta, selectSta);
+                  Navigator.pop(context);
                 }else {
+                  selectSta = p0.toString().split(' ')[1];
+                  selectEnd = p0.toString().split(' ')[4];
                   setSortDateText(selectSta, selectEnd);
+                  Navigator.pop(context);
                 }
-              Navigator.pop(context);
               }
             }
           ),

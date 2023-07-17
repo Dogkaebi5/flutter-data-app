@@ -68,7 +68,7 @@ class _WithdrawState extends State<Withdraw> {
               child: Container(
                 margin: EdgeInsets.only(bottom: 10),
                 padding: EdgeInsets.all(20),
-                color: const Color.fromARGB(255, 194, 226, 241) ,
+                color: Color.fromARGB(255, 242, 224, 255) ,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

@@ -1,6 +1,7 @@
 import 'package:data_project/provider/setting_provider.dart';
 import 'package:data_project/screens/point/withdraw.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 final List<String> bankList = ['국민은행', '하나은행', '신한은행', '우리은행', '농협은행', '기업은행', '산업은행', '제일은행', '카카오뱅크', '케이뱅크', '토스뱅크'];
@@ -45,7 +46,7 @@ class _BankState extends State<Bank> {
               width: double.infinity,
               margin: EdgeInsets.only(bottom: 10),
               padding: EdgeInsets.all(12),
-              color: Color.fromARGB(255, 218, 241, 252) ,
+              color: Color.fromARGB(255, 242, 224, 255) ,
               child: 
                 isHasAcc?
                 Text("등록계좌 : ${bankData[0]??''}\n${bankData[1]}  ${bankData[2]}")
@@ -61,9 +62,10 @@ class _BankState extends State<Bank> {
             SizedBox(
               height: 44,
               child: TextField(
-                onChanged: (value) => acc = value.toString(),
+                onChanged: (value) => setState(() => acc = value.toString()),
                 keyboardType: TextInputType.number,
                 maxLength: 14,
+                inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[0-9]'))],
                 textAlignVertical: TextAlignVertical.top,
                 decoration: InputDecoration(
                   counterText: "",
@@ -116,7 +118,7 @@ class _BankState extends State<Bank> {
                                                 width: 110,
                                                 child: 
                                                 Card(
-                                                  color: isSelectBanks[i] ?  Colors.cyan : Colors.white,
+                                                  color: isSelectBanks[i] ?  Color.fromARGB(255, 142, 57, 246)  : Colors.white,
                                                   child: Center(
                                                     child:Text(
                                                       bankList[i],
@@ -153,7 +155,7 @@ class _BankState extends State<Bank> {
               height: 40,
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: (bank != null && acc != null)
+                onPressed: (bank != null && acc!.length > 5)
                   ?() {
                     setState(() => isHasAcc = true);
                     context.read<SettingProvider>().setBank(bank, acc);

@@ -68,8 +68,8 @@ class _SettingPageState extends State<SettingPage> {
             InkWell(
               onTap: () => passwordDialog(context, moveToData),
               child: Container(
-                padding: EdgeInsets.all(20),
-                color: const Color.fromARGB(255, 194, 226, 241) ,
+                padding: EdgeInsets.only(right:20, left: 20, top: 28, bottom: 28),
+                color: Color.fromARGB(255, 231, 208, 255) ,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: const [
@@ -113,18 +113,22 @@ class _SettingPageState extends State<SettingPage> {
             ),
             InkWell(
               onTap: () => passwordDialog(context, moveToSetPassword),
-              child: Container(
-                padding: EdgeInsets.all(20),
-                color: const Color.fromARGB(255, 194, 226, 241) ,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
-                    Text("비밀번호 설정"),
-                    Icon(Icons.arrow_forward_ios),
-                  ]
+              child: SizedBox(
+                height: 60,
+                child: Container(
+                  padding: EdgeInsets.only(left:12, right:12),
+                  color: Color.fromARGB(255, 230, 230, 230) ,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: const [
+                      Text("비밀번호 설정"),
+                      Icon(Icons.arrow_forward_ios),
+                    ]
+                  ),
                 ),
               ),
             ),
+            SizedBox(height: 12,),
             InkWell(
               onTap: () {
                 Navigator.push(
@@ -132,22 +136,25 @@ class _SettingPageState extends State<SettingPage> {
                   MaterialPageRoute(builder: (context) => const Webview()),
                 );
               },
-              child: Container(
-                margin: EdgeInsets.only(top: 20),
-                padding: EdgeInsets.all(20),
-                color: const Color.fromARGB(255, 194, 226, 241) ,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('휴대폰 변경 설정'),
-                        Text("010-****-$mobile"),
-                      ],
-                    ),
-                    Icon(Icons.arrow_forward_ios),
-                  ]
+              child: SizedBox(
+                height: 60,
+                child: Container(
+                  padding: EdgeInsets.only(left:12, right:12),
+                  color: Color.fromARGB(255, 230, 230, 230) ,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('휴대폰 변경 설정'),
+                          Text("010-****-$mobile"),
+                        ],
+                      ),
+                      Icon(Icons.arrow_forward_ios),
+                    ]
+                  ),
                 ),
               ),
             ),

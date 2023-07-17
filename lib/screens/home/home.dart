@@ -122,8 +122,8 @@ class _HomePageState extends State<HomePage> {
           children: [
             //포인트 표기
             Center(
-              heightFactor: 3,
-              child: Text("$point P", style: TextStyle(fontSize: 28),)
+              heightFactor: 3.2,
+              child: Text("$point P", style: TextStyle(fontSize: 32),)
             ),
             //출금신청 링크
             InkWell(
@@ -134,8 +134,8 @@ class _HomePageState extends State<HomePage> {
                 );
               },
               child: Container(
-                padding: EdgeInsets.all(20),
-                color: const Color.fromARGB(255, 194, 226, 241) ,
+                padding: EdgeInsets.only(left: 20, right: 20, top: 28, bottom: 28),
+                color: Color.fromARGB(255, 242, 224, 255) ,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: const [Text("출금신청"), Icon(Icons.arrow_forward_ios),
@@ -164,11 +164,11 @@ class _HomePageState extends State<HomePage> {
                   },              
                   children: const [
                     SizedBox(
-                      width: 164,
+                      width: 160,
                       child: Text("1개월", textAlign: TextAlign.center,)
                     ),
                     SizedBox(
-                      width: 164,
+                      width: 160,
                       child: Text("직접입력", textAlign: TextAlign.center,)
                     ),
                   ],
@@ -220,6 +220,8 @@ class _HomePageState extends State<HomePage> {
     setSortDateText(monthAgo, todayDate);
   }
 
+  void setMon() => setState(() => _selections = [true, false]);
+
   showDatePickerDialog()=>
     showDialog(
       context: context, 
@@ -231,10 +233,14 @@ class _HomePageState extends State<HomePage> {
             showActionButtons: true,
             maxDate: DateTime.now(),
             minDate: signUpDate,
-            onCancel: () => Navigator.pop(context),
+            onCancel: (){
+              Navigator.pop(context);
+              setMon();
+            },
             onSubmit: (p0) {
               if (p0 == null) {
                 Navigator.pop(context);
+                setMon();
               }else {
                 String selectSta = p0.toString().split(' ')[1];
                 var selectEnd = p0.toString().split(' ')[4];
@@ -254,29 +260,30 @@ class _HomePageState extends State<HomePage> {
   createDetailCards(int loopInt){
     return InkWell(
       onTap: () => detailDialog(context, loopInt, newDetails), 
-      child: Container(
-        margin: EdgeInsets.all(8),
-        padding: EdgeInsets.all(12),
-        color: const Color.fromARGB(255, 194, 226, 241) ,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(newDetails[loopInt]['title'] + "  " + newDetails[loopInt]['point'],),
-                SizedBox(height: 4,),
-                Text(
-                  newDetails[loopInt]['date'].split(' ')[0], 
-                  style: TextStyle(
-                    color: Colors.black45, 
-                    fontSize: 12
+      child: Card(
+        margin: EdgeInsets.all(4),
+        child: Container(
+          padding: EdgeInsets.all(20),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(newDetails[loopInt]['title'] + "  " + newDetails[loopInt]['point'],),
+                  SizedBox(height: 4,),
+                  Text(
+                    newDetails[loopInt]['date'].split(' ')[0], 
+                    style: TextStyle(
+                      color: Colors.black45, 
+                      fontSize: 12
+                    ),
                   ),
-                ),
-              ],
-            ),
-            Icon(Icons.arrow_forward_ios),
-        ]),
+                ],
+              ),
+              Icon(Icons.arrow_forward_ios),
+          ]),
+        ),
       ),
     );
   }

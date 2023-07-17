@@ -32,7 +32,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Data Pro',
       theme: ThemeData(
-        primarySwatch: Colors.indigo,
+        primarySwatch: Colors.deepPurple,
+        secondaryHeaderColor: Colors.teal
       ),
       home: Authentication(),
     );

@@ -79,17 +79,20 @@ class _NotificationPageState extends State<NotificationPage> {
               child: Container(
                 margin: EdgeInsets.only(bottom: 10),
                 padding: EdgeInsets.all(20),
-                color: const Color.fromARGB(255, 194, 226, 241) ,
+                color: Color.fromARGB(255, 232, 232, 232),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: const [
                     Row(
                       children: [
-                        Icon(Icons.notifications_on),
+                        Icon(
+                          Icons.notifications_on,
+                        ),
                         SizedBox(width: 8),
                         Text(
                           "알림설정",
                           style: TextStyle(
+
                             fontWeight: FontWeight.bold,
                             fontSize: 16,  
                           ),
@@ -106,53 +109,40 @@ class _NotificationPageState extends State<NotificationPage> {
             for(var i = 0; i < notifications.length; i++)
               InkWell(
                 onTap: () => notificationDialog(i),
-                child: Container(
-                  width: double.infinity,
-                  margin: EdgeInsets.all(8),
-                  padding: EdgeInsets.all(12),
-                  color: const Color.fromARGB(255, 194, 226, 241) ,
-                  child: 
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //   children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            notifications[i]['title'], 
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold, 
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.justify,
-                            maxLines: 1,
+                child: Card(
+                  child: Container(
+                    width: double.infinity,
+                    margin: EdgeInsets.all(8),
+                    padding: EdgeInsets.all(12),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          notifications[i]['title'], 
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold, 
                           ),
-                          SizedBox(height: 4,),
-                          Text(
-                            notifications[i]['content'], 
-                            overflow: TextOverflow.clip,
-                            textAlign: TextAlign.justify,
-                            maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.justify,
+                          maxLines: 1,
+                        ),
+                        SizedBox(height: 4,),
+                        Text(
+                          notifications[i]['content'], 
+                          overflow: TextOverflow.clip,
+                          textAlign: TextAlign.justify,
+                          maxLines: 2,
+                        ),
+                        SizedBox(height: 4,),
+                        Text(
+                          notifications[i]['date'],
+                          style: TextStyle(
+                            color: Color.fromARGB(255, 132, 132, 132),
                           ),
-                          SizedBox(height: 4,),
-                          Text(
-                            notifications[i]['date'],
-                            style: TextStyle(
-                              color: Color.fromARGB(255, 132, 132, 132),
-                            ),
-                          ),
-                        ],
-                      ),
-                    //   Container(
-                    //     width: 10,
-                    //     height: 10,
-                    //     decoration: BoxDecoration(
-                    //       color: Colors.red,
-                    //       shape: BoxShape.circle,
-                    //     ),
-                    //   ),
-                    // ]
-                  // ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ),
           ]

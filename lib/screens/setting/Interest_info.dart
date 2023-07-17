@@ -90,7 +90,7 @@ class _InterestState extends State<Interest> {
                   width: double.infinity,
                   child:
                     Wrap(
-                      direction: Axis.horizontal, 
+                      alignment: WrapAlignment.center,
                       children: [
                         for(var i = 0; i < interestList.length; i++)
                           createInterstCard(i)
@@ -160,8 +160,7 @@ class _InterestState extends State<Interest> {
   }
   createInterstCard(i){
     return InkWell(
-      child: Container(
-        margin: EdgeInsets.all(2),
+      child: SizedBox(
         height: 60,
         width: 110,
         child: 

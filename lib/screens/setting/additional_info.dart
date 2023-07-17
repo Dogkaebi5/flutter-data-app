@@ -155,10 +155,10 @@ class _AddInfoState extends State<AddInfo> {
       List q2 = userInterestList[1]["question"];
       List q3 = userInterestList[2]["question"];
 
-      List addDataList = context.read<UserInterestData>().addData;
-      var addData0 = addDataList[0];
-      var addData1 = addDataList[1];
-      var addData2 = addDataList[2];
+      // List addDataList = context.read<UserInterestData>().addData;
+      // var addData0 = addDataList[0];
+      // var addData1 = addDataList[1];
+      // var addData2 = addDataList[2];
 
       isNewUser = context.read<NewUserProvider>().isNewUser;
       
@@ -187,9 +187,9 @@ class _AddInfoState extends State<AddInfo> {
           break;
         default : break;
       }
-      if(addData0.isNotEmpty){addSelected[0] = addData0;}
-      if(addData1.isNotEmpty){addSelected[1] = addData1;}
-      if(addData2.isNotEmpty){addSelected[2] = addData2;}
+      // if(addData0.isNotEmpty && addData0 != ""){addSelected[0] = addData0;}
+      // if(addData1.isNotEmpty && addData1 != ""){addSelected[1] = addData1;}
+      // if(addData2.isNotEmpty && addData2 != ""){addSelected[2] = addData2;}
       if(selectedInterestCount > 0){setQuestValue();}
     });
   }

@@ -38,7 +38,7 @@ class DataPage extends StatelessWidget {
               },
               child: Container(
                 padding: EdgeInsets.all(20),
-                color: const Color.fromARGB(255, 194, 226, 241) ,
+                color: Color.fromARGB(255, 245, 226, 255) ,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: const [
@@ -62,7 +62,7 @@ class DataPage extends StatelessWidget {
               child: Container(
                 margin: EdgeInsets.only(bottom: 20),
                 padding: EdgeInsets.all(20),
-                color: const Color.fromARGB(255, 194, 226, 241) ,
+                color: Color.fromARGB(255, 245, 226, 255) ,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: const [
@@ -81,7 +81,7 @@ class DataPage extends StatelessWidget {
               },
               child: Container(
                 padding: EdgeInsets.all(20),
-                color: const Color.fromARGB(255, 194, 226, 241) ,
+                color: Color.fromARGB(255, 245, 226, 255) ,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: const [
@@ -105,7 +105,7 @@ class DataPage extends StatelessWidget {
               child: Container(
                 margin: EdgeInsets.only(bottom: 20),
                 padding: EdgeInsets.all(20),
-                color: const Color.fromARGB(255, 194, 226, 241) ,
+                color: Color.fromARGB(255, 245, 226, 255) ,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: const [

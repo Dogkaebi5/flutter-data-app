@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:data_project/screens/home/home_dialog.dart';
+import 'package:data_project/screens/start/authentication.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:data_project/screens/home/notifications.dart';
 import 'package:data_project/screens/setting/setting.dart';
@@ -197,7 +198,14 @@ class _HomePageState extends State<HomePage> {
                   createDetailCards(i),
             Spacer(),
             TextButton(
-              onPressed: () => FirebaseAuth.instance.signOut(),
+              onPressed: (){
+                FirebaseAuth.instance.signOut();
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) =>  Authentication()),
+                  ModalRoute.withName('/'),
+                );
+                },
               child: Text("로그아웃")
             ),
           ]

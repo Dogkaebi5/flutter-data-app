@@ -76,61 +76,64 @@ class _BasicInfoState extends State<BasicInfo> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('기본정보'),
-        centerTitle: true,
-        automaticallyImplyLeading: false,
-        ),
-      body: SingleChildScrollView(
-        child: Container(
-          margin: EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('정보가 많을 수록 더 많은 리워드를 받을 수 있습니다.'),
-              SizedBox(height: 40,),
-              createTextInput("닉네임", userNickname),
-              SizedBox(height: 20,),
-              createTextInput("이메일", userEmail),
-              
-              SizedBox(height: 40,),
-              Text('아래 입력된 정보는 3개월간 수정 불가합니다.'),
-              SizedBox(height: 40,),
-              
-              for (int i = 0; i < basicInfoList.length; i++)
-                createBasicDataDropDown(
-                  basicInfoList[i]['title'],
-                  basicInfoList[i]['option'], 
-                  i
-                ),
-              
-              Container(
-                margin: EdgeInsets.only(top: 20, bottom: 20),
-                width: double.maxFinite,
-                child: ElevatedButton(
-                  onPressed: (){
-                    saveBasicData();
-                    if(isNewUser){
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Interest()),
-                      );
-                    }else{
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => DataPage()),
-                      );
-                    }
-                  }, 
-                  child: Text('확인 저장')
-                ),
-              ),
-            ],
+    return WillPopScope(
+      onWillPop: () => Future(() => false),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('기본정보'),
+          centerTitle: true,
+          automaticallyImplyLeading: false,
           ),
-        ),
-      )
-      
+        body: SingleChildScrollView(
+          child: Container(
+            margin: EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('정보가 많을 수록 더 많은 리워드를 받을 수 있습니다.'),
+                SizedBox(height: 40,),
+                createTextInput("닉네임", userNickname),
+                SizedBox(height: 20,),
+                createTextInput("이메일", userEmail),
+                
+                SizedBox(height: 40,),
+                Text('아래 입력된 정보는 3개월간 수정 불가합니다.'),
+                SizedBox(height: 40,),
+                
+                for (int i = 0; i < basicInfoList.length; i++)
+                  createBasicDataDropDown(
+                    basicInfoList[i]['title'],
+                    basicInfoList[i]['option'], 
+                    i
+                  ),
+                
+                Container(
+                  margin: EdgeInsets.only(top: 20, bottom: 20),
+                  width: double.maxFinite,
+                  child: ElevatedButton(
+                    onPressed: (){
+                      saveBasicData();
+                      if(isNewUser){
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => Interest()),
+                        );
+                      }else{
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => DataPage()),
+                        );
+                      }
+                    }, 
+                    child: Text('확인 저장')
+                  ),
+                ),
+              ],
+            ),
+          ),
+        )
+        
+      ),
     );
   }
   

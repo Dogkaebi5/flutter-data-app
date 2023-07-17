@@ -13,7 +13,10 @@ class _AppStartState extends State<AppStart> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("시작하기")),
+      appBar: AppBar(
+        title: Text("시작하기"),
+        automaticallyImplyLeading: false,
+      ),
       body : Center(
         child: Padding(
           padding: const EdgeInsets.only(right: 20, left: 20),

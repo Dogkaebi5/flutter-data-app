@@ -65,62 +65,65 @@ class _InterestState extends State<Interest> {
   @override
   Widget build(BuildContext context) {
     
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('관심사'),
-        centerTitle: true,
-        automaticallyImplyLeading: false,
-      ),
-      body: Container(
-        margin: EdgeInsets.only(top: 20, left:20, right:20,),
-        child: SizedBox(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('관심사를 최대 3개 선택하세요.'),
-              Text('선택된 정보는 3개월간 수정 불가합니다.'),
-              SizedBox(
-                height: 88,
-                child: createInterestListText(),
-              ),
-              Container(
-                margin: EdgeInsets.symmetric(vertical:10),
-                width: double.infinity,
-                child:
-                  Wrap(
-                    direction: Axis.horizontal, 
-                    children: [
-                      for(var i = 0; i < interestList.length; i++)
-                        createInterstCard(i)
-                    ],
-                  ),
-              ),
-              Spacer(),
-              SizedBox(
-                width: double.infinity,
-                height: 40,
-                child: ElevatedButton(
-                  onPressed: (){
-                    saveInterestData();
-                    setAddselectInit();
-                    if(isNewUser){
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => AddInfo()),
-                      );
-                    }else{
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => DataPage()),
-                      );
-                    }
-                  }, 
-                  child: Text('확인 저장')
+    return WillPopScope(
+      onWillPop: () => Future(() => false),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('관심사'),
+          centerTitle: true,
+          automaticallyImplyLeading: false,
+        ),
+        body: Container(
+          margin: EdgeInsets.only(top: 20, left:20, right:20,),
+          child: SizedBox(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('관심사를 최대 3개 선택하세요.'),
+                Text('선택된 정보는 3개월간 수정 불가합니다.'),
+                SizedBox(
+                  height: 88,
+                  child: createInterestListText(),
                 ),
-              ),
-              Spacer(),
-            ],
-          )
+                Container(
+                  margin: EdgeInsets.symmetric(vertical:10),
+                  width: double.infinity,
+                  child:
+                    Wrap(
+                      direction: Axis.horizontal, 
+                      children: [
+                        for(var i = 0; i < interestList.length; i++)
+                          createInterstCard(i)
+                      ],
+                    ),
+                ),
+                Spacer(),
+                SizedBox(
+                  width: double.infinity,
+                  height: 40,
+                  child: ElevatedButton(
+                    onPressed: (){
+                      saveInterestData();
+                      setAddselectInit();
+                      if(isNewUser){
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => AddInfo()),
+                        );
+                      }else{
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => DataPage()),
+                        );
+                      }
+                    }, 
+                    child: Text('확인 저장')
+                  ),
+                ),
+                Spacer(),
+              ],
+            )
+          ),
         ),
       ),
     );

@@ -16,7 +16,7 @@ class _NotificationPageState extends State<NotificationPage> {
     { "notification": 
       [
         {
-        "id": "80001",
+        "id": "20000",
         "type": "tele", 
         "title": "[데이플러스] 텔레마케팅 접수 안내",
         "content": "텔레마케팅 구매가 접수되었습니다. 업체의 마케팅 전화를 유의하세요.",
@@ -29,10 +29,10 @@ class _NotificationPageState extends State<NotificationPage> {
           }
         },
         {
-        "id": "80002",
+        "id": "10000",
         "type": "normal", 
         "title": "[데이플러스] 리워드 안내",
-        "content": "데이터 판매 리워드가 도착했습니다.",
+        "content": "판매 접수된 정보가 구매 확정되어 포인트가 적립되었습니다!",
         "date": "2023.01.01 23:59:59"
         }
       ]
@@ -65,7 +65,7 @@ class _NotificationPageState extends State<NotificationPage> {
             );
           },
         ),
-        ),
+      ),
       body: Container(
         margin: EdgeInsets.only(top:30, left:20, right:20,),
         child: Column(
@@ -161,54 +161,60 @@ class _NotificationPageState extends State<NotificationPage> {
     );
   }
 
-  notificationDialog(int i) => showDialog(
-    context: context,
-    builder: (BuildContext context) => Dialog.fullscreen(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          IconButton(
-            onPressed: (){
-              Navigator.pop(context);
-            }, 
-            icon: Icon(Icons.close)
+  notificationDialog(int i) {
+    if (notifications[i]['type'] == "tele") {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) => Dialog.fullscreen(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              IconButton(
+                onPressed: (){
+                  Navigator.pop(context);
+                }, 
+                icon: Icon(Icons.close)
+              ),
+              Padding(
+                padding: EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('텔레마케팅 데이터 판매', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+                    SizedBox(height: 15),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('구매자'),
+                        Text(notifications[i]["tmdata"]["buyer"]),
+                      ],),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('연락처'),
+                        Text(notifications[i]["tmdata"]["cotact"]),
+                      ],),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('접수일시'),
+                        Text(notifications[i]["date"]),
+                      ],),
+                    SizedBox(height: 20,),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('상태'),
+                        Text(notifications[i]["tmdata"]["state"]),
+                      ],),
+                  ]),
+              ),
+            ]
           ),
-          Padding(
-            padding: EdgeInsets.all(20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('텔레마케팅 데이터 판매', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
-                SizedBox(height: 15),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('구매자'),
-                    Text('(주)테스트회사'),
-                  ],),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('연락처'),
-                    Text('02)1234-5678'),
-                  ],),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('접수일시'),
-                    Text('2023.01.01 23:59:59'),
-                  ],),
-                SizedBox(height: 20,),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('상태'),
-                    Text('거래접수'),
-                ],),                            
-              ]),
-          ),
-        ]
-      ),
-    ),
-  );
+        ),
+      );
+    }else if(notifications[i]['type'] == "normal"){
+      Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
+    }
+  }
 }

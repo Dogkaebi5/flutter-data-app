@@ -26,7 +26,7 @@ class SignPage extends StatelessWidget {
           return SignInScreen(
             providerConfigs: const [
               EmailProviderConfiguration(),
-              // GoogleProviderConfiguration(clientId: ""),
+              // PhoneProviderConfiguration(),
             ],
           );
         }

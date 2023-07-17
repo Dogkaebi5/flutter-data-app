@@ -201,96 +201,99 @@ class _AddInfoState extends State<AddInfo> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('추가정보'),
-        centerTitle: true,
-        automaticallyImplyLeading: false,
-      ),
-      body: 
-      SingleChildScrollView(
-        child: Container(
-          margin: EdgeInsets.only(top:20, left:20, right:20,),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('정보가 많을 수록 판매될 확률이 높아집니다.'),
-              Text('입력된 정보는 3개월간 수정 불가합니다.'),
-              SizedBox(height: 20,),
-
-              (selectedInterestCount > 0)
-                ?Column(
-                  children: [
-                    Center(
-                      child: ToggleButtons(
-                        onPressed: (index) {
-                          setState(() {
-                            _selections = List.filled(_selections.length, false);
-                            _selections[index] = !_selections[index];
-                            setQuestValue();
-                          });
-                        },
-                        isSelected: _selections,
-                        children: [
-                          for (int i = 0; i < selectedInterestList.length; i++)
-                            Container(
-                              width: 100,
-                              padding: EdgeInsets.all(2),
-                              child: Text(selectedInterestList[i], textAlign: TextAlign.center,),
-                            ),
-                        ],
+    return WillPopScope(
+      onWillPop: () => Future(() => false),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('추가정보'),
+          centerTitle: true,
+          automaticallyImplyLeading: false,
+        ),
+        body: 
+        SingleChildScrollView(
+          child: Container(
+            margin: EdgeInsets.only(top:20, left:20, right:20,),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('정보가 많을 수록 판매될 확률이 높아집니다.'),
+                Text('입력된 정보는 3개월간 수정 불가합니다.'),
+                SizedBox(height: 20,),
+    
+                (selectedInterestCount > 0)
+                  ?Column(
+                    children: [
+                      Center(
+                        child: ToggleButtons(
+                          onPressed: (index) {
+                            setState(() {
+                              _selections = List.filled(_selections.length, false);
+                              _selections[index] = !_selections[index];
+                              setQuestValue();
+                            });
+                          },
+                          isSelected: _selections,
+                          children: [
+                            for (int i = 0; i < selectedInterestList.length; i++)
+                              Container(
+                                width: 100,
+                                padding: EdgeInsets.all(2),
+                                child: Text(selectedInterestList[i], textAlign: TextAlign.center,),
+                              ),
+                          ],
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 12,),
-                    createInterestDateText(),
-                    SizedBox(height: 40,),
-                    for (int i = 0; i < quests.length; i++)
-                      createQuestionDropDowns(i),
-                  ])
-                : Column(
-                  children: const [
-                    Text("선택한 관심사가 없습니다."),
-                    SizedBox(height: 80,),
-                  ],
+                      SizedBox(height: 12,),
+                      createInterestDateText(),
+                      SizedBox(height: 40,),
+                      for (int i = 0; i < quests.length; i++)
+                        createQuestionDropDowns(i),
+                    ])
+                  : Column(
+                    children: const [
+                      Text("선택한 관심사가 없습니다."),
+                      SizedBox(height: 80,),
+                    ],
+                  ),
+    
+                SizedBox(
+                  width: double.infinity,
+                  height: 40,
+                  child: ElevatedButton(
+                    onPressed: (){
+                      switch (selectedInterestCount) {
+                        case 1 : setData(); router(); break;
+                        case 2 : 
+                          if(_selections[0]){
+                            setState((){
+                              _selections = [false, true];
+                              setQuestValue();
+                            });
+                          }else{setData(); router(); break;}
+                        case 3 : 
+                          if(_selections[0]){
+                            setState((){
+                              _selections = [false, true, false];
+                              setQuestValue();
+                            });
+                          }else if (_selections[1]){
+                            setState((){
+                              _selections = [false, false, true];
+                              setQuestValue();
+                            });
+                          }else {setData(); router(); break;}
+                        default: router(); break;
+                      }
+                    }, 
+                    child: Text('확인 저장')
+                  ),
                 ),
-
-              SizedBox(
-                width: double.infinity,
-                height: 40,
-                child: ElevatedButton(
-                  onPressed: (){
-                    switch (selectedInterestCount) {
-                      case 1 : setData(); router(); break;
-                      case 2 : 
-                        if(_selections[0]){
-                          setState((){
-                            _selections = [false, true];
-                            setQuestValue();
-                          });
-                        }else{setData(); router(); break;}
-                      case 3 : 
-                        if(_selections[0]){
-                          setState((){
-                            _selections = [false, true, false];
-                            setQuestValue();
-                          });
-                        }else if (_selections[1]){
-                          setState((){
-                            _selections = [false, false, true];
-                            setQuestValue();
-                          });
-                        }else {setData(); router(); break;}
-                      default: router(); break;
-                    }
-                  }, 
-                  child: Text('확인 저장')
-                ),
-              ),
-              SizedBox(height: 20,),
-            ],
-          ),
+                SizedBox(height: 20,),
+              ],
+            ),
+          )
         )
-      )
+      ),
     );
   }
 

@@ -4,7 +4,9 @@ import 'package:data_project/screens/home/home.dart';
 import 'package:data_project/screens/setting/data_setting.dart';
 import 'package:data_project/screens/setting/del_user_dialog.dart';
 import 'package:data_project/screens/setting/set_password.dart';
+import 'package:data_project/screens/webview/webview.dart';
 import 'package:flutter/material.dart';
+
 import 'package:provider/provider.dart';
 
 class SettingPage extends StatefulWidget {
@@ -125,7 +127,10 @@ class _SettingPageState extends State<SettingPage> {
             ),
             InkWell(
               onTap: () {
-
+                Navigator.push(
+                  context, 
+                  MaterialPageRoute(builder: (context) => const Webview()),
+                );
               },
               child: Container(
                 margin: EdgeInsets.only(top: 20),
@@ -150,8 +155,24 @@ class _SettingPageState extends State<SettingPage> {
               padding: const EdgeInsets.only(top: 10, bottom: 10),
               child: Divider(color: Colors.black, thickness: 1,),
             ),
-            TextButton(onPressed: (){}, child: Text('이용약관')),
-            TextButton(onPressed: (){}, child: Text('고객센터')),
+            TextButton(
+              onPressed: (){
+                Navigator.push(
+                  context, 
+                  MaterialPageRoute(builder: (context) => const Webview()),
+                );
+              },
+              child: Text('이용약관')
+            ),
+            TextButton(
+              onPressed: (){
+                Navigator.push(
+                  context, 
+                  MaterialPageRoute(builder: (context) => const Webview()),
+                );
+              }, 
+              child: Text('고객센터')
+            ),
             Padding(
               padding: const EdgeInsets.only(top: 20, bottom: 20),
               child: Row(

@@ -1,4 +1,5 @@
 import 'package:data_project/screens/start/firebase.dart';
+import 'package:data_project/screens/webview/webview.dart';
 import 'package:flutter/material.dart';
 
 class AppStart extends StatefulWidget {
@@ -36,7 +37,12 @@ class _AppStartState extends State<AppStart> {
                     )
                   ),
                   TextButton(
-                    onPressed: (){}, 
+                    onPressed: (){
+                      Navigator.push(
+                        context, 
+                        MaterialPageRoute(builder: (context) => const Webview()),
+                      );
+                    }, 
                     child: Text('고객센터', 
                     style: TextStyle(
                       decoration: TextDecoration.underline),

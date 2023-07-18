@@ -3,7 +3,7 @@ import 'package:data_project/main.dart';
 import 'package:data_project/provider/new_user_provider.dart';
 import 'package:data_project/screens/setting/basic_info.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:pinput/pinput.dart';
 import 'package:provider/provider.dart';
 
 class SetPassword extends StatefulWidget {
@@ -13,12 +13,10 @@ class SetPassword extends StatefulWidget {
   State<SetPassword> createState() => _SetPassword();
 }
 
-//basic 호출할 때 파라미터 전달 말로 provider로 수정 필요
-//isFirstLogin 삭제 필요
-
 class _SetPassword extends State<SetPassword> {
-  bool _isVisibility = false;
-  bool isCorrectPassword = true;
+  bool _isVisibilityNew = false;
+  bool _isVisibilityCheck = false;
+  bool? isCorrectPassword;
   String _newPassword = "";
   String _checkNewPassword = "";
 
@@ -33,37 +31,134 @@ class _SetPassword extends State<SetPassword> {
       ?setState(() => isCorrectPassword = true)
       :setState(() => isCorrectPassword = false);
   }
+  PageController _pageViewController = PageController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-      margin: EdgeInsets.only(top: 200, left: 60, right: 60),
-        child: Column(
-          children:[
-            Text(
-              "비밀번호 설정", 
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),),
-            SizedBox(height: 8,),
-            Text("숫자 4자리"),
-            SizedBox(height: 8,),
-            IconButton(
-              onPressed: () => setState(() => _isVisibility = !_isVisibility),
-              icon: _isVisibility ? Icon(Icons.visibility) : Icon(Icons.visibility_off),
-              color: _isVisibility ? Colors.cyan : Colors.grey ,
+      body: SafeArea(
+        child: PageView(
+          controller: _pageViewController,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 24, horizontal:20),
+              child: Column(
+                children:[
+                  SizedBox(height: 200,),
+                  Text(
+                    "새로운 비밀번호", 
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),),
+                  SizedBox(height: 8,),
+                  Text("숫자 4자리을 입력하세요"),
+                  SizedBox(height: 8,),
+                  IconButton(
+                    onPressed: () => setState(() => _isVisibilityNew = !_isVisibilityNew),
+                    icon: _isVisibilityNew ? Icon(Icons.visibility) : Icon(Icons.visibility_off),
+                    color: _isVisibilityNew ? Colors.purple.shade300 : Colors.grey ,
+                  ),
+                  SizedBox(height: 20 ,),
+                  Pinput(
+                    defaultPinTheme: PinTheme(
+                      height: 60,
+                      width: 60,
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade200,
+                        borderRadius: BorderRadius.circular(20)
+                      )
+                    ),
+                  focusedPinTheme: PinTheme(
+                    height: 60,
+                    width: 60,
+                    decoration: BoxDecoration(
+                      color: Colors.purple.shade100,
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(color: Colors.purple, width: 1.2 )
+                    ),
+                  ),
+                  submittedPinTheme: PinTheme(
+                    height: 60,
+                    width: 60,
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade200,
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(color: Colors.purple.shade200, width: 1),
+                    )
+                  ),
+                  autofocus : true,
+                  obscureText : _isVisibilityNew? false :true,
+                  obscuringCharacter: "⁕",
+                  onChanged: (value)=> setState(()=> _newPassword = value),
+                  onCompleted: (value){
+                    _pageViewController.nextPage(
+                      duration: Duration(milliseconds: 300), 
+                      curve: Curves.linear,);
+                    }
+                  ),
+                ],
+              ),
             ),
-            passwordTextField(setNewPassword),
-            passwordTextField(setCheckNewPassword),
-            SizedBox(height: 40,),
-            SizedBox(
-              width: double.infinity,
-              height: 40, 
-              child: ElevatedButton(
-                onPressed: 
-                  (_newPassword.length > 3 && _checkNewPassword.length > 3)
-                  ?(){
-                    checkPassword();
-                    if(isCorrectPassword){
+
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 24, horizontal:20),
+              child: Column(
+                children:[
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: GestureDetector(
+                      onTap: (){ 
+                        _pageViewController.previousPage(
+                          duration: Duration(milliseconds: 300), 
+                          curve: Curves.linear,);
+                      },
+                      child: const Icon(Icons.arrow_back),
+                    ),
+                  ),
+                SizedBox(height: 174,),
+                Text(
+                  "비밀번호 다시 확인", 
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),),
+                SizedBox(height: 8,),
+                Text("입력한 비밀번호를 다시 입력해주세요"),
+                SizedBox(height: 8,),
+                IconButton(
+                  onPressed: () => setState(() => _isVisibilityCheck = !_isVisibilityCheck),
+                  icon: _isVisibilityCheck ? Icon(Icons.visibility) : Icon(Icons.visibility_off),
+                  color: _isVisibilityCheck ? Colors.purple.shade300 : Colors.grey ,
+                ),
+                SizedBox(height: 20 ,),
+                Pinput(
+                  defaultPinTheme: PinTheme(
+                    height: 60,
+                    width: 60,
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade200,
+                      borderRadius: BorderRadius.circular(20)
+                    )
+                  ),
+                  focusedPinTheme: PinTheme(
+                    height: 60,
+                    width: 60,
+                    decoration: BoxDecoration(
+                      color: Colors.purple.shade100,
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(color: Colors.purple, width: 1.2 )
+                    ),
+                  ),
+                  submittedPinTheme: PinTheme(
+                    height: 60,
+                    width: 60,
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade200,
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(color: Colors.purple.shade200, width: 1),
+                    )
+                  ),
+                  autofocus : true,
+                  obscureText : _isVisibilityCheck? false :true,
+                  obscuringCharacter: "⁕",
+                  onChanged: (value)=> setState(()=> _checkNewPassword = value),
+                  onCompleted: (value){
+                    if(_newPassword == _checkNewPassword){
                       PasswordStorage().writePassword(_newPassword);
                       if (context.read<NewUserProvider>().isNewUser) {
                         Navigator.pushAndRemoveUntil(
@@ -78,30 +173,19 @@ class _SetPassword extends State<SetPassword> {
                           ModalRoute.withName('/'),
                         );
                       }
+                    }else{
+                      setState(()=> isCorrectPassword = false);
                     }
-                  }: null,                   
-                child: Text('확인'), 
-              ),
+                  }
+                ),
+                SizedBox(height: 20,),
+                if (isCorrectPassword != null && isCorrectPassword == false)
+                  Text("비밀번호가 일치하지 않습니다", style: TextStyle(color: Colors.red),),
+              ],
             ),
-            SizedBox(height: 20,),
-            if (!isCorrectPassword)
-              Text("비밀번호가 일치하지 않습니다", style: TextStyle(color: Colors.red),)
-          ],
+          )
+        ],),
         ),
-      )
-    );
-  }
-
-  passwordTextField(setter){
-    return TextField(
-      textAlign: TextAlign.center,
-      keyboardType: TextInputType.number,
-      obscureText : _isVisibility ? false : true,
-      maxLength: 4,
-      inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[0-9]'))],
-      onChanged: (value){
-        setter(value);
-      },
-    );
+      );
   }
 }

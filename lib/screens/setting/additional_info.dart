@@ -155,11 +155,6 @@ class _AddInfoState extends State<AddInfo> {
       List q2 = userInterestList[1]["question"];
       List q3 = userInterestList[2]["question"];
 
-      // List addDataList = context.read<UserInterestData>().addData;
-      // var addData0 = addDataList[0];
-      // var addData1 = addDataList[1];
-      // var addData2 = addDataList[2];
-
       isNewUser = context.read<NewUserProvider>().isNewUser;
       
       selectedInterestList = context.read<UserInterestData>().selectedList;
@@ -187,9 +182,6 @@ class _AddInfoState extends State<AddInfo> {
           break;
         default : break;
       }
-      // if(addData0.isNotEmpty && addData0 != ""){addSelected[0] = addData0;}
-      // if(addData1.isNotEmpty && addData1 != ""){addSelected[1] = addData1;}
-      // if(addData2.isNotEmpty && addData2 != ""){addSelected[2] = addData2;}
       if(selectedInterestCount > 0){setQuestValue();}
     });
   }
@@ -202,95 +194,112 @@ class _AddInfoState extends State<AddInfo> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () => Future(() => false),
+      onWillPop: () => Future(() => true),
+      // false),
       child: Scaffold(
-        appBar: AppBar(
-          title: Text('추가정보'),
-          centerTitle: true,
-          automaticallyImplyLeading: false,
-        ),
-        body: 
-        SingleChildScrollView(
-          child: Container(
-            margin: EdgeInsets.only(top:20, left:20, right:20,),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('정보가 많을 수록 판매될 확률이 높아집니다.'),
-                Text('입력된 정보는 3개월간 수정 불가합니다.'),
-                SizedBox(height: 20,),
-    
-                (selectedInterestCount > 0)
-                  ?Column(
-                    children: [
-                      Center(
-                        child: ToggleButtons(
-                          onPressed: (index) {
-                            setState(() {
-                              _selections = List.filled(_selections.length, false);
-                              _selections[index] = !_selections[index];
-                              setQuestValue();
-                            });
-                          },
-                          isSelected: _selections,
-                          children: [
-                            for (int i = 0; i < selectedInterestList.length; i++)
-                              Container(
-                                width: 100,
-                                padding: EdgeInsets.all(2),
-                                child: Text(selectedInterestList[i], textAlign: TextAlign.center,),
-                              ),
-                          ],
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 20, horizontal:24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: 40,),
+                  Row(
+                  children: [
+                    Icon(Icons.library_add, color: Colors.deepPurple.shade400, size: 32,),
+                    SizedBox(width: 8,),
+                    Text("추가정보",
+                      style: TextStyle(
+                        color: Colors.deepPurple.shade400,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                    ),),
+                  ],),
+                  SizedBox(height: 4,),
+                  Text('정보가 많을 수록 판매될 확률이 높아집니다.'),
+                  SizedBox(height: 2,),
+                  Text('입력된 정보는 3개월간 수정 불가합니다.'),
+                  SizedBox(height: 32,),
+            
+                  (selectedInterestCount > 0)
+                    ?Column(
+                      children: [
+                        Center(
+                          child: ToggleButtons(
+                            onPressed: (index) {
+                              setState(() {
+                                _selections = List.filled(_selections.length, false);
+                                _selections[index] = !_selections[index];
+                                setQuestValue();
+                              });
+                            },
+                            isSelected: _selections,
+                            children: [
+                              for (int i = 0; i < selectedInterestList.length; i++)
+                                Container(
+                                  width: 100,
+                                  padding: EdgeInsets.all(2),
+                                  child: Text(selectedInterestList[i], 
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold
+                                    ),
+                                    ),
+                                ),
+                            ],
+                          ),
                         ),
-                      ),
-                      SizedBox(height: 12,),
-                      createInterestDateText(),
-                      SizedBox(height: 40,),
-                      for (int i = 0; i < quests.length; i++)
-                        createQuestionDropDowns(i),
-                    ])
-                  : Column(
-                    children: const [
-                      Text("선택한 관심사가 없습니다."),
-                      SizedBox(height: 80,),
-                    ],
+                        SizedBox(height: 12,),
+                        createInterestDateText(),
+                        SizedBox(height: 40,),
+                        for (int i = 0; i < quests.length; i++)
+                          createQuestionDropDowns(i),
+                      ])
+                    : Column(
+                      children: const [
+                        Text("선택한 관심사가 없습니다."),
+                        SizedBox(height: 80,),
+                      ],
+                    ),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 44,
+                    child: ElevatedButton(
+                      onPressed: (){
+                        switch (selectedInterestCount) {
+                          case 1 : setData(); router(); break;
+                          case 2 : 
+                            if(_selections[0]){
+                              setState((){
+                                _selections = [false, true];
+                                setQuestValue();
+                              });
+                            }else{setData(); router(); break;}
+                          case 3 : 
+                            if(_selections[0]){
+                              setState((){
+                                _selections = [false, true, false];
+                                setQuestValue();
+                              });
+                            }else if (_selections[1]){
+                              setState((){
+                                _selections = [false, false, true];
+                                setQuestValue();
+                              });
+                            }else {setData(); router(); break;}
+                          default: router(); break;
+                        }
+                      }, 
+                      child: Text('확인 저장')
+                    ),
                   ),
-                SizedBox(
-                  width: double.infinity,
-                  height: 44,
-                  child: ElevatedButton(
-                    onPressed: (){
-                      switch (selectedInterestCount) {
-                        case 1 : setData(); router(); break;
-                        case 2 : 
-                          if(_selections[0]){
-                            setState((){
-                              _selections = [false, true];
-                              setQuestValue();
-                            });
-                          }else{setData(); router(); break;}
-                        case 3 : 
-                          if(_selections[0]){
-                            setState((){
-                              _selections = [false, true, false];
-                              setQuestValue();
-                            });
-                          }else if (_selections[1]){
-                            setState((){
-                              _selections = [false, false, true];
-                              setQuestValue();
-                            });
-                          }else {setData(); router(); break;}
-                        default: router(); break;
-                      }
-                    }, 
-                    child: Text('확인 저장')
-                  ),
-                ),
-                SizedBox(height: 20,),
-              ],
-            ),
-          )
+                  SizedBox(height: 20,),
+                ],
+              ),
+            )
+          ),
         )
       ),
     );
@@ -330,26 +339,40 @@ class _AddInfoState extends State<AddInfo> {
     
     return StatefulBuilder(
       builder: (BuildContext context, StateSetter setState) => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            question,
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-          DropdownButton(
-            isExpanded: true,
-            value: selected,
-            items: options.map((e)=> 
-              DropdownMenuItem(
-                value: e,
-                child: Text(e),
-              )).toList(), 
-            onChanged: (value) {
-              setState((){
-                selected = value as String? ;
-                addSelected[trueIndex][i] = value;
-              });
-            }
+          Container(
+            padding: EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: Color.fromARGB(92, 209, 196, 233),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  question,
+                  style: TextStyle(fontWeight: FontWeight.bold,),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8),
+                  child: DropdownButton(
+                    isExpanded: true,
+                    value: selected,
+                    items: options.map((e)=> 
+                      DropdownMenuItem(
+                        value: e,
+                        child: Text(e),
+                      )).toList(), 
+                    onChanged: (value) {
+                      setState((){
+                        selected = value as String? ;
+                        addSelected[trueIndex][i] = value;
+                      });
+                    }
+                  ),
+                ),
+              ],
+            ),
           ),
           SizedBox(height: 24,),
         ],

@@ -206,7 +206,7 @@ class _BasicInfoState extends State<BasicInfo> {
                   title,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 16,
+                    fontSize: 14,
                   ),
                 ),
                 Padding(

@@ -255,10 +255,9 @@ class _AddInfoState extends State<AddInfo> {
                       SizedBox(height: 80,),
                     ],
                   ),
-    
                 SizedBox(
                   width: double.infinity,
-                  height: 40,
+                  height: 44,
                   child: ElevatedButton(
                     onPressed: (){
                       switch (selectedInterestCount) {

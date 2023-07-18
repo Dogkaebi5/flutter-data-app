@@ -11,141 +11,177 @@ class Terms extends StatefulWidget{
 }
 
 class _Terms extends State<Terms>{
-  bool isAllChecked = false;
-  bool isTermChecked = false;
-  bool isPolicyChecked = false;
-  bool isTMChecked = false;
-  bool is14Checked = false;
-  bool isButtonActive(){
-    bool isActive = false;
-    if(isTermChecked && isPolicyChecked && is14Checked){
-      isActive = true;
-    } 
-    return isActive;
+  List<bool> checklist = List.filled(5, false);
+  
+  void allCheck(){
+    setState(() {
+      checklist[0] = !checklist[0];
+    });
+    if(checklist[0]){
+      setState(() => checklist = List.filled(5, true));
+    }else {
+      setState(() => checklist = List.filled(5, false));
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(40),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget> [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('전체동의'), 
-                Checkbox(
-                  value: isAllChecked, 
-                  onChanged: (value){
-                    setState(() {
-                      isAllChecked = value!;
-                    });
-                    if(isAllChecked){
-                      setState(() {
-                        isTermChecked = true;
-                        isPolicyChecked = true;
-                        isTMChecked = true;
-                        is14Checked = true;
-                        isButtonActive();
-                      });
-                    }else {
-                      setState(() {
-                        isTermChecked = false;
-                        isPolicyChecked = false;
-                        isTMChecked = false;
-                        is14Checked = false;
-                        isButtonActive();
-                      });
-                    }
-                  }
-                ),
-              ]
-            ),
-            Divider(thickness: 2,),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                TextButton(
-                  onPressed: () {}, 
-                  child: Text('서비스 이용약관 동의(필수)'),
-                ), 
-                Checkbox(
-                  value: isTermChecked, 
-                  onChanged: (value){setState((){
-                    isTermChecked = value!;
-                    isButtonActive();
-                  });}
-                )
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                TextButton(
-                  onPressed: () {}, 
-                  child: Text('개인정보이용동의(필수)'),
-                ), 
-                Checkbox(
-                  value: isPolicyChecked, 
-                  onChanged: (value){setState((){
-                    isPolicyChecked = value!;
-                    isButtonActive();
-                  });}
-                )
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                TextButton(
-                  onPressed: () {}, 
-                  child: Text('텔레마케팅 활용 동의'),
-                ), 
-                Checkbox(
-                  value: isTMChecked, 
-                  onChanged: (value){setState((){
-                    isTMChecked = value!;
-                  });}
-                )
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('   만 14세 이상입니다(필수)'), 
-                Checkbox(
-                  value: is14Checked,
-                  onChanged: (bool? value){
-                    setState((){
-                      is14Checked = value!;
-                      isButtonActive();
-                    });
-                  }
-                )
-              ],
-            ),
-            Container(
-              padding: EdgeInsets.only(top: 20),
-              width: double.infinity,
-              height: 60, 
-              child: ElevatedButton(
-                onPressed:isButtonActive()
-                  ?(){
-                    if(isTMChecked){
-                      String date = DateTime.now().toString().split(' ')[0];
-                      context.read<SettingProvider>().setTmPermission(true, date);
-                    }
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const SetPassword()),
-                    );
-                  } : null,
-                child: Text("다음"),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(40),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget> [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  InkWell(
+                    onTap: () => allCheck(),
+                    child: Text('전체동의',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ), 
+                  Checkbox(
+                    value: checklist[0], 
+                    onChanged: (val) => allCheck(),
+                  ),
+                ]
               ),
-            ),
-          ],
+              Divider(thickness: 2,),
+              Column(children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    InkWell(
+                      onTap: (){},
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(
+                              color: Colors.black,
+                              width: .8,
+                            )
+                          )
+                        ),
+                        child: Text('서비스 이용약관 동의',),
+                      ),
+                    ), 
+                    Text(" (필수)", style: TextStyle(color: Colors.deepPurple),),
+                    Spacer(),
+                    Checkbox(
+                      value: checklist[1], 
+                      onChanged: (value){
+                        setState(() => checklist[1] = value!);
+                        (checklist[1] && checklist[2] && checklist[3] && checklist[4])
+                          ?setState(() => checklist[0] = true)
+                          :setState(() => checklist[0] = false);
+                      }
+                    )
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    InkWell(
+                      onTap: (){},
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(
+                              color: Colors.black,
+                              width: .8,
+                            )
+                          )
+                        ),
+                        child: Text('개인정보이용동의',),
+                      ),
+                    ), 
+                    Text(" (필수)", style: TextStyle(color: Colors.deepPurple),),
+                    Spacer(), 
+                    Checkbox(
+                      value: checklist[2], 
+                      onChanged: (value){
+                        setState(() => checklist[2] = value!);
+                        (checklist[1] && checklist[2] && checklist[3] && checklist[4])
+                          ?setState(() => checklist[0] = true)
+                          :setState(() => checklist[0] = false);
+                      }
+                    )
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    InkWell(
+                      onTap: (){},
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(
+                              color: Colors.black,
+                              width: .8,
+                            )
+                          )
+                        ),
+                        child: Text('텔레마케팅 활용 동의',),
+                      ),
+                    ), 
+                    Spacer(),
+                    Checkbox(
+                      value: checklist[3], 
+                      onChanged: (value){
+                        setState(() => checklist[3] = value!);
+                        (checklist[1] && checklist[2] && checklist[3] && checklist[4])
+                          ?setState(() => checklist[0] = true)
+                          :setState(() => checklist[0] = false);
+                      }
+                    )
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('만 14세 이상입니다'),
+                    Text(" (필수)", style: TextStyle(color: Colors.deepPurple),),
+                    Spacer(),
+                    Checkbox(
+                      value: checklist[4], 
+                      onChanged: (value){
+                        setState(() => checklist[4] = value!);
+                        (checklist[1] && checklist[2] && checklist[3] && checklist[4])
+                          ?setState(() => checklist[0] = true)
+                          :setState(() => checklist[0] = false);
+                      }
+                    )
+                  ],
+                ),
+              ]),
+              
+              Container(
+                padding: EdgeInsets.only(top: 20),
+                width: double.infinity,
+                height: 60, 
+                child: ElevatedButton(
+                  onPressed:(checklist[1] && checklist[2] && checklist[4])
+                    ?(){
+                      if(checklist[3]){
+                        String date = DateTime.now().toString().split(' ')[0];
+                        context.read<SettingProvider>().setTmPermission(true, date);
+                      }
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const SetPassword()),
+                      );
+                    } : null,
+                  child: Text("다음"),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

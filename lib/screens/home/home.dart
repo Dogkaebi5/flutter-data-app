@@ -137,7 +137,7 @@ class _HomePageState extends State<HomePage> {
                 },
                 child: Container(
                   padding: EdgeInsets.only(left: 20, right: 20, top: 28, bottom: 28),
-                  color: Color.fromARGB(255, 242, 224, 255) ,
+                  color: Colors.purple.shade50,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: const [Text("출금신청"), Icon(Icons.arrow_forward_ios),

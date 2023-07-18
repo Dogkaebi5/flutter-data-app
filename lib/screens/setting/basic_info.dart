@@ -77,62 +77,76 @@ class _BasicInfoState extends State<BasicInfo> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () => Future(() => false),
+      onWillPop: () => Future(() => true),
+      // => Future(() => false), 
       child: Scaffold(
-        appBar: AppBar(
-          title: Text('기본정보'),
-          centerTitle: true,
-          automaticallyImplyLeading: false,
-          ),
-        body: SingleChildScrollView(
-          child: Container(
-            margin: EdgeInsets.all(20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('정보가 많을 수록 더 많은 리워드를 받을 수 있습니다.'),
-                SizedBox(height: 40,),
-                createTextInput("닉네임", userNickname),
-                SizedBox(height: 20,),
-                createTextInput("이메일", userEmail),
-                
-                SizedBox(height: 40,),
-                Text('아래 입력된 정보는 3개월간 수정 불가합니다.'),
-                SizedBox(height: 40,),
-                
-                for (int i = 0; i < basicInfoList.length; i++)
-                  createBasicDataDropDown(
-                    basicInfoList[i]['title'],
-                    basicInfoList[i]['option'], 
-                    i
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 20, horizontal:24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: 40,),
+                  Row(
+                    children: [
+                      Icon(Icons.info, color: Colors.deepPurple.shade400, size: 32,),
+                      SizedBox(width: 8,),
+                      Text("기본정보",
+                        style: TextStyle(
+                          color: Colors.deepPurple.shade400,
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                      ),),
+                  ],),
+                  SizedBox(height: 4,),
+                  Text('정보가 많을 수록 더 많은 리워드를 받을 수 있습니다.',),
+                  
+                  SizedBox(height: 28,),
+                  createTextInput("닉네임", userNickname),
+                  SizedBox(height: 20,),
+                  createTextInput("이메일", userEmail),
+                  
+                  SizedBox(height: 40,),
+                  Text('※ 아래 입력된 정보는 3개월간 수정 불가합니다.',
+                    style: TextStyle(color: Colors.deepPurple.shade400),
                   ),
-                
-                Container(
-                  margin: EdgeInsets.only(top: 20, bottom: 20),
-                  width: double.maxFinite,
-                  child: ElevatedButton(
-                    onPressed: (){
-                      saveBasicData();
-                      if(isNewUser){
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => Interest()),
-                        );
-                      }else{
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => DataPage()),
-                        );
-                      }
-                    }, 
-                    child: Text('확인 저장')
+                  SizedBox(height: 40,),
+                  
+                  for (int i = 0; i < basicInfoList.length; i++)
+                    createBasicDataDropDown(
+                      basicInfoList[i]['title'],
+                      basicInfoList[i]['option'], 
+                      i
+                    ),
+                  
+                  Container(
+                    margin: EdgeInsets.only(top: 20, bottom: 20),
+                    width: double.maxFinite,
+                    height: 44,
+                    child: ElevatedButton(
+                      onPressed: (){
+                        saveBasicData();
+                        if(isNewUser){
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => Interest()),
+                          );
+                        }else{
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => DataPage()),
+                          );
+                        }
+                      }, 
+                      child: Text('확인 저장')
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         )
-        
       ),
     );
   }
@@ -155,15 +169,16 @@ class _BasicInfoState extends State<BasicInfo> {
       Text(
         title, 
         style: TextStyle(
-          fontWeight: FontWeight.bold
+          fontWeight: FontWeight.bold,
+          fontSize: 16,
         ),
       ),
-      SizedBox(height: 4,),
+      SizedBox(height: 6,),
       TextFormField(
         initialValue: initValue, 
         decoration: InputDecoration(
           border: OutlineInputBorder(),
-          contentPadding: EdgeInsets.all(10),
+          contentPadding: EdgeInsets.all(12),
         ),
         onChanged: (value) {
           (title == "닉네임")
@@ -177,27 +192,44 @@ class _BasicInfoState extends State<BasicInfo> {
   createBasicDataDropDown(String title, List list, int i){ 
     return StatefulBuilder(
       builder: (BuildContext context, StateSetter setState) => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            title,
-            style: TextStyle(fontWeight: FontWeight.bold),
+          Container(
+            padding: EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: Color.fromARGB(92, 209, 196, 233),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left:8, right:8),
+                  child: DropdownButton(
+                    isExpanded: true,
+                    value: selectedList[i],
+                    items: list.map((e)=> DropdownMenuItem(
+                      value: e,
+                      child: Text(e),
+                    )).toList(), 
+                    onChanged: (value) {
+                      setState((){
+                        selectedList[i] = value as String?;
+                        dateList[i] = DateTime.now().toString().split(" ")[0];
+                      });
+                    }
+                  ),
+                ),
+              ],
+            ),
           ),
-          DropdownButton(
-            isExpanded: true,
-            value: selectedList[i],
-            items: list.map((e)=> DropdownMenuItem(
-              value: e,
-              child: Text(e),
-            )).toList(), 
-            onChanged: (value) {
-              setState((){
-                selectedList[i] = value as String?;
-                dateList[i] = DateTime.now().toString().split(" ")[0];
-              });
-            }
-          ),
-            SizedBox(height: 24,),
+          SizedBox(height: 8,)
         ],
       )
     );

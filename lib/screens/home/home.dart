@@ -1,13 +1,9 @@
 import 'dart:convert';
 
-import 'package:blur/blur.dart';
 import 'package:data_project/screens/home/home_dialog.dart';
 import 'package:data_project/screens/home/home_nav.dart';
 import 'package:data_project/screens/start/authentication.dart';
-import 'package:flutter/rendering.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
-import 'package:data_project/screens/home/notifications.dart';
-import 'package:data_project/screens/setting/setting.dart';
 import 'package:data_project/screens/point/withdraw.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

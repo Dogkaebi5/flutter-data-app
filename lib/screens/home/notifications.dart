@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:data_project/screens/home/home.dart';
-import 'package:data_project/screens/home/home_nav.dart';
 import 'package:data_project/screens/setting/setting.dart';
 import 'package:flutter/material.dart';
 
@@ -54,11 +53,11 @@ class _NotificationPageState extends State<NotificationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color.fromARGB(255, 245, 245, 245),
       appBar: AppBar(
-        title: Text("알림", style: TextStyle(fontWeight: FontWeight.bold),),
-        centerTitle: true,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios_new),
+        shadowColor: Colors.white54,
+        title: Text("알림", style: TextStyle(fontWeight: FontWeight.bold,)),
+        leading: IconButton(icon: Icon(Icons.arrow_back_ios_new,),
           onPressed: (){
             Navigator.push(
               context,

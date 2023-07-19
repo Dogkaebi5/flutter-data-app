@@ -349,18 +349,28 @@ class _HomePageState extends State<HomePage> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(newDetails[loopInt]['title'] + "  " + newDetails[loopInt]['point'],),
+                  Text(newDetails[loopInt]['title'],
+                    style: TextStyle(fontWeight: FontWeight.bold),),
+                  // newDetails[loopInt]['point']
                   SizedBox(height: 4,),
                   Text(
                     newDetails[loopInt]['date'].split(' ')[0], 
                     style: TextStyle(
-                      color: Colors.black45, 
+                      color: Colors.grey, 
                       fontSize: 12
                     ),
                   ),
                 ],
               ),
-              Icon(Icons.arrow_forward_ios),
+              Text(newDetails[loopInt]['point'],
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: newDetails[loopInt]['point'].split(' ')[0] == "+"
+                    ? Colors.deepPurple.shade300
+                    : Colors.red.shade300
+                ),)
+              // Icon(Icons.arrow_forward_ios),
           ]),
         ),
       ),

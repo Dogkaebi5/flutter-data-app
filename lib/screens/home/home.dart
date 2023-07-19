@@ -1,7 +1,9 @@
 import 'dart:convert';
 
+import 'package:blur/blur.dart';
 import 'package:data_project/screens/home/home_dialog.dart';
 import 'package:data_project/screens/start/authentication.dart';
+import 'package:flutter/rendering.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:data_project/screens/home/notifications.dart';
 import 'package:data_project/screens/setting/setting.dart';
@@ -90,127 +92,195 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ) {
     return WillPopScope(
       onWillPop: () => Future(() => false),
       child: Scaffold(
-        appBar: AppBar(
-          title: Text("데이플러스"),
-          automaticallyImplyLeading: false,
-          actions: [
-            IconButton(
-              onPressed: (){
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const NotificationPage()),
-                );
-              }, 
-              icon: Icon(Icons.notifications)
-            ),
-            IconButton(
-              onPressed: (){
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const SettingPage()),
-                );
-              }, 
-              icon: Icon(Icons.settings)
-            ),
-          ],
-        ),
-        body: Container(
-          margin: EdgeInsets.only(left:20, right:20,),
-          child: Column(
+        backgroundColor: Colors.deepPurple.shade400,
+        // appBar: AppBar(
+        //   title: Text("데이플러스"),
+        //   automaticallyImplyLeading: false,
+        //   actions: [
+        //     IconButton(
+        //       onPressed: (){
+        //         Navigator.push(
+        //           context,
+        //           MaterialPageRoute(builder: (context) => const NotificationPage()),
+        //         );
+        //       }, 
+        //       icon: Icon(Icons.notifications)
+        //     ),
+        //     IconButton(
+        //       onPressed: (){
+        //         Navigator.push(
+        //           context,
+        //           MaterialPageRoute(builder: (context) => const SettingPage()),
+        //         );
+        //       }, 
+        //       icon: Icon(Icons.settings)
+        //     ),
+        //   ],
+        // ),
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Column(
             children: [
-              //포인트 표기
-              Center(
-                heightFactor: 3.2,
-                child: Text("$point P", style: TextStyle(fontSize: 32),)
-              ),
-              //출금신청 링크
-              InkWell(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Withdraw(point)),
-                  );
-                },
-                child: Container(
-                  padding: EdgeInsets.only(left: 20, right: 20, top: 28, bottom: 28),
-                  color: Colors.purple.shade50,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [Text("출금신청"), Icon(Icons.arrow_forward_ios),
-                  ]),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 20, horizontal:24),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    SizedBox(height: 40,),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("My Point", 
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18, ),),
+                            SizedBox(height: 4,),
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.account_balance_wallet,
+                                  color: Colors.white,
+                                  size: 32,
+                                  ),
+                                SizedBox(width: 12,),
+                                Text("$point P", 
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 30,
+                                    ),),
+                              ],
+                            ),
+                        ],),
+                        Container(
+                          height: 40,
+                          width: 40,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(100),
+                            color: Colors.white,
+                            boxShadow: [BoxShadow(
+                              color: Colors.black.withOpacity(.6),
+                              blurRadius: 6,
+                              spreadRadius : 1,
+                              offset: Offset(2, 4)
+                            ),],
+                          ),
+                          child: Icon(
+                            Icons.analytics,
+                            color: Colors.deepPurple,
+                            size: 28,
+                            ),
+                        )
+                      ],
+                    ),
+                    SizedBox(height: 8,),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => Withdraw(point)),
+                        );},
+                        child: SizedBox(
+                          width: 112,
+                          height: 44,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: const [
+                              Icon(Icons.toll,),
+                              SizedBox(width: 4),
+                              Text("출금신청"),
+                              SizedBox(width: 8),
+                            ],
+                          ),
+                        )),
+                  ],
                 ),
               ),
-              Divider(thickness: 2,),
-              
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  //소팅선택
-                  ToggleButtons(
-                    isSelected: _selections,
-                    onPressed: (index) {
-                      setState(() {
-                        _selections = [false, false];
-                        _selections[index] = !_selections[index];
-                      });
-                      if (index == 1) {
-                        showDatePickerDialog();
-                      } else {
-                        changeSortTextToMonth();
-                      }
-                    },              
-                    children: const [
-                      SizedBox(
-                        width: 160,
-                        child: Text("1개월", textAlign: TextAlign.center,)
-                      ),
-                      SizedBox(
-                        width: 160,
-                        child: Text("직접입력", textAlign: TextAlign.center,)
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 8,),
-                  
-                  if(_selections[1])
-                    Text(
-                      '검색기간 : $sortStartDate ~ $sortEndDate', 
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 12,
-                      ),  
+              Container(
+                constraints: BoxConstraints(minHeight: MediaQuery.of(context).size.height - 220),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),),
+                  color: Color.fromARGB(255, 245, 245, 245),
+                  boxShadow: [BoxShadow(
+                    color: Colors.black.withOpacity(.6),
+                    blurRadius: 6,
+                    spreadRadius : 1,
+                  ),],
+                ),
+                child: Column(
+                  children: [
+                    SizedBox(height: 28,),
+                    ToggleButtons(
+                      isSelected: _selections,
+                      onPressed: (index) {
+                        setState(() {
+                          _selections = [false, false];
+                          _selections[index] = !_selections[index];
+                        });
+                        if (index == 1) {
+                          showDatePickerDialog();
+                        } else {
+                          changeSortTextToMonth();
+                        }
+                      },              
+                      children: const [
+                        SizedBox(
+                          width: 120,
+                          child: Text("1개월", textAlign: TextAlign.center,)
+                        ),
+                        SizedBox(
+                          width: 120,
+                          child: Text("직접입력", textAlign: TextAlign.center,)
+                        ),
+                      ],
                     ),
-                ],
-              ),
-              SizedBox(height: 20,),
-    
-              //디테일 링크
-              if(newDetails.length < 0)
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: const [Text("기록이 없습니다.")],
-                )
-                else 
-                  for(var i = 0; i < newDetails.length; i++)
-                    createDetailCards(i),
-              Spacer(),
-              TextButton(
-                onPressed: (){
-                  FirebaseAuth.instance.signOut();
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (context) =>  Authentication()),
-                    ModalRoute.withName('/'),
-                  );
-                  },
-                child: Text("로그아웃")
+                    SizedBox(height: 8,),
+                  
+                    if(_selections[1])
+                      Text(
+                        '검색기간 : $sortStartDate ~ $sortEndDate', 
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 12,
+                        ),  
+                      ),
+                    SizedBox(height: 12,),
+                
+                    //디테일 링크
+                    if(newDetails.length < 0)
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: const [Text("기록이 없습니다.")],
+                      )
+                      else 
+                        for(var i = 0; i < newDetails.length; i++)
+                          createDetailCards(i),
+                    TextButton(
+                      onPressed: (){
+                        FirebaseAuth.instance.signOut();
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(builder: (context) =>  Authentication()),
+                          ModalRoute.withName('/'),
+                        );
+                        },
+                      child: Text("로그아웃")
+                    ),
+                  ]
+                ),
               ),
             ]
+              ),
           ),
         )
       ),
@@ -270,7 +340,7 @@ class _HomePageState extends State<HomePage> {
     return InkWell(
       onTap: () => detailDialog(context, loopInt, newDetails), 
       child: Card(
-        margin: EdgeInsets.all(4),
+        margin: EdgeInsets.all(1),
         child: Container(
           padding: EdgeInsets.all(20),
           child: Row(

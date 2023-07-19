@@ -39,20 +39,30 @@ class _InfopermissionState extends State<Infopermission> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('데이터 판매범위 설정')),
+      appBar: AppBar(title: Text('데이터 판매설정')),
       body: SingleChildScrollView(
-        child : Container(
-          margin: EdgeInsets.only(top:30, left:20, right:20,),
+        child : Padding(
+          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 32),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               for (int i = 0; i < necessaryDataTexts.length; i++)
                 Padding(
-                  padding: EdgeInsets.only(bottom: 20, right: 10),
+                  padding: EdgeInsets.only(bottom: 16, right: 16),
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(necessaryDataTexts[i]),Text('필수'),
+                        Text(necessaryDataTexts[i],
+                          style: TextStyle(
+                          color: Colors.black87,
+                          fontSize: 16,
+                          ),
+                        ),
+                        Text('필수', 
+                          style: TextStyle(
+                            color: Colors.deepPurple,
+                          ),
+                        ),
                       ]
                   ),
                 ),
@@ -61,7 +71,12 @@ class _InfopermissionState extends State<Infopermission> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(userDataTexts[i]),
+                    Text(userDataTexts[i],
+                      style: TextStyle(
+                        color: Colors.black87,
+                        fontSize: 16,
+                      ),
+                    ),
                     Switch(
                       value: isPermitUsers[i], 
                       onChanged: (val){
@@ -76,7 +91,7 @@ class _InfopermissionState extends State<Infopermission> {
               Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("텔레마케팅 동의"),
+                    Text("— 텔레마케팅 동의",),
                     Switch(
                       value: isPermitUsers[4],
                       onChanged: (isPermitUsers[3])?
@@ -92,16 +107,21 @@ class _InfopermissionState extends State<Infopermission> {
                   ],
                 ),
               if(isPermitUsers[4])
-                Text("____ 텔레마케팅 동의일자 : $tmDate",
+                Text("텔레마케팅 동의일자 : $tmDate",
                   style: TextStyle(
                     fontSize: 12,
                   ),),
-
+              SizedBox(height: 8,),
               for (int i = 0; i < basciDataTexts.length; i++)
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(basciDataTexts[i]),
+                    Text(basciDataTexts[i],
+                      style: TextStyle(
+                        color: Colors.black87,
+                        fontSize: 16,
+                      ),
+                    ),
                     Switch(
                       value: isPermitBasics[i],
                       onChanged: (val){
@@ -117,7 +137,12 @@ class _InfopermissionState extends State<Infopermission> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("관심사 ${(i+1).toString()} : ${interests[i]}"),
+                    Text("관심사 ${(i+1).toString()} : ${interests[i]}",
+                      style: TextStyle(
+                        color: Colors.black87,
+                        fontSize: 16,
+                      ),
+                    ),
                     Switch(
                       value: isPremitInterest[i],
                       onChanged: (val){

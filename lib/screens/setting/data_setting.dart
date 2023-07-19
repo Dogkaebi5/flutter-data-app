@@ -166,7 +166,7 @@ class DataPage extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: const [ 
-                  Text("데이터 판매범위 설정",
+                  Text("데이터 판매설정",
                     style: TextStyle(
                       fontSize: 16,
                     ),),

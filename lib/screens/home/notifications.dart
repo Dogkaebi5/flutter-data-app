@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:data_project/screens/home/home.dart';
+import 'package:data_project/screens/home/home_nav.dart';
 import 'package:data_project/screens/setting/setting.dart';
 import 'package:flutter/material.dart';
 
@@ -54,7 +55,7 @@ class _NotificationPageState extends State<NotificationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("알림"),
+        title: Text("알림", style: TextStyle(fontWeight: FontWeight.bold),),
         centerTitle: true,
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios_new),
@@ -66,87 +67,95 @@ class _NotificationPageState extends State<NotificationPage> {
           },
         ),
       ),
-      body: Container(
-        margin: EdgeInsets.only(top:30, left:20, right:20,),
-        child: Column(
-          children: [
-            InkWell(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const SettingPage()));
-              },
-              child: Container(
-                margin: EdgeInsets.only(bottom: 10),
-                padding: EdgeInsets.all(20),
-                color: Color.fromARGB(255, 232, 232, 232),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.notifications_on,
+      body: Column(
+        children: [
+          InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const SettingPage()));
+            },
+            child: Container(
+              margin: EdgeInsets.symmetric(vertical: 28, horizontal: 40),
+              padding: EdgeInsets.symmetric(vertical: 40, horizontal: 28),
+              decoration: BoxDecoration(
+                color: Color.fromARGB(255, 243, 236, 255),
+                borderRadius: BorderRadius.circular(24),
+                boxShadow: [BoxShadow(
+                  color: Colors.grey.withOpacity(.6),
+                  blurRadius: 6,
+                  spreadRadius : 1,
+                  offset: Offset(2, 4)
+                ),],
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: const [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Icon(
+                        Icons.notifications_on,
+                        size: 28,
+                        color: Colors.deepPurple,
+                      ),
+                      SizedBox(width: 12),
+                      Text(
+                        "알림설정",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                          color: Colors.black87
                         ),
-                        SizedBox(width: 8),
-                        Text(
-                          "알림설정",
-                          style: TextStyle(
-
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,  
-                          ),
-                        ),
-                      ],
-                    ),
-                    Icon(Icons.arrow_forward_ios),
-                  ]
-                ),
+                      ),
+                    ],
+                  ),
+                  Icon(Icons.arrow_forward_ios),
+                ]
               ),
             ),
-            Divider(thickness: 1,),
+          ),
 
-            for(var i = 0; i < notifications.length; i++)
-              InkWell(
-                onTap: () => notificationDialog(i),
-                child: Card(
-                  child: Container(
-                    width: double.infinity,
-                    margin: EdgeInsets.all(8),
-                    padding: EdgeInsets.all(12),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          notifications[i]['title'], 
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold, 
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                          textAlign: TextAlign.justify,
-                          maxLines: 1,
+          for(var i = 0; i < notifications.length; i++)
+            InkWell(
+              onTap: () => notificationDialog(i),
+              child: Card(
+                margin: EdgeInsets.all(1),
+                child: Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        notifications[i]['title'], 
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold, 
                         ),
-                        SizedBox(height: 4,),
-                        Text(
-                          notifications[i]['content'], 
-                          overflow: TextOverflow.clip,
-                          textAlign: TextAlign.justify,
-                          maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.justify,
+                        maxLines: 1,
+                      ),
+                      SizedBox(height: 4,),
+                      Text(
+                        notifications[i]['content'], 
+                        overflow: TextOverflow.clip,
+                        textAlign: TextAlign.justify,
+                        maxLines: 2,
+                      ),
+                      SizedBox(height: 4,),
+                      Text(
+                        notifications[i]['date'],
+                        style: TextStyle(
+                          color: Color.fromARGB(255, 132, 132, 132),
                         ),
-                        SizedBox(height: 4,),
-                        Text(
-                          notifications[i]['date'],
-                          style: TextStyle(
-                            color: Color.fromARGB(255, 132, 132, 132),
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               ),
-          ]
-        ),
+            ),
+        ]
       )
     );
   }

@@ -4,8 +4,8 @@ import 'package:data_project/screens/setting/setting.dart';
 import 'package:flutter/material.dart';
 
 class Nav extends StatefulWidget {
-  const Nav({ Key? key }) : super(key: key);
-
+  const Nav({super.key});
+  
   @override
   _NavState createState() => _NavState();
 }

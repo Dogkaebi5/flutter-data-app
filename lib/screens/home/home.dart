@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:blur/blur.dart';
 import 'package:data_project/screens/home/home_dialog.dart';
+import 'package:data_project/screens/home/home_nav.dart';
 import 'package:data_project/screens/start/authentication.dart';
 import 'package:flutter/rendering.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
@@ -93,35 +94,12 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context, ) {
-    return WillPopScope(
-      onWillPop: () => Future(() => false),
-      child: Scaffold(
-        backgroundColor: Colors.deepPurple.shade400,
-        // appBar: AppBar(
-        //   title: Text("데이플러스"),
-        //   automaticallyImplyLeading: false,
-        //   actions: [
-        //     IconButton(
-        //       onPressed: (){
-        //         Navigator.push(
-        //           context,
-        //           MaterialPageRoute(builder: (context) => const NotificationPage()),
-        //         );
-        //       }, 
-        //       icon: Icon(Icons.notifications)
-        //     ),
-        //     IconButton(
-        //       onPressed: (){
-        //         Navigator.push(
-        //           context,
-        //           MaterialPageRoute(builder: (context) => const SettingPage()),
-        //         );
-        //       }, 
-        //       icon: Icon(Icons.settings)
-        //     ),
-        //   ],
-        // ),
-        body: SafeArea(
+    return Scaffold(
+      backgroundColor: Colors.deepPurple.shade400,
+      bottomSheet: Nav(),
+      body:  WillPopScope(
+        onWillPop: () => Future(() => false),
+        child: SafeArea(
           child: SingleChildScrollView(
             child: Column(
             children: [

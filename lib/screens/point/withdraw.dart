@@ -53,8 +53,8 @@ class _WithdrawState extends State<Withdraw> {
           },
         ),
       ),
-      body: Container(
-        margin: EdgeInsets.only(top:20, left:20, right:20,),
+      body: Padding(
+        padding: EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -67,20 +67,60 @@ class _WithdrawState extends State<Withdraw> {
               },
               child: Container(
                 margin: EdgeInsets.only(bottom: 10),
-                padding: EdgeInsets.all(20),
-                color: Color.fromARGB(255, 242, 224, 255) ,
+                padding: EdgeInsets.all(28),
+                decoration: BoxDecoration(
+                  color: Colors.deepPurple.shade50,
+                  borderRadius: BorderRadius.circular(20),
+                ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        (isHasAcc)?
-                          Text("등록계좌 : ${bankData[0]??''}\n${bankData[1]}  ${bankData[2]}")
-                          :Text("등록계좌 :\n없음")
-                      ]
+                    (isHasAcc)?
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Text("등록계좌 : ",
+                                style: TextStyle(color: Colors.black87),
+                              ),
+                              Text("${bankData[0]??''}", 
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 2,),
+                          Text("${bankData[1]}  ${bankData[2]}",
+                            style: TextStyle(
+                              color: Colors.black87,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ],
+                      )
+                      :Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: const [
+                          Text("등록계좌 :", 
+                            style: TextStyle(color: Colors.black87),
+                          ),
+                          SizedBox(height: 2,),
+                          Text("없음",
+                            style: TextStyle(
+                              color: Colors.black87,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ],
+                      ),
+                    Icon(Icons.arrow_forward_ios,
+                      size: 16,
+                      color: Colors.grey,
                     ),
-                    Icon(Icons.arrow_forward_ios),
                   ]
                 ),
               ),

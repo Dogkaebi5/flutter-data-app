@@ -208,16 +208,15 @@ class _WithdrawState extends State<Withdraw> {
             Spacer(),
             SizedBox(
               width: double.infinity,
+              height: 44,
               child: ElevatedButton(
                 onPressed: 
                   (int.parse(transferAmount()) > 0)
                   ? () => passwordDialog(context, withdraw)
                   : null, 
-                style: ButtonStyle(padding: MaterialStateProperty.all(EdgeInsets.symmetric(horizontal: 58, vertical: 12))),
                 child: Text('출금신청'),
               ),
             ),
-            SizedBox(height: 30,)
           ]
         ),
       ),

@@ -31,7 +31,7 @@ class _SetPassword extends State<SetPassword> {
       ?setState(() => isCorrectPassword = true)
       :setState(() => isCorrectPassword = false);
   }
-  PageController _pageViewController = PageController();
+  final PageController _pageViewController = PageController();
 
   @override
   Widget build(BuildContext context) {
@@ -181,7 +181,7 @@ class _SetPassword extends State<SetPassword> {
                 SizedBox(height: 20,),
                 if (isCorrectPassword != null && isCorrectPassword == false)
                   Text("비밀번호가 일치하지 않습니다", style: TextStyle(color: Colors.red),),
-              ],
+              ], 
             ),
           )
         ],),

@@ -75,7 +75,7 @@ class _NotificationPageState extends State<NotificationPage> {
                 MaterialPageRoute(builder: (context) => const SettingPage()));
             },
             child: Container(
-              margin: EdgeInsets.symmetric(vertical: 28, horizontal: 40),
+              margin: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
               padding: EdgeInsets.symmetric(vertical: 40, horizontal: 28),
               decoration: BoxDecoration(
                 color: Color.fromARGB(255, 243, 236, 255),

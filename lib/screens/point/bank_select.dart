@@ -155,7 +155,7 @@ class _BankState extends State<Bank> {
               height: 40,
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: (bank != null && acc!.length > 5)
+                onPressed: (bank != null && acc!= null)
                   ?() {
                     setState(() => isHasAcc = true);
                     context.read<SettingProvider>().setBank(bank, acc);

@@ -1,4 +1,3 @@
-import 'package:data_project/screens/home/home.dart';
 import 'package:data_project/screens/home/notifications.dart';
 import 'package:data_project/screens/setting/setting.dart';
 import 'package:flutter/material.dart';

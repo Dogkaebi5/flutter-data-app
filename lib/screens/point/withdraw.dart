@@ -44,20 +44,12 @@ class _WithdrawState extends State<Withdraw> {
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 240, 240, 240),
       appBar: AppBar(
+        iconTheme: IconThemeData(color: Colors.black87),
         backgroundColor: Color.fromARGB(255, 240, 240, 240),
         shadowColor: Color.fromARGB(0, 0, 0, 0),
-        title: Text("출금신청",
-          style: TextStyle(
-          color: Colors.black87,
-          ),),
-        automaticallyImplyLeading: false,
+        title: Text("출금신청", style: TextStyle(color: Colors.black87,),),
         centerTitle: true,
-        actions: [IconButton(
-          icon: Icon(Icons.close),
-          onPressed: () => Navigator.pop(context),
-          color: Colors.black87
-        ),]
-      ),
+      ), 
       body: Column(
         children: [
           SizedBox(height: 30,),

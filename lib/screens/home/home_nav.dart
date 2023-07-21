@@ -42,10 +42,7 @@ class _NavState extends State<Nav> {
           
           onTap: (index){
             switch(index){
-              case 0 : Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => HomePage()),
-              );
+              case 0 : break;
               case 1 : Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => NotificationPage()),

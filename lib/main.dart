@@ -30,10 +30,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Data Pro',
+      title: 'DayPlus',
       theme: ThemeData(
         primarySwatch: Colors.deepPurple,
-        secondaryHeaderColor: Colors.teal
       ),
       home: Authentication(),
     );

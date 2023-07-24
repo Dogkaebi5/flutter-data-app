@@ -1,4 +1,4 @@
-import 'package:data_project/screens/start/firebase.dart';
+import 'package:data_project/screens/start/auth.dart';
 import 'package:data_project/screens/webview/webview.dart';
 import 'package:flutter/material.dart';
 

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:data_project/screens/home/home_dialog.dart';
 import 'package:data_project/screens/home/home_nav.dart';
 import 'package:data_project/screens/start/authentication.dart';
+import 'package:data_project/testpage.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:data_project/screens/point/withdraw.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -249,6 +250,15 @@ class _HomePageState extends State<HomePage> {
                         );
                         },
                       child: Text("로그아웃")
+                    ),
+                    TextButton(
+                      onPressed: (){
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) =>  TestPage()),
+                        );
+                        },
+                      child: Text("테스트 페이지")
                     ),
                   ]
                 ),

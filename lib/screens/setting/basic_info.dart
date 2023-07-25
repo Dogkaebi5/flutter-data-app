@@ -126,7 +126,9 @@ class _BasicInfoState extends State<BasicInfo> {
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     decoration: BoxDecoration(
-                      color: Color.fromARGB(92, 209, 196, 233),
+                      color: (dateList?[5] == null || dateList?[5] == "")
+                        ? Colors.deepPurple.shade50
+                        : Colors.grey,
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Column(
@@ -144,6 +146,7 @@ class _BasicInfoState extends State<BasicInfo> {
                             isExpanded: true,
                             value: selecteds?[5],
                             items: residenceOptions.map((e)=> DropdownMenuItem(
+                              enabled: (dateList?[5] == null || dateList?[5] == "")?true:false,
                               value: e,
                               child: Text(e),
                             )).toList(), 
@@ -165,7 +168,7 @@ class _BasicInfoState extends State<BasicInfo> {
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     decoration: BoxDecoration(
-                      color: Color.fromARGB(92, 209, 196, 233),
+                      color: Colors.deepPurple.shade50,
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Column(

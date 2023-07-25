@@ -28,7 +28,7 @@ class _InfopermissionState extends State<Infopermission> {
   void initState() {
     super.initState();
     setState(() {
-      interests = context.read<UserInterestData>().selectedList;
+      interests = context.read<UserInterestData>().selecteds;
       isPermitUsers = context.read<SettingProvider>().userDataPermissions;
       isPermitBasics = context.read<UserBasicData>().basicPermissions;
       isPremitInterest = context.read<UserInterestData>().interestPermissions;
@@ -148,7 +148,7 @@ class _InfopermissionState extends State<Infopermission> {
                       onChanged: (val){
                         setState(() {
                           isPremitInterest[i] = val;
-                          context.read<UserInterestData>().setInterestpermissions(isPremitInterest);
+                          context.read<UserInterestData>().setPermissions(isPremitInterest);
                       });}
                     )
                   ],

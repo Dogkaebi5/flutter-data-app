@@ -133,6 +133,7 @@ class AddInfo extends StatefulWidget {
 }
 
 class _AddInfoState extends State<AddInfo> {
+
   List<bool> _selections = List.empty(growable: true);
   List userInterestList = List.empty(growable: true);
   List quests = List.empty(growable: true);
@@ -157,9 +158,10 @@ class _AddInfoState extends State<AddInfo> {
 
       isNewUser = context.read<NewUserProvider>().isNewUser;
       
-      selectedInterestList = context.read<UserInterestData>().selectedList;
-      selectedInterestCount = context.read<UserInterestData>().interestCount;
-      selectedInterestDates = context.read<UserInterestData>().dateList;
+      selectedInterestList = context.read<UserInterestData>().selecteds;
+
+      selectedInterestDates = context.read<UserInterestData>().selectedDates;
+      selectedInterestCount = selectedInterestList.length;
             
       switch(selectedInterestCount){
         case 1 : 

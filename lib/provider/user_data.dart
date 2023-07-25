@@ -73,7 +73,7 @@ class UserData extends ChangeNotifier {
     }
   }
   //additional
-  List? _insurance = List.filled(Questions().q00Insurance.length, "");
+  List? _insurance = List.filled(0, "");
   List? _loan = List.empty(growable: true);
   List? _deposit = List.empty(growable: true);
   List? _immovables = List.empty(growable: true);

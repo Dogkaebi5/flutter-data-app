@@ -16,40 +16,51 @@ class UserBasicData extends ChangeNotifier {
 
   void setNickname(String nickname){_nickname = nickname; notifyListeners();}
   void setEmail(String email){_email = email; notifyListeners();}
-  void setBasicpermissions(list){_isPermitBasicDatas = List.from(list); notifyListeners();}
+  void setPermissions(list){_isPermitBasicDatas = List.from(list); notifyListeners();}
   
+  void setData(data){
+    if(data[0] != _married){setMarried(data[0]);}
+    if(data[1] != _childHas){setChildHas(data[1]);}
+    if(data[2] != _education){setEducation(data[2]);}
+    if(data[3] != _occupation){setOccupation(data[3]);}
+    if(data[4] != _income){setIncome(data[4]);}
+    if(data[5] != _residence){setResidence(data[5]);}
+    if(data[6] != _area){setArea(data[6]);}
+    notifyListeners();
+  }
   void setMarried(String? value){
     _married = value; 
-    if(value != null){_isPermitBasicDatas[0] = true;}
-    notifyListeners();
+    _marriedDate = DateTime.now().toString().split(" ")[0]; 
+    _isPermitBasicDatas[0] = true;
   }
   void setChildHas(String? value){
     _childHas = value; 
-    if(value != null) {_isPermitBasicDatas[1] = true;}
-    notifyListeners();
+    _childHasDate = DateTime.now().toString().split(" ")[0];
+    _isPermitBasicDatas[1] = true;
   }
   void setEducation(String? value){
     _education = value; 
-    if(value != null) {_isPermitBasicDatas[2] = true;}
-    notifyListeners();
+    _educationDate = DateTime.now().toString().split(" ")[0];
+    _isPermitBasicDatas[2] = true;
   }
   void setOccupation(String? value){
     _occupation = value; 
-    if(value != null) {_isPermitBasicDatas[3] = true;}
-    notifyListeners();
+    _occupationDate = DateTime.now().toString().split(" ")[0];
+    _isPermitBasicDatas[3] = true;
   }
   void setIncome(String? value){
     _income = value; 
-    if(value != null) {_isPermitBasicDatas[4] = true;}
-    notifyListeners();
+    _incomeDate = DateTime.now().toString().split(" ")[0];
+    _isPermitBasicDatas[4] = true;
   }
   void setResidence(String? value){
     _residence = value; 
-    if(value != null) {_isPermitBasicDatas[5] = true;}
-    notifyListeners();
+    _residenceDate = DateTime.now().toString().split(" ")[0];
+    _isPermitBasicDatas[5] = true;
   }
   void setArea(String? value) {
     _area = value;
-    if(value != null) {_isPermitBasicDatas[6] = true;}
+    _residenceDate = DateTime.now().toString().split(" ")[0];
+    _isPermitBasicDatas[6] = true;
   }
 }

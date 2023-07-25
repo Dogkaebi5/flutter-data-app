@@ -127,7 +127,7 @@ class _InfopermissionState extends State<Infopermission> {
                       onChanged: (val){
                         setState(() {
                           isPermitBasics[i] = val;
-                          context.read<UserBasicData>().setBasicpermissions(isPermitBasics);
+                          context.read<UserBasicData>().setPermissions(isPermitBasics);
                       });}
                     )
                   ],

@@ -19,7 +19,7 @@ class _BasicInfoState extends State<BasicInfo> {
   String? residence;
   String? tempString;
   List? selecteds = List.empty(growable: true);
-  List? datelist = List.empty(growable: true);
+  List? dateList = List.empty(growable: true);
 
   List basicQuestions = Questions().basicInfo;
   Map residenceMap = Questions().region;
@@ -39,7 +39,7 @@ class _BasicInfoState extends State<BasicInfo> {
       userNickname = userData.nickname;
       userEmail = userData.email;
       selecteds = userData.selected;
-      datelist = userData.selectedDate;
+      dateList = userData.selectedDate;
       if(selecteds?[5] != null){
         areaOptions = residenceMap[selecteds?[5]];
       }
@@ -203,7 +203,7 @@ class _BasicInfoState extends State<BasicInfo> {
                     height: 44,
                     child: ElevatedButton(
                       onPressed: (){
-                        saveBasicData();
+                        userData.setData(selecteds);
                         if(isNewUser){
                           Navigator.push(
                             context,
@@ -228,17 +228,6 @@ class _BasicInfoState extends State<BasicInfo> {
     );
   }
   
-  saveBasicData(){
-    userData.setNickname(userNickname!);
-    userData.setEmail(userEmail!);
-    userData.setMarried(selecteds?[0]);
-    userData.setChildHas(selecteds?[1]);
-    userData.setEducation(selecteds?[2]);
-    userData.setOccupation(selecteds?[3]);
-    userData.setIncome(selecteds?[4]);
-    userData.setResidence(selecteds?[5]);
-    // userData.setArea(area);
-  }
 
   createBasicDataDropDown(String title, List option, int i){ 
     return StatefulBuilder(
@@ -247,7 +236,9 @@ class _BasicInfoState extends State<BasicInfo> {
           Container(
             padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             decoration: BoxDecoration(
-              color: Color.fromARGB(92, 209, 196, 233),
+              color: (dateList?[i] == null || dateList?[i] == "")
+              ? Colors.deepPurple.shade50
+              : Colors.grey,
               borderRadius: BorderRadius.circular(20),
             ),
             child: Column(
@@ -265,10 +256,14 @@ class _BasicInfoState extends State<BasicInfo> {
                   child: DropdownButton(
                     isExpanded: true,
                     value: selecteds?[i],
-                    items: option.map((e)=> DropdownMenuItem(
-                      value: e,
-                      child: Text(e),
-                    )).toList(), 
+                    items: 
+                      option.map((e) =>
+                        DropdownMenuItem(
+                          value: e,
+                          enabled: (dateList?[i] == null || dateList?[i] == "")?true:false,
+                          child: Text(e),
+                        )
+                      ).toList(), 
                     onChanged: (value) {
                       setState((){
                         selecteds?[i] = value as String?;

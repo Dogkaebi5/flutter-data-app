@@ -1,8 +1,12 @@
 import 'dart:convert';
 
+import 'package:data_project/provider/setting_provider.dart';
 import 'package:data_project/screens/home/home.dart';
 import 'package:data_project/screens/setting/setting.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import 'home_dialog.dart';
 
 class NotificationPage extends StatefulWidget {
   const NotificationPage({super.key});
@@ -45,8 +49,7 @@ class _NotificationPageState extends State<NotificationPage> {
   void initState(){
     super.initState();
     setState(() {
-      Map jsonData = jsonDecode(jsonString);
-      notifications = jsonData["notification"];
+      notifications = context.read<SettingProvider>().notices;
     });
   }
 
@@ -55,7 +58,6 @@ class _NotificationPageState extends State<NotificationPage> {
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 245, 245, 245),
       appBar: AppBar(
-        shadowColor: Colors.white54,
         title: Text("알림", style: TextStyle(fontWeight: FontWeight.bold,)),
         leading: IconButton(icon: Icon(Icons.arrow_back_ios_new,),
           onPressed: (){
@@ -72,13 +74,12 @@ class _NotificationPageState extends State<NotificationPage> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const SettingPage()));
-            },
+                MaterialPageRoute(builder: (context) => const SettingPage()));},
             child: Container(
               margin: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
               padding: EdgeInsets.symmetric(vertical: 40, horizontal: 28),
               decoration: BoxDecoration(
-                color: Color.fromARGB(255, 243, 236, 255),
+                color: Colors.deepPurple.shade50,
                 borderRadius: BorderRadius.circular(24),
                 boxShadow: [BoxShadow(
                   color: Colors.grey.withOpacity(.6),
@@ -115,9 +116,23 @@ class _NotificationPageState extends State<NotificationPage> {
             ),
           ),
 
-          for(var i = 0; i < notifications.length; i++)
+          for(int i = notifications.length-1; i > -1; i--)
             InkWell(
-              onTap: () => notificationDialog(i),
+              onTap: (){
+                
+                if(notifications[i]["type"] == "tele"){
+                  notificationDialog(i);
+                }else if (notifications[i]["type"] == "normal"){
+                  int index = 0;
+                  String id = notifications[i]["id"];
+                  List<Map> details = context.read<SettingProvider>().details;
+                  for (var detail in details) {
+                    if(detail.containsValue(id)){break;}
+                    index++;
+                  }
+                  detailDialog(context, index, details);
+                }
+              },
               child: Card(
                 margin: EdgeInsets.all(1),
                 child: Container(
@@ -160,59 +175,55 @@ class _NotificationPageState extends State<NotificationPage> {
   }
 
   notificationDialog(int i) {
-    if (notifications[i]['type'] == "tele") {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) => Dialog.fullscreen(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              IconButton(
-                onPressed: (){
-                  Navigator.pop(context);
-                }, 
-                icon: Icon(Icons.close)
-              ),
-              Padding(
-                padding: EdgeInsets.all(20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('텔레마케팅 데이터 판매', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
-                    SizedBox(height: 15),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('구매자'),
-                        Text(notifications[i]["tmdata"]["buyer"]),
-                      ],),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('연락처'),
-                        Text(notifications[i]["tmdata"]["cotact"]),
-                      ],),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('접수일시'),
-                        Text(notifications[i]["date"]),
-                      ],),
-                    SizedBox(height: 20,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('상태'),
-                        Text(notifications[i]["tmdata"]["state"]),
-                      ],),
-                  ]),
-              ),
-            ]
-          ),
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => Dialog.fullscreen(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            IconButton(
+              onPressed: (){
+                Navigator.pop(context);
+              }, 
+              icon: Icon(Icons.close)
+            ),
+            Padding(
+              padding: EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('텔레마케팅 데이터 판매', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+                  SizedBox(height: 15),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('구매자'),
+                      Text(notifications[i]["tmdata"]["buyer"]),
+                    ],),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('연락처'),
+                      Text(notifications[i]["tmdata"]["cotact"]),
+                    ],),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('접수일시'),
+                      Text(notifications[i]["date"]),
+                    ],),
+                  SizedBox(height: 20,),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('상태'),
+                      Text(notifications[i]["tmdata"]["state"]),
+                    ],),
+                ]),
+            ),
+          ]
         ),
-      );
-    }else if(notifications[i]['type'] == "normal"){
-      Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
-    }
+      ),
+    );
   }
 }

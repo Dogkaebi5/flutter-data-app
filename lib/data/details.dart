@@ -26,6 +26,24 @@ class Details {
     "account": ["홍길동", "카카오뱅크 3333123456789"],
     "status" : "접수"}];
 
+  List<Map> notices = [
+    {"id": "20000",
+    "type": "tele", 
+    "title": "[데이플러스] 텔레마케팅 접수 안내",
+    "content": "텔레마케팅 구매가 접수되었습니다. 업체의 마케팅 전화를 유의하세요.",
+    "date": "2023.01.01 23:59:59",
+    "tmdata": {
+      "buyer": "(주)테스트회사",
+      "cotact": "02)1234-5678",
+      "state": "거래접수"
+    }},
+    {"id": "10000",
+    "type": "normal", 
+    "title": "[데이플러스] 리워드 안내",
+    "content": "판매 접수된 정보가 구매 확정되어 포인트가 적립되었습니다!",
+    "date": "2023.01.01 23:59:59" }
+  ];
+
 //   List get details => _details;
 //   void addDetail(Map newDetail){
 //     _details.add(newDetail);

@@ -17,6 +17,7 @@ class SettingProvider extends ChangeNotifier {
   String _mobile = "010-1234-5678";
   int _point = 25000;
   List _details = Details().details;
+  List _notices = Details().notices;
   
   get userName => name;
   get isNotice => [_isNoticeService, _isNoticeMarketing];
@@ -25,6 +26,7 @@ class SettingProvider extends ChangeNotifier {
   get mobile => _mobile.split("-")[2];
   get point => _point;
   get details => _details;
+  get notices => _notices;
 
   get isHasAcc => _isHasAcc;
   get bankData => [name, _bankName, _bankAccNum];
@@ -42,7 +44,7 @@ class SettingProvider extends ChangeNotifier {
     _mobile = mobileNum;
     notifyListeners();
   } 
-    void setBank(bank, acc){
+  void setBank(bank, acc){
     _bankName = bank;
     _bankAccNum = acc;
     _isHasAcc = true;
@@ -58,26 +60,30 @@ class SettingProvider extends ChangeNotifier {
     notifyListeners();
   }
   void clearDetail() => _details.clear();
+  void addNotice(notice) => _notices.add(notice);
   void addDetailTest(int point, List? info){
     Map newdetail;
+    Map newNotice;
     if(point > -1) {
-      newdetail = addSaleDetail(point);
-      addDetail(newdetail);
+      newdetail = _addSaleDetail(point);
+      newNotice = _addSaleNotice();
     }else {
-      newdetail = addWithdrawDetail(point, info);
-      addDetail(newdetail);
+      newdetail = _addWithdrawDetail(point, info);
+      newNotice = _addSaleNotice();
     }
     addPoint(point);
+    addDetail(newdetail);
+    addNotice(newNotice);
   }
 
 
-  int _saleDetailID = 10001;
-  int _withDrawDetailID = 30001;
+  int _saleDetailID = 10000;
+  int _withDrawDetailID = 30000;
 
-  addSaleDetail(int point){
+  _addSaleDetail(int point){
     return {
       "title": "데이터 판매",
-      "id": (_saleDetailID++).toString(),
+      "id": (++_saleDetailID).toString(),
       "type": "리워드",
       "date": DateTime.now().toString().split(".")[0],
       "point": "+ ${f.format(point)} P",
@@ -85,10 +91,10 @@ class SettingProvider extends ChangeNotifier {
       "info": ["닉네임", "연령층", "이메일", "성함", "휴대폰", "관심사 1"]
     };
   }
-  addWithdrawDetail(int point, info){
+  _addWithdrawDetail(int point, info){
     return {
       "title": "출금",
-      "id": (_withDrawDetailID++).toString(),
+      "id": (++_withDrawDetailID).toString(),
       "type": "출금",
       "date": DateTime.now().toString().split(".")[0],
       "point": "- ${f.format(point*-1)} P",
@@ -98,6 +104,25 @@ class SettingProvider extends ChangeNotifier {
       "amount": "${info[2].toString()} 원",
       "account": [name, "$_bankName $_bankAccNum"],
       "status" : "접수"
+    };
+  }
+
+  _addSaleNotice(){
+    return {
+      "id": _saleDetailID.toString(),
+      "type": "normal", 
+      "title": "[데이플러스] 리워드 안내",
+      "content": "판매 접수된 정보가 구매 확정되어 포인트가 적립되었습니다!",
+      "date": DateTime.now().toString().split(".")[0],
+    };
+  }
+  _addWithdrawNotice(){
+    return {
+      "id": _withDrawDetailID.toString(),
+      "type": "normal", 
+      "title": "[데이플러스] 출금 성공",
+      "content": "신청하신 포인트가 정상 출금되었습니다.",
+      "date": DateTime.now().toString().split(".")[0],
     };
   }
 }

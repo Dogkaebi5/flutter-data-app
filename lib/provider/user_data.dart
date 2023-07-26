@@ -1,5 +1,3 @@
-import 'dart:js_interop';
-
 import 'package:data_project/data/question.dart';
 import 'package:flutter/material.dart';
 

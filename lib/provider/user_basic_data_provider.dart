@@ -1,18 +1,21 @@
 import 'package:data_project/data/question.dart';
+import 'package:data_project/provider/setting_provider.dart';
 import 'package:flutter/material.dart';
 
 class UserBasicData extends ChangeNotifier {
-  String _nickname = "홍길동";
+  String _nickname = "";
   String _email = "example@example.com";
   
   String? _married, _childHas, _education, _occupation, _income, _residence, _area;
   String? _marriedDate, _childHasDate, _educationDate, _occupationDate, _incomeDate, _residenceDate;
   List _isPermitBasicDatas = List.filled(Questions().basicInfo.length + 2, false);
-  String get nickname => _nickname;
+  
+  String get nickname => (_nickname == "")?SettingProvider().userName :_nickname;
   String get email => _email;
   List get selected => [ _married, _childHas, _education, _occupation, _income, _residence, _area];
   List get selectedDate => [_marriedDate, _childHasDate, _educationDate, _occupationDate, _incomeDate, _residenceDate];
   List get basicPermissions => _isPermitBasicDatas;
+
 
   void setNickname(String nickname){_nickname = nickname; notifyListeners();}
   void setEmail(String email){_email = email; notifyListeners();}

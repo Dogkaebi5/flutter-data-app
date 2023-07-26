@@ -1,9 +1,9 @@
-import 'dart:convert';
-
+import 'package:data_project/provider/setting_provider.dart';
 import 'package:data_project/screens/home/home_dialog.dart';
 import 'package:data_project/screens/home/home_nav.dart';
 import 'package:data_project/screens/start/authentication.dart';
 import 'package:data_project/testpage.dart';
+import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:data_project/screens/point/withdraw.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -17,52 +17,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
-  String jsonString = ''' 
-    { "details": 
-      [{
-        "title": "데이터 판매",
-        "id": "10000",
-        "type": "리워드",
-        "date": "2023-01-01 23:59:59",
-        "point": "+ 20,000 P",
-        "buyer": "(주)테스트회사",
-        "info": ["닉네임", "연령층",  "이메일", "성함", "휴대폰", "성별","출생연도","결혼정보","자녀정보","최종학력","직업","소득수준","거주지역","관심사 1","관심사 2","관심사 3"]
-      },
-      {
-        "title": "텔레마케팅 판매",
-        "id": "20000",
-        "type": "리워드",
-        "date": "2023-01-01 23:59:59",
-        "point": "+ 20,000 P",
-        "buyer": "(주)테스트회사",
-        "info": ["닉네임", "연령층",  "이메일", "성함", "휴대폰","텔레마케팅","성별","출생연도","결혼정보","자녀정보","최종학력","직업","소득수준","거주지역","관심사 1"]
-      },
-      {
-        "title": "출금",
-        "id": "30000",
-        "type": "출금",
-        "date": "2023-01-01 23:59:59",
-        "point": "- 10,000 P",
-        "withdraw": "10,000 P",
-        "fee": "0 P",
-        "tax": "660 원",
-        "amount": "9,340 원",
-        "account": ["홍길동", "카카오뱅크 3333123456789"],
-        "status" : "접수"
-      }
-      ],
-
-      "bank": {
-        "username": "홍길동",
-        "accountNum": "3333161234567",
-        "bank": "카카오뱅크"
-      },
-
-      "point": "40000"
-    }
-  ''';
-  List newDetails = List.empty(growable: true);
+  List details = List.empty(growable: true);
   int point = 0;
 
   List<bool> _selections = [true, false];
@@ -82,9 +37,8 @@ class _HomePageState extends State<HomePage> {
   void initState(){
     super.initState();
     setState(() {
-      Map jsonData = jsonDecode(jsonString);
-      newDetails = jsonData["details"];
-      point = int.parse(jsonData["point"]);
+      details = context.read<SettingProvider>().details;
+      point = context.read<SettingProvider>().point;
     });
     changeSortTextToMonth();
   }
@@ -130,32 +84,20 @@ class _HomePageState extends State<HomePage> {
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 30,
-                                    ),),
-                              ],
-                            ),
+                                    fontSize: 30,),),
+                            ],),
                         ],),
                         Container(
                           height: 40,
                           width: 40,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(100),
-                            color: Colors.white,
-                            boxShadow: [BoxShadow(
-                              color: Colors.black.withOpacity(.6),
-                              blurRadius: 6,
-                              spreadRadius : 1,
-                              offset: Offset(2, 4)
-                            ),],
-                          ),
+                            color: Colors.white,),
                           child: Icon(
                             Icons.analytics,
                             color: Colors.deepPurple,
-                            size: 28,
-                            ),
-                        )
-                      ],
-                    ),
+                            size: 28,),)
+                    ],),
                     SizedBox(height: 8,),
                     ElevatedButton(
                       onPressed: () {
@@ -232,14 +174,17 @@ class _HomePageState extends State<HomePage> {
                     SizedBox(height: 12,),
                 
                     //디테일 링크
-                    if(newDetails.length < 0)
+                    if(details.length < 1)
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: const [Text("기록이 없습니다.")],
+                        children: const [Padding(
+                          padding: EdgeInsets.all(28),
+                          child: Text("기록이 없습니다."),
+                        )],
                       )
-                      else 
-                        for(var i = 0; i < newDetails.length; i++)
-                          createDetailCards(i),
+                    else 
+                      for(int i = details.length-1; i > -1; i--)
+                        createDetailCards(i),
+
                     TextButton(
                       onPressed: (){
                         FirebaseAuth.instance.signOut();
@@ -248,8 +193,8 @@ class _HomePageState extends State<HomePage> {
                           MaterialPageRoute(builder: (context) =>  Authentication()),
                           ModalRoute.withName('/'),
                         );
-                        },
-                      child: Text("로그아웃")
+                      },
+                      child: Text("테스트 로그아웃")
                     ),
                     TextButton(
                       onPressed: (){
@@ -260,6 +205,14 @@ class _HomePageState extends State<HomePage> {
                         },
                       child: Text("테스트 페이지")
                     ),
+                    TextButton(
+                      onPressed: (){setState((){
+                        context.read<SettingProvider>().addDetailTest(10000);
+                        point = context.read<SettingProvider>().point;
+                      });},
+                      child: Text("만P 추가")
+                    ),
+                    SizedBox(height: 100,),
                   ]
                 ),
               ),
@@ -322,7 +275,7 @@ class _HomePageState extends State<HomePage> {
 
   createDetailCards(int loopInt){
     return InkWell(
-      onTap: () => detailDialog(context, loopInt, newDetails), 
+      onTap: () => detailDialog(context, loopInt, details), 
       child: Card(
         margin: EdgeInsets.all(1),
         child: Container(
@@ -333,12 +286,12 @@ class _HomePageState extends State<HomePage> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(newDetails[loopInt]['title'],
+                  Text(details[loopInt]['title'],
                     style: TextStyle(fontWeight: FontWeight.bold),),
                   // newDetails[loopInt]['point']
                   SizedBox(height: 4,),
                   Text(
-                    newDetails[loopInt]['date'].split(' ')[0], 
+                    details[loopInt]['date'].split(' ')[0], 
                     style: TextStyle(
                       color: Colors.grey, 
                       fontSize: 12
@@ -346,11 +299,11 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ],
               ),
-              Text(newDetails[loopInt]['point'],
+              Text(details[loopInt]['point'],
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: newDetails[loopInt]['point'].split(' ')[0] == "+"
+                  color: details[loopInt]['point'].split(' ')[0] == "+"
                     ? Colors.deepPurple.shade300
                     : Colors.red.shade300
                 ),)

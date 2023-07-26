@@ -31,7 +31,7 @@ class _InfopermissionState extends State<Infopermission> {
       interests = context.read<UserInterestData>().selecteds;
       isPermitUsers = context.read<SettingProvider>().userDataPermissions;
       isPermitBasics = context.read<UserBasicData>().basicPermissions;
-      isPremitInterest = context.read<UserInterestData>().interestPermissions;
+      isPremitInterest = context.read<UserInterestData>().permissions;
       tmDate = context.read<SettingProvider>().permitTmDate;
     });
   }

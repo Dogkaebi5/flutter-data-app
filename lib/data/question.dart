@@ -34,7 +34,7 @@ class Questions {
     "제주특별자치도": ["서귀포시", "제주시"]
   };
 
-  Map<String, List<Map<String, dynamic>>> interests = {
+  Map<String, List<Map>> interests = {
     "보험설계": [
       {"title": "가입한 보험이 있으신가요?",
       "option": ["10개 이상", "6~10개", "3~5개", "1~2개", "없음"]},

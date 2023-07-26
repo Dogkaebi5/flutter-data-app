@@ -27,7 +27,7 @@ class UserInterestData extends ChangeNotifier {
   List interests = Questions().interests.keys.toList();
   List _selecteds = List.empty(growable: true);
   List _selectedDates = List.empty(growable: true);
-  List<bool> _isPermissions = [true, true, true];
+  List<bool> _isPermissions = List.empty(growable: true);
   List<bool> _isSelecteds = List.filled(Questions().interests.keys.toList().length, false);
   
   List _insurance = List.filled(Questions().interests["보험설계"]!.length, _tempString);

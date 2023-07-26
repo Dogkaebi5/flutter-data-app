@@ -15,10 +15,11 @@ class Interest extends StatefulWidget {
 class _InterestState extends State<Interest> {
   bool isNewUser = false;
   UserInterestData userData = UserInterestData();
-  List<String> interestQuest = Questions().interests.keys.toList();
+  List<String> interestOptions = Questions().interests.keys.toList();
   List selecteds = List.empty(growable: true);
   List isSelecteds = List.empty(growable: true);
   List selectedDates = List.empty(growable: true);
+  List permissions = List.empty(growable: true);
   int selectedCount = 0;
   
   @override
@@ -30,7 +31,9 @@ class _InterestState extends State<Interest> {
       isSelecteds = userData.isSelecteds;
       selecteds = userData.selecteds;
       selectedDates = userData.selectedDates;
+      permissions = userData.permissions;
       selectedCount = selecteds.length;
+      
     });
   }
 
@@ -79,7 +82,7 @@ class _InterestState extends State<Interest> {
                     Wrap(
                       alignment: WrapAlignment.center,
                       children: [
-                        for(var i = 0; i < interestQuest.length; i++)
+                        for(var i = 0; i < interestOptions.length; i++)
                           createInterstCard(i)
                       ],
                     ),
@@ -115,11 +118,11 @@ class _InterestState extends State<Interest> {
   }
 
   saveInterestData(){
-    userData.setIsSelecteds(isSelecteds);
     userData.setSeleceds(selecteds);
+    userData.setIsSelecteds(isSelecteds);
     userData.setDates(selectedDates);
+    userData.setPermissions(permissions);
   }
-
 
   createInterestListText(){
     if(selectedCount>0) {
@@ -159,29 +162,31 @@ class _InterestState extends State<Interest> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text((interestQuest[i]), style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
+                    Text((interestOptions[i]), style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
                     Icon(Icons.close, color: Colors.white, size: 16,),
                   ]),
               )
               : Text(
-              interestQuest[i],
+              interestOptions[i],
               textAlign: TextAlign.center,
             ),
           ),
         ),
       ),
       onTap: (){
-        String after30days = DateTime.now().add(Duration(days: 30)).toString().split(" ")[0];
         setState(() {
-          if(selecteds.contains(interestQuest[i])){
+          if(selecteds.contains(interestOptions[i])){
             isSelecteds[i] = false;
-            selecteds.remove(interestQuest[i]);
-            selectedDates.removeLast();
+            selectedDates.removeAt(selecteds.indexOf(interestOptions[i]));
+            permissions.removeAt(selecteds.indexOf(interestOptions[i]));
+            selecteds.remove(interestOptions[i]);
             selectedCount --;
           }else if(selectedCount < 3){
+            String after30days = DateTime.now().add(Duration(days: 30)).toString().split(" ")[0];
             isSelecteds[i] = true;
-            selecteds.add(interestQuest[i]);
+            selecteds.add(interestOptions[i]);
             selectedDates.add(after30days);
+            permissions.add(true);
             selectedCount ++;
           }
         });

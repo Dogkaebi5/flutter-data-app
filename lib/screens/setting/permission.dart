@@ -12,9 +12,9 @@ class Infopermission extends StatefulWidget {
 }
 
 class _InfopermissionState extends State<Infopermission> {
-  List necessaryDataTexts = ["닉네임", "연령층", "이메일"];
-  List userDataTexts = ["성함", "성별", "출생연도", "휴대폰", "텔레마케팅 동의"];
-  List basciDataTexts = ['결혼정보', '자녀정보', '최종학력', '직업', '소득수준', '거주지역'];
+  static const List necessaryDataTexts = ["닉네임", "연령층", "이메일"];
+  static const List userDataTexts = ["성함", "성별", "출생연도", "휴대폰", "텔레마케팅 동의"];
+  static const List basciDataTexts = ['결혼정보', '자녀정보', '최종학력', '직업', '소득수준', '거주지역'];
   
   List interests = List.empty(growable: true);
 

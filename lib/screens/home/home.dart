@@ -103,7 +103,7 @@ class _HomePageState extends State<HomePage> {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => Withdraw(point)),
+                          MaterialPageRoute(builder: (context) => Withdraw()),
                         );},
                         child: SizedBox(
                           width: 112,
@@ -207,10 +207,17 @@ class _HomePageState extends State<HomePage> {
                     ),
                     TextButton(
                       onPressed: (){setState((){
-                        context.read<SettingProvider>().addDetailTest(10000);
+                        context.read<SettingProvider>().addDetailTest(10000, null);
                         point = context.read<SettingProvider>().point;
                       });},
                       child: Text("만P 추가")
+                    ),
+                    TextButton(
+                      onPressed: (){setState((){
+                        context.read<SettingProvider>().clearDetail();
+                        point = context.read<SettingProvider>().point;
+                      });},
+                      child: Text("디테일 전부 삭제")
                     ),
                     SizedBox(height: 100,),
                   ]

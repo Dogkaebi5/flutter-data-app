@@ -42,37 +42,39 @@ class SettingProvider extends ChangeNotifier {
     _mobile = mobileNum;
     notifyListeners();
   } 
-  
-  void addPoint(int point){
-    _point = _point + point;
-    notifyListeners();
-  }
-  void addDetail(Map detail){
-    _details.add(detail);
-    notifyListeners();
-  }
-  void addDetailTest(int point){
-    Map newdetail;
-    if(point > -1) {
-      newdetail = addSaleDetail(point);
-      addDetail(newdetail);
-    }else {
-      newdetail = addWithdrawDetail(point);
-      addDetail(newdetail);
-    }
-    addPoint(point);
-  }
-  void setBank(bank, acc){
+    void setBank(bank, acc){
     _bankName = bank;
     _bankAccNum = acc;
     _isHasAcc = true;
     notifyListeners();
   }
+  void addPoint(int point){
+    _point = _point + point;
+    notifyListeners();
+  }
 
-  int _saleDetailID = 10000;
-  int _withDrawDetailID = 30000;
+  void addDetail(Map detail){
+    _details.add(detail);
+    notifyListeners();
+  }
+  void clearDetail() => _details.clear();
+  void addDetailTest(int point, List? info){
+    Map newdetail;
+    if(point > -1) {
+      newdetail = addSaleDetail(point);
+      addDetail(newdetail);
+    }else {
+      newdetail = addWithdrawDetail(point, info);
+      addDetail(newdetail);
+    }
+    addPoint(point);
+  }
 
-  addSaleDetail(point){
+
+  int _saleDetailID = 10001;
+  int _withDrawDetailID = 30001;
+
+  addSaleDetail(int point){
     return {
       "title": "데이터 판매",
       "id": (_saleDetailID++).toString(),
@@ -83,18 +85,18 @@ class SettingProvider extends ChangeNotifier {
       "info": ["닉네임", "연령층", "이메일", "성함", "휴대폰", "관심사 1"]
     };
   }
-  addWithdrawDetail(point){
+  addWithdrawDetail(int point, info){
     return {
       "title": "출금",
-      "id": "30000",
+      "id": (_withDrawDetailID++).toString(),
       "type": "출금",
-      "date": "2023-01-01 23:59:59",
+      "date": DateTime.now().toString().split(".")[0],
       "point": "- ${f.format(point)} P",
       "withdraw": "${f.format(point)} P",
       "fee": "${(point < 10000)?"1,000": "0"} P",
       "tax": "660 원",
       "amount": "9,340 원",
-      "account": ["홍길동", "카카오뱅크 3333123456789"],
+      "account": [name, "$_bankName $_bankAccNum"],
       "status" : "접수"
     };
   }

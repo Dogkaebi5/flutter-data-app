@@ -102,7 +102,7 @@ class _BankState extends State<Bank> {
                     context.read<SettingProvider>().setBank(bank, acc);
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => Withdraw(40000))
+                      MaterialPageRoute(builder: (context) => Withdraw())
                     );
                   }
                   :null, 

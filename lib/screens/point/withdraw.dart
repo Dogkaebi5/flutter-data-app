@@ -21,7 +21,6 @@ class _WithdrawState extends State<Withdraw> {
   int amount = 0;
   TextEditingController _controller = TextEditingController();
 
-  
   bool isHasAcc = false;
   List bankData = List.empty(growable: true);
 
@@ -42,7 +41,7 @@ class _WithdrawState extends State<Withdraw> {
   }
   taxCalculate(){
     setState((){
-      tax = (inputPoint * 0.33).floor();
+      tax = (inputPoint * 0.033).floor();
     });
   }
   amountCalculate() {
@@ -215,7 +214,7 @@ class _WithdrawState extends State<Withdraw> {
     );
   }
   withdraw(){
-    
+    context.read<SettingProvider>().addDetailTest(-inputPoint, [fee, tax, amount]);
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute<void>(builder: (BuildContext context) => HomePage()),

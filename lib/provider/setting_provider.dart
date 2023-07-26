@@ -91,11 +91,11 @@ class SettingProvider extends ChangeNotifier {
       "id": (_withDrawDetailID++).toString(),
       "type": "출금",
       "date": DateTime.now().toString().split(".")[0],
-      "point": "- ${f.format(point)} P",
-      "withdraw": "${f.format(point)} P",
-      "fee": "${(point < 10000)?"1,000": "0"} P",
-      "tax": "660 원",
-      "amount": "9,340 원",
+      "point": "- ${f.format(point*-1)} P",
+      "withdraw": "${f.format(point*-1)} P",
+      "fee": "${info[0].toString()} 원",
+      "tax": "${info[1].toString()} 원",
+      "amount": "${info[2].toString()} 원",
       "account": [name, "$_bankName $_bankAccNum"],
       "status" : "접수"
     };

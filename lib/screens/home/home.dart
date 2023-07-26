@@ -2,7 +2,6 @@ import 'package:data_project/provider/setting_provider.dart';
 import 'package:data_project/screens/home/home_dialog.dart';
 import 'package:data_project/screens/home/home_nav.dart';
 import 'package:data_project/screens/start/authentication.dart';
-import 'package:data_project/testpage.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:data_project/screens/point/withdraw.dart';
@@ -184,42 +183,37 @@ class _HomePageState extends State<HomePage> {
                     else 
                       for(int i = details.length-1; i > -1; i--)
                         createDetailCards(i),
-
-                    TextButton(
-                      onPressed: (){
-                        FirebaseAuth.instance.signOut();
-                        Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(builder: (context) =>  Authentication()),
-                          ModalRoute.withName('/'),
-                        );
-                      },
-                      child: Text("테스트 로그아웃")
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        TextButton(
+                          onPressed: (){
+                            FirebaseAuth.instance.signOut();
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(builder: (context) =>  Authentication()),
+                              ModalRoute.withName('/'),
+                            );
+                          },
+                          child: Text("/test\nlogout")
+                        ),
+                        TextButton(
+                          onPressed: (){setState((){
+                            context.read<SettingProvider>().addDetailTest(10000, null);
+                            point = context.read<SettingProvider>().point;
+                          });},
+                          child: Text("/test\n+10k")
+                        ),
+                        TextButton(
+                          onPressed: (){setState((){
+                            context.read<SettingProvider>().clearDetail();
+                            point = context.read<SettingProvider>().point;
+                          });},
+                          child: Text("/test\ndel all")
+                        ),
+                      ],
                     ),
-                    TextButton(
-                      onPressed: (){
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) =>  TestPage()),
-                        );
-                        },
-                      child: Text("테스트 페이지")
-                    ),
-                    TextButton(
-                      onPressed: (){setState((){
-                        context.read<SettingProvider>().addDetailTest(10000, null);
-                        point = context.read<SettingProvider>().point;
-                      });},
-                      child: Text("만P 추가")
-                    ),
-                    TextButton(
-                      onPressed: (){setState((){
-                        context.read<SettingProvider>().clearDetail();
-                        point = context.read<SettingProvider>().point;
-                      });},
-                      child: Text("디테일 전부 삭제")
-                    ),
-                    SizedBox(height: 100,),
+                    SizedBox(height: 80,),
                   ]
                 ),
               ),

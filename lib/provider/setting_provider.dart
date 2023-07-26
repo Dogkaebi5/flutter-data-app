@@ -69,12 +69,15 @@ class SettingProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  int _saleDetailID = 10000;
+  int _withDrawDetailID = 30000;
+
   addSaleDetail(point){
     return {
       "title": "데이터 판매",
-      "id": "10000",
+      "id": (_saleDetailID++).toString(),
       "type": "리워드",
-      "date": "2023-01-01 23:59:59",
+      "date": DateTime.now().toString().split(".")[0],
       "point": "+ ${f.format(point)} P",
       "buyer": "(주)테스트회사",
       "info": ["닉네임", "연령층", "이메일", "성함", "휴대폰", "관심사 1"]

@@ -150,8 +150,8 @@ class _InterestState extends State<Interest> {
       child: SizedBox(
         height: 60,
         width: (MediaQuery.of(context).size.width > 360)
-          ?MediaQuery.of(context).size.width/3 - 16
-          :MediaQuery.of(context).size.width/2 - 24,
+          ?MediaQuery.of(context).size.width/3 - 18
+          :MediaQuery.of(context).size.width/2 - 26,
         child: 
         Card(
           color: isSelecteds[i]? Colors.deepPurple : Colors.white,

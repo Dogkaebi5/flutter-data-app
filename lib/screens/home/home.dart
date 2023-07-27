@@ -1,3 +1,4 @@
+import 'package:data_project/provider/new_user_provider.dart';
 import 'package:data_project/provider/setting_provider.dart';
 import 'package:data_project/screens/home/home_dialog.dart';
 import 'package:data_project/screens/home/notifications.dart';
@@ -260,6 +261,18 @@ class _HomePageState extends State<HomePage> {
                             );
                           },
                           child: Text("/test\nlogout")
+                        ),
+                        TextButton(
+                          onPressed: (){
+                            FirebaseAuth.instance.signOut();
+                            context.read<NewUserProvider>().setNewUser();
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(builder: (context) => Authentication()),
+                              ModalRoute.withName('/'),
+                            );
+                          },
+                          child: Text("/test\nnewUser")
                         ),
                         TextButton(
                           onPressed: (){setState((){

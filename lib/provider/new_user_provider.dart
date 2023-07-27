@@ -7,7 +7,7 @@ class NewUserProvider extends ChangeNotifier {
     _isNewUser = false;
     notifyListeners();
   }
-  void setNewUser(String newPassword){
+  void setNewUser(){
     _isNewUser = true;
     notifyListeners();
   }

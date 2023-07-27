@@ -33,10 +33,8 @@ class _InterestState extends State<Interest> {
       selectedDates = userData.selectedDates;
       permissions = userData.permissions;
       selectedCount = selecteds.length;
-      
     });
   }
-
   
   @override
   Widget build(BuildContext context) {
@@ -45,71 +43,72 @@ class _InterestState extends State<Interest> {
       // false),
       child: Scaffold(
         body: SafeArea(
-          child: Padding(
-            padding: EdgeInsets.symmetric(vertical: 20, horizontal:24),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: 40,),
-                Row(
-                  children: [
-                    Icon(Icons.interests, color: Colors.deepPurple.shade400, size: 32,),
-                    SizedBox(width: 8,),
-                    Text("관심사",
-                      style: TextStyle(
-                        color: Colors.deepPurple.shade400,
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                    ),),
-                ],),
-                SizedBox(height: 4,),
-                Text('관심사를 최대 3개 선택하세요.'),
-                Text('선택된 정보는 3개월간 수정 불가합니다.'),
-                SizedBox(height: 4,),
-                Container(
-                  padding: EdgeInsets.all(12),
-                  height: 108,
-                  decoration: BoxDecoration(
-                    color: Colors.deepPurple.shade50,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: createInterestListText(),
-                ),
-                Container(
-                  margin: EdgeInsets.symmetric(vertical:10),
-                  width: double.infinity,
-                  child:
-                    Wrap(
-                      alignment: WrapAlignment.center,
-                      children: [
-                        for(var i = 0; i < interestOptions.length; i++)
-                          createInterstCard(i)
-                      ],
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 20, horizontal:24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: 40,),
+                  Row(
+                    children: [
+                      Icon(Icons.interests, color: Colors.deepPurple.shade400, size: 32,),
+                      SizedBox(width: 8,),
+                      Text("관심사",
+                        style: TextStyle(
+                          color: Colors.deepPurple.shade400,
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                      ),),
+                  ],),
+                  SizedBox(height: 4,),
+                  Text('관심사를 최대 3개 선택하세요.'),
+                  Text('선택된 정보는 3개월간 수정 불가합니다.'),
+                  SizedBox(height: 4,),
+                  Container(
+                    padding: EdgeInsets.all(12),
+                    height: 108,
+                    decoration: BoxDecoration(
+                      color: Colors.deepPurple.shade50,
+                      borderRadius: BorderRadius.circular(10),
                     ),
-                ),
-                SizedBox(
-                  width: double.infinity,
-                  height: 44,
-                  child: ElevatedButton(
-                    onPressed: (){
-                      saveInterestData();
-                      if(isNewUser){
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => AddInfo()),
-                        );
-                      }else{
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => DataPage()),
-                        );
-                      }
-                    }, 
-                    child: Text('확인 저장')
+                    child: createInterestListText(),
                   ),
-                ),
-                Spacer(),
-              ],
+                  Container(
+                    margin: EdgeInsets.symmetric(vertical:10),
+                    width: double.infinity,
+                    child:
+                      Wrap(
+                        alignment: WrapAlignment.center,
+                        children: [
+                          for(var i = 0; i < interestOptions.length; i++)
+                            createInterstCard(i)
+                        ],
+                      ),
+                  ),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 44,
+                    child: ElevatedButton(
+                      onPressed: (){
+                        saveInterestData();
+                        if(isNewUser){
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => AddInfo()),
+                          );
+                        }else{
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => DataPage()),
+                          );
+                        }
+                      }, 
+                      child: Text('확인 저장')
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -130,8 +129,9 @@ class _InterestState extends State<Interest> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           for(var i = 0; i < selectedCount; i++)
-            Row(children: [
-              Padding(
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [Padding(
                 padding: const EdgeInsets.all(2.0),
                 child: Text(selecteds[i], 
                   style: TextStyle(
@@ -139,7 +139,6 @@ class _InterestState extends State<Interest> {
                     fontSize: 16,
                 ),),
               ),
-              Spacer(),
               Text('저장 유지기간 : ~ ${selectedDates[i]}',),
             ],),
         ],
@@ -150,7 +149,9 @@ class _InterestState extends State<Interest> {
     return InkWell(
       child: SizedBox(
         height: 60,
-        width: 110,
+        width: (MediaQuery.of(context).size.width > 360)
+          ?MediaQuery.of(context).size.width/3 - 16
+          :MediaQuery.of(context).size.width/2 - 24,
         child: 
         Card(
           color: isSelecteds[i]? Colors.deepPurple : Colors.white,

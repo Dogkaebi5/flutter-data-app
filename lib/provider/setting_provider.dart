@@ -16,8 +16,8 @@ class SettingProvider extends ChangeNotifier {
   String? _bankAccNum;
   String _mobile = "010-1234-5678";
   int _point = 25000;
-  List _details = Details().details;
-  List _notices = Details().notices;
+  final List _details = Details().details;
+  final List _notices = Details().notices;
   bool _hasNewNotice = false;
   int _newNoticesCount = 0;
   

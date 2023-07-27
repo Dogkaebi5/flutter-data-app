@@ -66,33 +66,33 @@ class _SetPassword extends State<SetPassword> {
                         borderRadius: BorderRadius.circular(20)
                       )
                     ),
-                  focusedPinTheme: PinTheme(
-                    height: 60,
-                    width: 60,
-                    decoration: BoxDecoration(
-                      color: Colors.purple.shade100,
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: Colors.purple, width: 1.2 )
+                    focusedPinTheme: PinTheme(
+                      height: 60,
+                      width: 60,
+                      decoration: BoxDecoration(
+                        color: Colors.purple.shade100,
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(color: Colors.purple, width: 1.2 )
+                      ),
                     ),
-                  ),
-                  submittedPinTheme: PinTheme(
-                    height: 60,
-                    width: 60,
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade200,
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: Colors.purple.shade200, width: 1),
-                    )
-                  ),
-                  autofocus : true,
-                  obscureText : _isVisibilityNew? false :true,
-                  obscuringCharacter: "⁕",
-                  onChanged: (value)=> setState(()=> _newPassword = value),
-                  onCompleted: (value){
-                    _pageViewController.nextPage(
-                      duration: Duration(milliseconds: 300), 
-                      curve: Curves.linear,);
-                    }
+                    submittedPinTheme: PinTheme(
+                      height: 60,
+                      width: 60,
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade200,
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(color: Colors.purple.shade200, width: 1),
+                      )
+                    ),
+                    autofocus : true,
+                    obscureText : _isVisibilityNew? false :true,
+                    obscuringCharacter: "⁕",
+                    onChanged: (value)=> setState(()=> _newPassword = value),
+                    onCompleted: (value){
+                      _pageViewController.nextPage(
+                        duration: Duration(milliseconds: 300), 
+                        curve: Curves.linear,);
+                      }
                   ),
                 ],
               ),

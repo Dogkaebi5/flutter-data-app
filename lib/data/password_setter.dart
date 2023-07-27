@@ -17,18 +17,15 @@ class PasswordStorage {
   Future<String> readPassword() async {
     try {
       final file = await _localFile;
-      // Read the file
       final contents = await file.readAsString();
       return contents;
     } catch (e) {
-      // If encountering an error, return 0
       return "";
     }
   }
 
   Future<File> writePassword(String password) async {
     final file = await _localFile;
-    // Write the file
     return file.writeAsString(password);
   }
 }

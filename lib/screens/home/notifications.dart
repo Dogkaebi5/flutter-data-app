@@ -137,7 +137,20 @@ class _NotificationPageState extends State<NotificationPage> {
                       }
                       index++;
                     }
-                    detailDialog(context, index, details);//없을 경우?
+                    if (index < details.length) {
+                      detailDialog(context, index, details);
+                    }else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text("상세내역을 찾지 못했습니다."),
+                          duration: Duration(seconds: 3), 
+                          action: SnackBarAction(
+                            label: 'Close',
+                            onPressed: (){},
+                          ),
+                        )
+                      );
+                    }
                   }
                 },
                 child: Card(

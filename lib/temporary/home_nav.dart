@@ -4,14 +4,14 @@ import 'package:data_project/screens/setting/setting.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class Nav extends StatefulWidget {
-  const Nav({super.key});
+class HomeNav extends StatefulWidget {
+  const HomeNav({super.key});
 
   @override
-  _NavState createState() => _NavState();
+  HomeNavState createState() => HomeNavState();
 }
 
-class _NavState extends State<Nav> {
+class HomeNavState extends State<HomeNav> {
   int selectedIndex = 0;
   bool hasNewNotice = false;
 

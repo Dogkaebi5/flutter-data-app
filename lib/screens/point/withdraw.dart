@@ -19,7 +19,7 @@ class _WithdrawState extends State<Withdraw> {
   int fee = 1000;
   int tax = 0;
   int amount = 0;
-  TextEditingController _controller = TextEditingController();
+  final TextEditingController _controller = TextEditingController();
 
   bool isHasAcc = false;
   List bankData = List.empty(growable: true);

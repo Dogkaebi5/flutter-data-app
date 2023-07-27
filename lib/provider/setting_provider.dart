@@ -18,6 +18,8 @@ class SettingProvider extends ChangeNotifier {
   int _point = 25000;
   List _details = Details().details;
   List _notices = Details().notices;
+  bool _hasNewNotice = false;
+  int _newNoticesCount = 0;
   
   get userName => name;
   get isNotice => [_isNoticeService, _isNoticeMarketing];
@@ -27,6 +29,8 @@ class SettingProvider extends ChangeNotifier {
   get point => _point;
   get details => _details;
   get notices => _notices;
+  get hasNewNotice => _hasNewNotice;
+  get newNoticesCount => _newNoticesCount;
 
   get isHasAcc => _isHasAcc;
   get bankData => [name, _bankName, _bankAccNum];
@@ -61,26 +65,30 @@ class SettingProvider extends ChangeNotifier {
   }
   void clearDetail() => _details.clear();
   void addNotice(notice) => _notices.add(notice);
+  void clearNotice() => _notices.clear();
+  void setHasNewNotice(bool a) => _hasNewNotice = a;
+  void countNewNotice(bool a) => (a)? _newNoticesCount++ : _newNoticesCount = 0;
+
   void addDetailTest(int point, List? info){
     Map newdetail;
     Map newNotice;
     if(point > -1) {
-      newdetail = _addSaleDetail(point);
-      newNotice = _addSaleNotice();
+      newdetail = _createSaleDetail(point);
+      newNotice = _createSaleNotice();
     }else {
-      newdetail = _addWithdrawDetail(point, info);
-      newNotice = _addSaleNotice();
+      newdetail = _createWithdrawDetail(point, info);
+      newNotice = _createWithdrawNotice();
     }
     addPoint(point);
     addDetail(newdetail);
     addNotice(newNotice);
+    setHasNewNotice(true);
+    countNewNotice(true);
   }
-
-
   int _saleDetailID = 10000;
   int _withDrawDetailID = 30000;
 
-  _addSaleDetail(int point){
+  _createSaleDetail(int point){
     return {
       "title": "데이터 판매",
       "id": (++_saleDetailID).toString(),
@@ -91,7 +99,7 @@ class SettingProvider extends ChangeNotifier {
       "info": ["닉네임", "연령층", "이메일", "성함", "휴대폰", "관심사 1"]
     };
   }
-  _addWithdrawDetail(int point, info){
+  _createWithdrawDetail(int point, info){
     return {
       "title": "출금",
       "id": (++_withDrawDetailID).toString(),
@@ -107,7 +115,7 @@ class SettingProvider extends ChangeNotifier {
     };
   }
 
-  _addSaleNotice(){
+  _createSaleNotice(){
     return {
       "id": _saleDetailID.toString(),
       "type": "normal", 
@@ -116,7 +124,7 @@ class SettingProvider extends ChangeNotifier {
       "date": DateTime.now().toString().split(".")[0],
     };
   }
-  _addWithdrawNotice(){
+  _createWithdrawNotice(){
     return {
       "id": _withDrawDetailID.toString(),
       "type": "normal", 

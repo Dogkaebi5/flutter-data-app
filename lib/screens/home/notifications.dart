@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:data_project/provider/setting_provider.dart';
 import 'package:data_project/screens/home/home.dart';
 import 'package:data_project/screens/setting/setting.dart';
@@ -42,14 +40,16 @@ class _NotificationPageState extends State<NotificationPage> {
       ]
     }
   ''';
-
   List notifications = List.empty(growable: true);
+  int newNoticesCount = 0;
 
   @override
   void initState(){
     super.initState();
     setState(() {
       notifications = context.read<SettingProvider>().notices;
+      context.read<SettingProvider>().setHasNewNotice(false);
+      newNoticesCount = context.read<SettingProvider>().newNoticesCount;
     });
   }
 
@@ -115,63 +115,100 @@ class _NotificationPageState extends State<NotificationPage> {
               ),
             ),
           ),
-
-          for(int i = notifications.length-1; i > -1; i--)
-            InkWell(
-              onTap: (){
-                
-                if(notifications[i]["type"] == "tele"){
-                  notificationDialog(i);
-                }else if (notifications[i]["type"] == "normal"){
-                  int index = 0;
-                  String id = notifications[i]["id"];
-                  List<Map> details = context.read<SettingProvider>().details;
-                  for (var detail in details) {
-                    if(detail.containsValue(id)){break;}
-                    index++;
+          if (notifications.isEmpty)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+              child: Align(
+                alignment: Alignment.topLeft,
+                child: Text("알림이 없습니다.")))
+          else
+            for(int i = notifications.length-1; i > -1; i--)
+              InkWell(
+                onTap: (){
+                  if(notifications[i]["type"] == "tele"){
+                    notificationDialog(i);
+                  }else if (notifications[i]["type"] == "normal"){
+                    int index = 0;
+                    String id = notifications[i]["id"];
+                    List<Map> details = context.read<SettingProvider>().details;
+                    for (var detail in details) {
+                      if(detail.containsValue(id)){
+                        break;
+                      }
+                      index++;
+                    }
+                    detailDialog(context, index, details);//없을 경우?
                   }
-                  detailDialog(context, index, details);
-                }
-              },
-              child: Card(
-                margin: EdgeInsets.all(1),
-                child: Container(
-                  width: double.infinity,
-                  padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        notifications[i]['title'], 
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold, 
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.justify,
-                        maxLines: 1,
+                },
+                child: Card(
+                  margin: EdgeInsets.all(1),
+                  child: Stack(
+                    children:[Container(
+                      width: double.infinity,
+                      padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            notifications[i]['title'], 
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold, 
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.justify,
+                            maxLines: 1,
+                          ),
+                          SizedBox(height: 4,),
+                          Text(
+                            notifications[i]['content'], 
+                            overflow: TextOverflow.clip,
+                            textAlign: TextAlign.justify,
+                            maxLines: 2,
+                          ),
+                          SizedBox(height: 4,),
+                          Text(
+                            notifications[i]['date'],
+                            style: TextStyle(
+                              color: Color.fromARGB(255, 132, 132, 132),
+                            ),
+                          ),
+                        ],
                       ),
-                      SizedBox(height: 4,),
-                      Text(
-                        notifications[i]['content'], 
-                        overflow: TextOverflow.clip,
-                        textAlign: TextAlign.justify,
-                        maxLines: 2,
-                      ),
-                      SizedBox(height: 4,),
-                      Text(
-                        notifications[i]['date'],
-                        style: TextStyle(
-                          color: Color.fromARGB(255, 132, 132, 132),
-                        ),
-                      ),
-                    ],
+                    ),
+                    setBadge(),
+                    ]
                   ),
                 ),
               ),
-            ),
+          TextButton(
+            onPressed: (){
+              setState(() {
+                context.read<SettingProvider>().clearNotice();
+              });
+            }, 
+            child: Text("/test\ndel all"))
         ]
       )
     );
+  }
+
+  setBadge(){
+    if (newNoticesCount > 0){
+      newNoticesCount--;
+      return Positioned(
+        right: 12,
+        top: 12,
+        child: Container(
+          width: 8,
+          height: 8,
+          decoration: BoxDecoration(
+            color: Colors.red,
+            borderRadius: BorderRadius.circular(4)
+      )));
+    }else {
+      context.read<SettingProvider>().countNewNotice(false);
+      return SizedBox.shrink();
+    }
   }
 
   notificationDialog(int i) {

@@ -43,9 +43,4 @@ class Details {
     "content": "판매 접수된 정보가 구매 확정되어 포인트가 적립되었습니다!",
     "date": "2023.01.01 23:59:59" }
   ];
-
-//   List get details => _details;
-//   void addDetail(Map newDetail){
-//     _details.add(newDetail);
-//   }
 }

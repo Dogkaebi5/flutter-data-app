@@ -1,4 +1,4 @@
-import 'package:data_project/data/detail_setter.dart';
+import 'package:data_project/temporary/detail_setter.dart';
 import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
 

@@ -1,6 +1,7 @@
 import 'package:data_project/provider/setting_provider.dart';
 import 'package:data_project/screens/home/home_dialog.dart';
-import 'package:data_project/screens/home/home_nav.dart';
+import 'package:data_project/screens/home/notifications.dart';
+import 'package:data_project/screens/setting/setting.dart';
 import 'package:data_project/screens/start/authentication.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
@@ -19,12 +20,14 @@ class _HomePageState extends State<HomePage> {
   List details = List.empty(growable: true);
   int point = 0;
 
-  List<bool> _selections = [true, false];
+  int navSelectedIndex = 0;
+  bool hasNewNotice = false;
+
+  List<bool> sortSelections = [true, false];
   DateTime signUpDate = DateTime(2023, 1, 1);
   DateTime today = DateTime.now();
   String sortStartDate ="2023-01-01";
   String sortEndDate ="2023-01-31";
-  
   setSortDateText(selectStartDate, selectEndDate){
     setState((){
       sortStartDate = selectStartDate;
@@ -38,6 +41,7 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       details = context.read<SettingProvider>().details;
       point = context.read<SettingProvider>().point;
+      hasNewNotice = context.read<SettingProvider>().hasNewNotice;
     });
     changeSortTextToMonth();
   }
@@ -46,7 +50,67 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context, ) {
     return Scaffold(
       backgroundColor: Colors.deepPurple.shade400,
-      bottomSheet: Nav(),
+      bottomSheet: Container(
+      height: 60,
+      margin: EdgeInsets.only(bottom: 12, left: 8, right: 8),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(30),
+        boxShadow: [BoxShadow(
+          color: Colors.black.withOpacity(.6),
+          blurRadius: 6,
+          spreadRadius : 1,
+          offset: Offset(2, 4)
+        ),],
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(30),
+        child: BottomNavigationBar(
+          items:[
+            BottomNavigationBarItem(icon: Icon(Icons.home), label: "홈"),
+            BottomNavigationBarItem(
+              icon: (hasNewNotice) 
+                ?Stack(children: [
+                  Icon(Icons.notifications),
+                  Positioned(
+                    top: 2,
+                    right: 2,
+                    child: Container(
+                      width: 8,
+                      height: 8,
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                    ),
+                  )
+                ],) 
+                :Icon(Icons.notifications),
+              label: "알림"
+            ),
+            BottomNavigationBarItem(icon: Icon(Icons.settings), label: "설정")
+          ],
+          selectedItemColor: Colors.white,
+          backgroundColor: Colors.deepPurple,
+          currentIndex: navSelectedIndex,
+          unselectedItemColor: Colors.deepPurple.shade300,
+          
+          onTap: (index){
+            switch(index){
+              case 0 : break;
+              case 1 : Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => NotificationPage()),
+              );
+              case 2 : Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SettingPage()),
+              );
+            }
+            setState(()=> navSelectedIndex = index);
+          },
+        ),
+      ),
+    ),
       body:  WillPopScope(
         onWillPop: () => Future(() => false),
         child: SafeArea(
@@ -137,11 +201,11 @@ class _HomePageState extends State<HomePage> {
                   children: [
                     SizedBox(height: 28,),
                     ToggleButtons(
-                      isSelected: _selections,
+                      isSelected: sortSelections,
                       onPressed: (index) {
                         setState(() {
-                          _selections = [false, false];
-                          _selections[index] = !_selections[index];
+                          sortSelections = [false, false];
+                          sortSelections[index] = !sortSelections[index];
                         });
                         if (index == 1) {
                           showDatePickerDialog();
@@ -162,7 +226,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                     SizedBox(height: 8,),
                   
-                    if(_selections[1])
+                    if(sortSelections[1])
                       Text(
                         '검색기간 : $sortStartDate ~ $sortEndDate', 
                         style: TextStyle(
@@ -173,7 +237,7 @@ class _HomePageState extends State<HomePage> {
                     SizedBox(height: 12,),
                 
                     //디테일 링크
-                    if(details.length < 1)
+                    if(details.isEmpty)
                       Row(
                         children: const [Padding(
                           padding: EdgeInsets.all(28),
@@ -201,6 +265,7 @@ class _HomePageState extends State<HomePage> {
                           onPressed: (){setState((){
                             context.read<SettingProvider>().addDetailTest(10000, null);
                             point = context.read<SettingProvider>().point;
+                            hasNewNotice = context.read<SettingProvider>().hasNewNotice;
                           });},
                           child: Text("/test\n+10k")
                         ),
@@ -231,7 +296,7 @@ class _HomePageState extends State<HomePage> {
     setSortDateText(monthAgo, todayDate);
   }
 
-  void setMon() => setState(() => _selections = [true, false]);
+  void setMon() => setState(() => sortSelections = [true, false]);
 
   showDatePickerDialog()=>
     showDialog(

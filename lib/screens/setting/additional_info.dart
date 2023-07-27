@@ -185,7 +185,7 @@ class _AddInfoState extends State<AddInfo> {
                                 nowSelectedQuestions = questions[interstSelecteds[nowToggleIndex]];
                               });
                             }else {setData(); router(); break;}
-                          default: router(); break;
+                          default: setData(); router(); break;
                         }
                       }, 
                       child: Text('확인 저장')

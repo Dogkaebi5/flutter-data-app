@@ -66,4 +66,25 @@ class UserBasicData extends ChangeNotifier {
     _residenceDate = DateTime.now().toString().split(" ")[0];
     _isPermitBasicDatas[6] = true;
   }
+
+  void reset(){
+    _nickname = "";
+    _email = "example@example.com";
+  
+    _married = null;
+    _childHas = null;
+    _education = null;
+    _occupation = null;
+    _income = null;
+    _residence = null;
+    _area = null;
+    _marriedDate = null;
+    _childHasDate = null;
+    _educationDate = null;
+    _occupationDate = null;
+    _incomeDate = null;
+    _residenceDate = null;
+    
+    _isPermitBasicDatas = List.filled(Questions().basicInfo.length + 2, false);
+  }
 }

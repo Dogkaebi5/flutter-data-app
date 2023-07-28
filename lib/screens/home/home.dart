@@ -1,5 +1,7 @@
 import 'package:data_project/provider/new_user_provider.dart';
 import 'package:data_project/provider/setting_provider.dart';
+import 'package:data_project/provider/user_basic_data_provider.dart';
+import 'package:data_project/provider/user_interest_data_provider.dart';
 import 'package:data_project/screens/home/home_dialog.dart';
 import 'package:data_project/screens/home/notifications.dart';
 import 'package:data_project/screens/setting/setting.dart';
@@ -266,6 +268,9 @@ class _HomePageState extends State<HomePage> {
                           onPressed: (){
                             FirebaseAuth.instance.signOut();
                             context.read<NewUserProvider>().setNewUser();
+                            context.read<SettingProvider>().reset();
+                            context.read<UserBasicData>().reset();
+                            context.read<UserInterestData>().reset();
                             Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(builder: (context) => Authentication()),

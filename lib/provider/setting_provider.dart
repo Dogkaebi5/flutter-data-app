@@ -133,4 +133,21 @@ class SettingProvider extends ChangeNotifier {
       "date": DateTime.now().toString().split(".")[0],
     };
   }
+
+  void reset(){
+    _isNoticeService = false;
+    _isNoticeMarketing = false;
+    _isPermitUserData  = List.filled(6, false);
+    _permitTmDate = null;
+    _isHasAcc = false;
+    _bankName = null;
+    _bankAccNum = null;
+    _mobile = "010-1234-5678";
+    _point = 0;
+
+    _hasNewNotice = false;
+    _newNoticesCount = 0;
+    clearDetail();
+    clearNotice();
+  }
 }

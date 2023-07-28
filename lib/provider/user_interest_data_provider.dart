@@ -105,4 +105,31 @@ class UserInterestData extends ChangeNotifier {
   void setCamp(answers) => _camp = List.from(answers);
   void setFishing(answers) => _fishing = List.from(answers);
   void setPet(answers) => _pet = List.from(answers);
+
+  void reset() {
+    _selecteds = List.empty(growable: true);
+    _selectedDates = List.empty(growable: true);
+    _isPermissions = List.empty(growable: true);
+    _isSelecteds = List.filled(Questions().interests.keys.toList().length, false);
+    
+    _insurance = List.filled(Questions().interests["보험설계"]!.length, _tempString);
+    _loan = List.filled(Questions().interests["대출"]!.length, _tempString);
+    _deposit = List.filled(Questions().interests["예금/적금"]!.length, _tempString);
+    _immovables = List.filled(Questions().interests["부동산"]!.length, _tempString);
+    _stock = List.filled(Questions().interests["주식"]!.length, _tempString);
+    _cryto = List.filled(Questions().interests["가상자산"]!.length, _tempString);
+    _golf = List.filled(Questions().interests["골프"]!.length, _tempString);
+    _tennis = List.filled(Questions().interests["테니스"]!.length, _tempString);
+    _fitness = List.filled(Questions().interests["피트니스"]!.length, _tempString);
+    _yoga = List.filled(Questions().interests["요가"]!.length, _tempString);
+    _dietary = List.filled(Questions().interests["건강식품"]!.length, _tempString);
+    _educate = List.filled(Questions().interests["교육"]!.length, _tempString);
+    _parental = List.filled(Questions().interests["육아용품"]!.length, _tempString);
+    _automobile = List.filled(Questions().interests["자동차"]!.length, _tempString);
+    _localTrip = List.filled(Questions().interests["국내여행"]!.length, _tempString);
+    _overseatrip = List.filled(Questions().interests["해외여행"]!.length, _tempString);
+    _camp = List.filled(Questions().interests["캠핑"]!.length, _tempString);
+    _fishing = List.filled(Questions().interests["낚시"]!.length, _tempString);
+    _pet = List.filled(Questions().interests["반려동물"]!.length, _tempString);
+  }
 }

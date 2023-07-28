@@ -19,15 +19,16 @@ class _AppStartScreenState extends State<AppStartScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return Scaffold(
       body : SafeArea(
         child: SizedBox(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
+          height: size.height,
+          width: size.width,
           child: Stack(
             children: [
               AnimatedPositioned(
-                height: MediaQuery.of(context).size.height,
+                height: size.height,
                 duration: Duration(seconds: 14),
                 right: (firstAnimatedState) ? -1000 : (repeatAnimatedState) ? 0 : -999,
                 curve: Curves.linear,
@@ -40,7 +41,7 @@ class _AppStartScreenState extends State<AppStartScreen> {
                 width: double.infinity,
                 height: 180,
                 padding: EdgeInsets.all(20),
-                margin: EdgeInsets.only(top: MediaQuery.of(context).size.height/1.5, left: 20, right: 20),
+                margin: EdgeInsets.only(top: size.height/1.5, left: 20, right: 20),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
                   color: Colors.white.withOpacity(.8),

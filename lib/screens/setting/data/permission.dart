@@ -99,7 +99,7 @@ class _PermissionScreenState extends State<PermissionScreen> {
                           setState(() {
                             isPermitUsers[4] = val;
                             tmDate = DateTime.now().toString().split(" ")[0];
-                            context.read<SettingProvider>().setTmPermission(val, tmDate);
+                            context.read<SettingProvider>().setTmPermission(val);
                           });
                         }
                       : null,

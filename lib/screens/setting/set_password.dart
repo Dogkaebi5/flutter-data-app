@@ -40,69 +40,62 @@ class _SetPasswordScreen extends State<SetPasswordScreen> {
         child: PageView(
           controller: _pageViewController,
           children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 24, horizontal:20),
-              child: Column(
-                children:[
-                  SizedBox(height: 200,),
-                  Text(
-                    "새로운 비밀번호", 
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),),
-                  SizedBox(height: 8,),
-                  Text("숫자 4자리을 입력하세요"),
-                  SizedBox(height: 8,),
-                  IconButton(
-                    onPressed: () => setState(() => _isVisibilityNew = !_isVisibilityNew),
-                    icon: _isVisibilityNew ? Icon(Icons.visibility) : Icon(Icons.visibility_off),
-                    color: _isVisibilityNew ? Colors.purple.shade300 : Colors.grey ,
-                  ),
-                  SizedBox(height: 20 ,),
-                  Pinput(
-                    defaultPinTheme: PinTheme(
-                      height: 60,
-                      width: 60,
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade200,
-                        borderRadius: BorderRadius.circular(20)
-                      )
-                    ),
-                    focusedPinTheme: PinTheme(
-                      height: 60,
-                      width: 60,
-                      decoration: BoxDecoration(
-                        color: Colors.purple.shade100,
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: Colors.purple, width: 1.2 )
-                      ),
-                    ),
-                    submittedPinTheme: PinTheme(
-                      height: 60,
-                      width: 60,
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade200,
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: Colors.purple.shade200, width: 1),
-                      )
-                    ),
-                    autofocus : true,
-                    obscureText : _isVisibilityNew? false :true,
-                    obscuringCharacter: "⁕",
-                    onChanged: (value)=> setState(()=> _newPassword = value),
-                    onCompleted: (value){
-                      _pageViewController.nextPage(
-                        duration: Duration(milliseconds: 300), 
-                        curve: Curves.linear,);
-                      }
-                  ),
-                ],
-              ),
-            ),
+            Column(
+              children:[
+                SizedBox(height: 224,),
+                Text(
+                  "새로운 비밀번호", 
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),),
+                SizedBox(height: 8,),
+                Text("숫자 4자리을 입력하세요"),
+                SizedBox(height: 8,),
+                IconButton(
+                  onPressed: () => setState(() => _isVisibilityNew = !_isVisibilityNew),
+                  icon: _isVisibilityNew ? Icon(Icons.visibility) : Icon(Icons.visibility_off),
+                  color: _isVisibilityNew ? Colors.purple.shade300 : Colors.grey ,
+                ),
+                SizedBox(height: 20,),
+                Pinput(
+                  defaultPinTheme: PinTheme(
+                    height: 60,
+                    width: 60,
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade200,
+                      borderRadius: BorderRadius.circular(20)
+                  )),
+                  focusedPinTheme: PinTheme(
+                    height: 60,
+                    width: 60,
+                    decoration: BoxDecoration(
+                      color: Colors.purple.shade100,
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(color: Colors.purple, width: 1.2 )
+                  ),),
+                  submittedPinTheme: PinTheme(
+                    height: 60,
+                    width: 60,
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade200,
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(color: Colors.purple.shade200, width: 1),
+                  )),
+                  autofocus : true,
+                  obscureText : _isVisibilityNew? false :true,
+                  obscuringCharacter: "⁕",
+                  onChanged: (value)=> setState(()=> _newPassword = value),
+                  onCompleted: (value){
+                    _pageViewController.nextPage(
+                      duration: Duration(milliseconds: 300), 
+                      curve: Curves.linear,
+                  );}
+            ),],),
 
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 24, horizontal:20),
-              child: Column(
-                children:[
-                  Align(
+            Column(
+              children:[
+                
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Align(
                     alignment: Alignment.topLeft,
                     child: GestureDetector(
                       onTap: (){ 
@@ -113,7 +106,8 @@ class _SetPasswordScreen extends State<SetPasswordScreen> {
                       child: const Icon(Icons.arrow_back),
                     ),
                   ),
-                SizedBox(height: 174,),
+                ),
+                SizedBox(height: 160,),
                 Text(
                   "비밀번호 다시 확인", 
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),),
@@ -133,8 +127,7 @@ class _SetPasswordScreen extends State<SetPasswordScreen> {
                     decoration: BoxDecoration(
                       color: Colors.grey.shade200,
                       borderRadius: BorderRadius.circular(20)
-                    )
-                  ),
+                  )),
                   focusedPinTheme: PinTheme(
                     height: 60,
                     width: 60,
@@ -142,8 +135,7 @@ class _SetPasswordScreen extends State<SetPasswordScreen> {
                       color: Colors.purple.shade100,
                       borderRadius: BorderRadius.circular(20),
                       border: Border.all(color: Colors.purple, width: 1.2 )
-                    ),
-                  ),
+                  ),),
                   submittedPinTheme: PinTheme(
                     height: 60,
                     width: 60,
@@ -151,8 +143,7 @@ class _SetPasswordScreen extends State<SetPasswordScreen> {
                       color: Colors.grey.shade200,
                       borderRadius: BorderRadius.circular(20),
                       border: Border.all(color: Colors.purple.shade200, width: 1),
-                    )
-                  ),
+                  )),
                   autofocus : true,
                   obscureText : _isVisibilityCheck? false :true,
                   obscuringCharacter: "⁕",
@@ -181,9 +172,7 @@ class _SetPasswordScreen extends State<SetPasswordScreen> {
                 SizedBox(height: 20,),
                 if (isCorrectPassword != null && isCorrectPassword == false)
                   Text("비밀번호가 일치하지 않습니다", style: TextStyle(color: Colors.red),),
-              ], 
-            ),
-          )
+            ],)
         ],),
         ),
       );

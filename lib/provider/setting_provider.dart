@@ -38,10 +38,10 @@ class SettingProvider extends ChangeNotifier {
   void setNoticeService(bool isTrue) => _isNoticeService = isTrue;
   void setNoticeMarket(bool isTrue) => _isNoticeMarketing = isTrue;
   void setPermissions(list) => _isPermitUserData = List.from(list);  
-  void setTmPermission(bool isTrue, date){
+  void setTmPermission(bool isTrue){
     _isPermitUserData[3] = isTrue;
     _isPermitUserData[4] = isTrue;
-    _permitTmDate = date;
+    _permitTmDate = DateTime.now().toString().split(' ')[0];
     notifyListeners();
   }
   void changeMobile(String mobileNum){

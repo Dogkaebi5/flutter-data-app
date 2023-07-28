@@ -13,7 +13,7 @@ class BasicDataScreen extends StatefulWidget {
 }
 
 class _BasicDataScreenState extends State<BasicDataScreen> {
-  bool isNewUser = true;
+  late bool isNewUser;
   String? userNickname, userEmail;
   String? residence;
   String? tempString;
@@ -79,8 +79,7 @@ class _BasicDataScreenState extends State<BasicDataScreen> {
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
-                    ),
-                  ),
+                  ),),
                   SizedBox(height: 6,),
                   TextFormField(
                     initialValue: userNickname, 
@@ -97,15 +96,13 @@ class _BasicDataScreenState extends State<BasicDataScreen> {
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
-                    ),
-                  ),
+                  ),),
                   SizedBox(height: 6,),
                   TextFormField(
                     initialValue: userEmail, 
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
                       contentPadding: EdgeInsets.all(12),
-                      
                     ),
                     onChanged: (value) => userEmail = value,
                   ),
@@ -118,9 +115,7 @@ class _BasicDataScreenState extends State<BasicDataScreen> {
                   
                   for (int i = 0; i < basicQuestions.length-2; i++) 
                     createBasicDataDropDown(
-                      basicQuestions[i]["title"], 
-                      basicQuestions[i]["option"], 
-                      i),
+                      basicQuestions[i]["title"], basicQuestions[i]["option"], i),
                   
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),

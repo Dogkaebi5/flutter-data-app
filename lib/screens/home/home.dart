@@ -262,7 +262,10 @@ class _HomePageState extends State<HomePage> {
                               ModalRoute.withName('/'),
                             );
                           },
-                          child: Text("/test\nlogout")
+                          child: Text("/test\nlogout",
+                            style: TextStyle(
+                              color: Colors.grey.shade400, 
+                              decoration: TextDecoration.underline))
                         ),
                         TextButton(
                           onPressed: (){
@@ -277,7 +280,9 @@ class _HomePageState extends State<HomePage> {
                               ModalRoute.withName('/'),
                             );
                           },
-                          child: Text("/test\nnewUser")
+                          child: Text("/test\nnewUser",
+                            style: TextStyle(color: Colors.grey.shade400, 
+                              decoration: TextDecoration.underline))
                         ),
                         TextButton(
                           onPressed: (){setState((){
@@ -285,14 +290,18 @@ class _HomePageState extends State<HomePage> {
                             point = context.read<SettingProvider>().point;
                             hasNewNotice = context.read<SettingProvider>().hasNewNotice;
                           });},
-                          child: Text("/test\n+10k")
+                          child: Text("/test\n+10k",
+                            style: TextStyle(color: Colors.grey.shade400, 
+                              decoration: TextDecoration.underline))
                         ),
                         TextButton(
                           onPressed: (){setState((){
                             context.read<SettingProvider>().clearDetail();
                             point = context.read<SettingProvider>().point;
                           });},
-                          child: Text("/test\ndel all")
+                          child: Text("/test\ndel all",
+                            style: TextStyle(color: Colors.grey.shade400, 
+                              decoration: TextDecoration.underline))
                         ),
                       ],
                     ),

@@ -1,5 +1,4 @@
 import 'package:data_project/provider/setting_provider.dart';
-import 'package:data_project/screens/point/withdraw.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -100,10 +99,7 @@ class _BankState extends State<Bank> {
                   ?() {
                     setState(() => isHasAcc = true);
                     context.read<SettingProvider>().setBank(bank, acc);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Withdraw())
-                    );
+                    Navigator.pop(context);
                   }
                   :null, 
                 child: Text('계좌등록'))

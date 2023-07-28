@@ -1,18 +1,17 @@
 import 'package:data_project/data/question.dart';
 import 'package:data_project/provider/new_user_provider.dart';
 import 'package:data_project/provider/user_interest_data_provider.dart';
-import 'package:data_project/screens/setting/additional_info.dart';
-import 'package:data_project/screens/setting/data_setting.dart';
+import 'package:data_project/screens/setting/data/additional.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class Interest extends StatefulWidget {
-  const Interest({super.key});
+class InterestScreen extends StatefulWidget {
+  const InterestScreen({super.key});
   @override
-  State<Interest> createState() => _InterestState();
+  State<InterestScreen> createState() => _InterestScreenState();
 }
 
-class _InterestState extends State<Interest> {
+class _InterestScreenState extends State<InterestScreen> {
   bool isNewUser = false;
   UserInterestData userData = UserInterestData();
   List<String> interestOptions = Questions().interests.keys.toList();
@@ -95,13 +94,10 @@ class _InterestState extends State<Interest> {
                         if(isNewUser){
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => AddInfo()),
+                            MaterialPageRoute(builder: (context) => AdditionalScreen()),
                           );
                         }else{
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => DataPage()),
-                          );
+                          Navigator.pop(context);
                         }
                       }, 
                       child: Text('확인 저장')

@@ -1,19 +1,18 @@
 import 'package:data_project/data/question.dart';
 import 'package:data_project/provider/new_user_provider.dart';
 import 'package:data_project/provider/user_basic_data_provider.dart';
-import 'package:data_project/screens/setting/data_setting.dart';
-import 'package:data_project/screens/setting/interest_info.dart';
+import 'package:data_project/screens/setting/data/interest.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class BasicInfo extends StatefulWidget {
-  const BasicInfo({super.key});
+class BasicDataScreen extends StatefulWidget {
+  const BasicDataScreen({super.key});
 
   @override
-  State<BasicInfo> createState() => _BasicInfoState();
+  State<BasicDataScreen> createState() => _BasicDataScreenState();
 }
 
-class _BasicInfoState extends State<BasicInfo> {
+class _BasicDataScreenState extends State<BasicDataScreen> {
   bool isNewUser = true;
   String? userNickname, userEmail;
   String? residence;
@@ -210,13 +209,10 @@ class _BasicInfoState extends State<BasicInfo> {
                         if(isNewUser){
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => Interest()),
+                            MaterialPageRoute(builder: (context) => InterestScreen()),
                           );
                         }else{
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => DataPage()),
-                          );
+                          Navigator.pop(context);
                         }
                       }, 
                       child: Text('확인 저장')

@@ -2,18 +2,17 @@ import 'package:data_project/data/question.dart';
 import 'package:data_project/provider/new_user_provider.dart';
 import 'package:data_project/provider/user_interest_data_provider.dart';
 import 'package:data_project/screens/home/home.dart';
-import 'package:data_project/screens/setting/data_setting.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class AddInfo extends StatefulWidget {
-  const AddInfo({super.key});
+class AdditionalScreen extends StatefulWidget {
+  const AdditionalScreen({super.key});
 
   @override
-  State<AddInfo> createState() => _AddInfoState();
+  State<AdditionalScreen> createState() => _AdditionalScreenState();
 }
 
-class _AddInfoState extends State<AddInfo> {
+class _AdditionalScreenState extends State<AdditionalScreen> {
   bool isNewUser = false;
   String? tempString;
 
@@ -205,13 +204,10 @@ class _AddInfoState extends State<AddInfo> {
     if (isNewUser){
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => HomePage()),
+        MaterialPageRoute(builder: (context) => HomeScreen()),
       );
     }else{
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => DataPage()),
-      );
+      Navigator.pop(context);
     }
   }
   setData(){

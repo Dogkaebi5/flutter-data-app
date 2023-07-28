@@ -3,7 +3,7 @@ import 'package:data_project/provider/new_user_provider.dart';
 import 'package:data_project/provider/setting_provider.dart';
 import 'package:data_project/provider/user_basic_data_provider.dart';
 import 'package:data_project/provider/user_interest_data_provider.dart';
-import 'package:data_project/screens/start/authentication.dart';
+import 'package:data_project/screens/start/auth_router.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.deepPurple,
       ),
-      home: Authentication(),
+      home: AuthRouter(),
     );
   }
 }

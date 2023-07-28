@@ -4,14 +4,14 @@ import 'package:data_project/provider/user_interest_data_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class Infopermission extends StatefulWidget {
-  const Infopermission({super.key});
+class PermissionScreen extends StatefulWidget {
+  const PermissionScreen({super.key});
 
   @override
-  State<Infopermission> createState() => _InfopermissionState();
+  State<PermissionScreen> createState() => _PermissionScreenState();
 }
 
-class _InfopermissionState extends State<Infopermission> {
+class _PermissionScreenState extends State<PermissionScreen> {
   static const List necessaryDataTexts = ["닉네임", "연령층", "이메일"];
   static const List userDataTexts = ["성함", "성별", "출생연도", "휴대폰", "텔레마케팅 동의"];
   static const List basciDataTexts = ['결혼정보', '자녀정보', '최종학력', '직업', '소득수준', '거주지역'];

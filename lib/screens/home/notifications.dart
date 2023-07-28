@@ -4,42 +4,16 @@ import 'package:data_project/screens/setting/setting.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'home_dialog.dart';
+import 'detail_dialog.dart';
 
-class NotificationPage extends StatefulWidget {
-  const NotificationPage({super.key});
+class NotificationScreen extends StatefulWidget {
+  const NotificationScreen({super.key});
 
   @override
-  State<NotificationPage> createState() => _NotificationPageState();
+  State<NotificationScreen> createState() => _NotificationScreenState();
 }
 
-class _NotificationPageState extends State<NotificationPage> {
-  String jsonString = ''' 
-    { "notification": 
-      [
-        {
-        "id": "20000",
-        "type": "tele", 
-        "title": "[데이플러스] 텔레마케팅 접수 안내",
-        "content": "텔레마케팅 구매가 접수되었습니다. 업체의 마케팅 전화를 유의하세요.",
-        "date": "2023.01.01 23:59:59",
-        "tmdata": 
-          {
-            "buyer": "(주)테스트회사",
-            "cotact": "02)1234-5678",
-            "state": "거래접수"
-          }
-        },
-        {
-        "id": "10000",
-        "type": "normal", 
-        "title": "[데이플러스] 리워드 안내",
-        "content": "판매 접수된 정보가 구매 확정되어 포인트가 적립되었습니다!",
-        "date": "2023.01.01 23:59:59"
-        }
-      ]
-    }
-  ''';
+class _NotificationScreenState extends State<NotificationScreen> {
   List notifications = List.empty(growable: true);
   int newNoticesCount = 0;
 
@@ -63,7 +37,7 @@ class _NotificationPageState extends State<NotificationPage> {
           onPressed: (){
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => HomePage()),
+              MaterialPageRoute(builder: (context) => HomeScreen()),
             );
           },
         ),
@@ -74,7 +48,7 @@ class _NotificationPageState extends State<NotificationPage> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const SettingPage()));},
+                MaterialPageRoute(builder: (context) => const SettingScreen()));},
             child: Container(
               margin: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
               padding: EdgeInsets.symmetric(vertical: 40, horizontal: 28),
@@ -199,7 +173,11 @@ class _NotificationPageState extends State<NotificationPage> {
                 context.read<SettingProvider>().clearNotice();
               });
             }, 
-            child: Text("/test\ndel all"))
+            child: Text("/test\ndel all",
+              style: TextStyle(color: Colors.grey.shade400, 
+                decoration: TextDecoration.underline
+            ))
+          )
         ]
       )
     );

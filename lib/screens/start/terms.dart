@@ -3,14 +3,14 @@ import 'package:data_project/screens/setting/set_password.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class Terms extends StatefulWidget{
-  const Terms({super.key});
+class TermsScreen extends StatefulWidget{
+  const TermsScreen({super.key});
 
   @override
-  State<Terms> createState() => _Terms();
+  State<TermsScreen> createState() => _TermsScreen();
 }
 
-class _Terms extends State<Terms>{
+class _TermsScreen extends State<TermsScreen>{
   List<bool> checklist = List.filled(5, false);
   
   void allCheck(){
@@ -174,7 +174,7 @@ class _Terms extends State<Terms>{
                       }
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const SetPassword()),
+                        MaterialPageRoute(builder: (context) => const SetPasswordScreen()),
                       );
                     } : null,
                   child: Text("다음"),

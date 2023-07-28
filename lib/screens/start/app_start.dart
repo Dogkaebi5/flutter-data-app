@@ -1,15 +1,15 @@
-import 'package:data_project/screens/start/auth.dart';
+import 'package:data_project/screens/start/firebase_auth.dart';
 import 'package:data_project/screens/webview/webview.dart';
 import 'package:flutter/material.dart';
 
-class AppStart extends StatefulWidget {
-  const AppStart({super.key});
+class AppStartScreen extends StatefulWidget {
+  const AppStartScreen({super.key});
 
   @override
-  State<AppStart> createState() => _AppStartState();
+  State<AppStartScreen> createState() => _AppStartScreenState();
 }
 
-class _AppStartState extends State<AppStart> {
+class _AppStartScreenState extends State<AppStartScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,7 +17,7 @@ class _AppStartState extends State<AppStart> {
         child: Container(
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: AssetImage('assets/datas.jpg'),
+              image: AssetImage('assets/data_center.png'),
               fit: BoxFit.cover,
             ),
           ),
@@ -25,12 +25,6 @@ class _AppStartState extends State<AppStart> {
             padding: const EdgeInsets.only(right: 20, left: 20),
             child: Column(
               children : [
-                Spacer(),
-                Image(
-                  image: AssetImage("assets/text.png"),
-                  width: 200,
-                  
-                ),
                 Spacer(),
                 Container(
                   width: double.infinity,
@@ -52,7 +46,7 @@ class _AppStartState extends State<AppStart> {
                           onPressed:(){
                             Navigator.push(
                               context, 
-                              MaterialPageRoute(builder: (context) => const AuthPage()),
+                              MaterialPageRoute(builder: (context) => const FirebaseAuthPage()),
                             );
                           }, 
                           child: Text("본인인증"), 

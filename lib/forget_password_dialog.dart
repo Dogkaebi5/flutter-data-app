@@ -33,7 +33,7 @@ forgetPasswordDialog(context) {
                 onPressed: (){
                   Navigator.pushAndRemoveUntil(
                     context,
-                    MaterialPageRoute(builder: (context) => SetPassword()),
+                    MaterialPageRoute(builder: (context) => SetPasswordScreen()),
                     ModalRoute.withName('/'),
                   );
                 },

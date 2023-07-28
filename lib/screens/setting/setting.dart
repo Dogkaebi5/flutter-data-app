@@ -1,7 +1,7 @@
 import 'package:data_project/password_dialog.dart';
 import 'package:data_project/provider/setting_provider.dart';
 import 'package:data_project/screens/home/home.dart';
-import 'package:data_project/screens/setting/data_setting.dart';
+import 'package:data_project/screens/setting/data/data_setting.dart';
 import 'package:data_project/screens/setting/del_user_dialog.dart';
 import 'package:data_project/screens/setting/set_password.dart';
 import 'package:data_project/screens/webview/webview.dart';
@@ -9,14 +9,14 @@ import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 
-class SettingPage extends StatefulWidget {
-  const SettingPage({super.key});
+class SettingScreen extends StatefulWidget {
+  const SettingScreen({super.key});
 
   @override
-  State<SettingPage> createState() => _SettingPageState();
+  State<SettingScreen> createState() => _SettingScreenState();
 }
 
-class _SettingPageState extends State<SettingPage> {
+class _SettingScreenState extends State<SettingScreen> {
   bool isServiceNotice = false;
   bool isMarketNotice = false;
   String mobile = "";
@@ -34,13 +34,13 @@ class _SettingPageState extends State<SettingPage> {
   moveToData(){
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const DataPage()),
+      MaterialPageRoute(builder: (context) => const DataScreen()),
     );
   }
   moveToSetPassword(){
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const SetPassword()),
+      MaterialPageRoute(builder: (context) => const SetPasswordScreen()),
     );
   }
 
@@ -56,7 +56,7 @@ class _SettingPageState extends State<SettingPage> {
           onPressed: (){
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => HomePage()),
+              MaterialPageRoute(builder: (context) => HomeScreen()),
             );
           },
         ),

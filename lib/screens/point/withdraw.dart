@@ -1,19 +1,19 @@
 import 'package:data_project/password_dialog.dart';
 import 'package:data_project/provider/setting_provider.dart';
 import 'package:data_project/screens/home/home.dart';
-import 'package:data_project/screens/point/bank_select.dart';
+import 'package:data_project/screens/point/bank_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pinput/pinput.dart';
 import 'package:provider/provider.dart';
 
-class Withdraw extends StatefulWidget {
-  const Withdraw({super.key});
+class WithdrawScreen extends StatefulWidget {
+  const WithdrawScreen({super.key});
   @override
-  State<Withdraw> createState() => _WithdrawState();
+  State<WithdrawScreen> createState() => _WithdrawScreenState();
 }
 
-class _WithdrawState extends State<Withdraw> {
+class _WithdrawScreenState extends State<WithdrawScreen> {
   int point = 0;
   int inputPoint = 0;
   int fee = 1000;
@@ -22,7 +22,8 @@ class _WithdrawState extends State<Withdraw> {
   final TextEditingController _controller = TextEditingController();
 
   bool isHasAcc = false;
-  List bankData = List.empty(growable: true);
+  String? bank;
+  String? account;
 
   @override
   void initState() {
@@ -30,10 +31,10 @@ class _WithdrawState extends State<Withdraw> {
     setState(() {
       point = context.read<SettingProvider>().point;
       isHasAcc = context.read<SettingProvider>().isHasAcc;
-      bankData = context.read<SettingProvider>().bankData;
+      bank = context.read<SettingProvider>().bankData[1];
+      account = context.read<SettingProvider>().bankData[2];
     });
   }
-  
   feeCalculate(){
     setState((){
       (inputPoint < 10000) ? fee = 1000 : fee = 0;
@@ -66,11 +67,15 @@ class _WithdrawState extends State<Withdraw> {
         children: [
           SizedBox(height: 30,),
           InkWell(
-            onTap: () {
-              Navigator.push(
+            onTap: () async{
+              final data = await Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => Bank())
-              );
+                MaterialPageRoute(builder: (context) => BankDataScreen()));
+              setState((){
+                isHasAcc = data[0];
+                bank = data[1];
+                account = data[2];
+              });
             },
             child: 
             Container(
@@ -93,7 +98,7 @@ class _WithdrawState extends State<Withdraw> {
                         Text("출금계좌 : ",
                           style: TextStyle(color: Colors.black87),
                         ),
-                        Text("${bankData[1]}  ${bankData[2]}",
+                        Text("$bank  $account",
                           style: TextStyle(
                             color: Colors.deepPurpleAccent,
                             fontWeight: FontWeight.bold,
@@ -214,10 +219,10 @@ class _WithdrawState extends State<Withdraw> {
     );
   }
   withdraw(){
-    context.read<SettingProvider>().addDetailTest(-inputPoint, [fee, tax, amount]);
+    context.read<SettingProvider>().pointTest([-inputPoint, fee, tax, amount]);
     Navigator.pushAndRemoveUntil(
       context,
-      MaterialPageRoute<void>(builder: (BuildContext context) => HomePage()),
+      MaterialPageRoute<void>(builder: (BuildContext context) => HomeScreen()),
       ModalRoute.withName('/'),
     );
   }

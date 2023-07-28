@@ -1,18 +1,18 @@
 import 'package:data_project/provider/new_user_provider.dart';
 import 'package:data_project/screens/home/home.dart';
-import 'package:data_project/screens/start/service_terms.dart';
-import 'package:data_project/screens/start/start_page.dart';
+import 'package:data_project/screens/start/terms.dart';
+import 'package:data_project/screens/start/app_start.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class Authentication extends StatefulWidget {
-  const Authentication({super.key});
+class AuthRouter extends StatefulWidget {
+  const AuthRouter({super.key});
   @override
-  State<Authentication> createState() => _AuthenticationState();
+  State<AuthRouter> createState() => _AuthRouterState();
 }
 
-class _AuthenticationState extends State<Authentication> {
+class _AuthRouterState extends State<AuthRouter> {
 
   @override
   Widget build(BuildContext context) {
@@ -20,11 +20,11 @@ class _AuthenticationState extends State<Authentication> {
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (context, snapshot) {
         if(!snapshot.hasData){
-          return AppStart();
+          return AppStartScreen();
         }else if(context.read<NewUserProvider>().isNewUser){
-          return Terms();
+          return TermsScreen();
         }else {
-          return HomePage();
+          return HomeScreen();
         }
       },
     );

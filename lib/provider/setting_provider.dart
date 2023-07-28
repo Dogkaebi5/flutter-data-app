@@ -69,17 +69,19 @@ class SettingProvider extends ChangeNotifier {
   void setHasNewNotice(bool a) => _hasNewNotice = a;
   void countNewNotice(bool a) => (a)? _newNoticesCount++ : _newNoticesCount = 0;
 
-  void addDetailTest(int point, List? info){
+
+
+  void pointTest(List pointList){
     Map newdetail;
     Map newNotice;
-    if(point > -1) {
-      newdetail = _createSaleDetail(point);
+    if(pointList[0] > -1) {
+      newdetail = _createSaleDetail(pointList);
       newNotice = _createSaleNotice();
     }else {
-      newdetail = _createWithdrawDetail(point, info);
+      newdetail = _createWithdrawDetail(pointList);
       newNotice = _createWithdrawNotice();
     }
-    addPoint(point);
+    addPoint(pointList[0]);
     addDetail(newdetail);
     addNotice(newNotice);
     setHasNewNotice(true);
@@ -88,28 +90,28 @@ class SettingProvider extends ChangeNotifier {
   int _saleDetailID = 10000;
   int _withDrawDetailID = 30000;
 
-  _createSaleDetail(int point){
+  _createSaleDetail(List pointList){
     return {
       "title": "데이터 판매",
       "id": (++_saleDetailID).toString(),
       "type": "리워드",
       "date": DateTime.now().toString().split(".")[0],
-      "point": "+ ${f.format(point)} P",
+      "point": "+ ${f.format(pointList[0])} P",
       "buyer": "(주)테스트회사",
       "info": ["닉네임", "연령층", "이메일", "성함", "휴대폰", "관심사 1"]
     };
   }
-  _createWithdrawDetail(int point, info){
+  _createWithdrawDetail(List pointList){
     return {
       "title": "출금",
       "id": (++_withDrawDetailID).toString(),
       "type": "출금",
       "date": DateTime.now().toString().split(".")[0],
-      "point": "- ${f.format(point*-1)} P",
-      "withdraw": "${f.format(point*-1)} P",
-      "fee": "${info[0].toString()} 원",
-      "tax": "${info[1].toString()} 원",
-      "amount": "${info[2].toString()} 원",
+      "point": "- ${f.format(pointList[0]*-1)} P",
+      "withdraw": "${f.format(pointList[0]*-1)} P",
+      "fee": "${pointList[1].toString()} 원",
+      "tax": "${pointList[2].toString()} 원",
+      "amount": "${pointList[3].toString()} 원",
       "account": [name, "$_bankName $_bankAccNum"],
       "status" : "접수"
     };

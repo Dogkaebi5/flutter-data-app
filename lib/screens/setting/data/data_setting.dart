@@ -1,12 +1,12 @@
-import 'package:data_project/screens/setting/interest_info.dart';
-import 'package:data_project/screens/setting/additional_info.dart';
-import 'package:data_project/screens/setting/basic_info.dart';
-import 'package:data_project/screens/setting/permission.dart';
+import 'package:data_project/screens/setting/data/interest.dart';
+import 'package:data_project/screens/setting/data/additional.dart';
+import 'package:data_project/screens/setting/data/basic.dart';
+import 'package:data_project/screens/setting/data/permission.dart';
 import 'package:data_project/screens/setting/setting.dart';
 import 'package:flutter/material.dart';
 
-class DataPage extends StatelessWidget {
-  const DataPage({super.key});
+class DataScreen extends StatelessWidget {
+  const DataScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,7 @@ class DataPage extends StatelessWidget {
           onPressed: (){
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => SettingPage()),
+              MaterialPageRoute(builder: (context) => SettingScreen()),
             );
           },
         ),  
@@ -33,7 +33,7 @@ class DataPage extends StatelessWidget {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const BasicInfo()),
+                MaterialPageRoute(builder: (context) => const BasicDataScreen()),
               );
             },
             child: Container(
@@ -71,7 +71,7 @@ class DataPage extends StatelessWidget {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const Interest()),
+                MaterialPageRoute(builder: (context) => const InterestScreen()),
               );
             },
             child: Container(
@@ -109,7 +109,7 @@ class DataPage extends StatelessWidget {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const AddInfo()),
+                MaterialPageRoute(builder: (context) => const AdditionalScreen()),
               );
             },
             child: Container(
@@ -147,7 +147,7 @@ class DataPage extends StatelessWidget {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const Infopermission()),
+                MaterialPageRoute(builder: (context) => const PermissionScreen()),
               );
             },
             child: Container(

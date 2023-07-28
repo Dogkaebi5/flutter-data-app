@@ -72,11 +72,11 @@ class HomeNavState extends State<HomeNav> {
               case 0 : break;
               case 1 : Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => NotificationPage()),
+                MaterialPageRoute(builder: (context) => NotificationScreen()),
               );
               case 2 : Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => SettingPage()),
+                MaterialPageRoute(builder: (context) => SettingScreen()),
               );
             }
             setState(()=> selectedIndex = index);

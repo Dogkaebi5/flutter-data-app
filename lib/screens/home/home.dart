@@ -2,24 +2,24 @@ import 'package:data_project/provider/new_user_provider.dart';
 import 'package:data_project/provider/setting_provider.dart';
 import 'package:data_project/provider/user_basic_data_provider.dart';
 import 'package:data_project/provider/user_interest_data_provider.dart';
-import 'package:data_project/screens/home/home_dialog.dart';
+import 'package:data_project/screens/home/detail_dialog.dart';
 import 'package:data_project/screens/home/notifications.dart';
 import 'package:data_project/screens/setting/setting.dart';
-import 'package:data_project/screens/start/authentication.dart';
+import 'package:data_project/screens/start/auth_router.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:data_project/screens/point/withdraw.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class HomePage extends StatefulWidget {
-  HomePage({super.key});
+class HomeScreen extends StatefulWidget {
+  HomeScreen({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomeScreenState extends State<HomeScreen> {
   List details = List.empty(growable: true);
   int point = 0;
 
@@ -102,11 +102,11 @@ class _HomePageState extends State<HomePage> {
               case 0 : break;
               case 1 : Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => NotificationPage()),
+                MaterialPageRoute(builder: (context) => NotificationScreen()),
               );
               case 2 : Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => SettingPage()),
+                MaterialPageRoute(builder: (context) => SettingScreen()),
               );
             }
             setState(()=> navSelectedIndex = index);
@@ -169,7 +169,7 @@ class _HomePageState extends State<HomePage> {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => Withdraw()),
+                          MaterialPageRoute(builder: (context) => WithdrawScreen()),
                         );},
                         child: SizedBox(
                           width: 112,
@@ -258,7 +258,7 @@ class _HomePageState extends State<HomePage> {
                             FirebaseAuth.instance.signOut();
                             Navigator.pushAndRemoveUntil(
                               context,
-                              MaterialPageRoute(builder: (context) =>  Authentication()),
+                              MaterialPageRoute(builder: (context) =>  AuthRouter()),
                               ModalRoute.withName('/'),
                             );
                           },
@@ -276,7 +276,7 @@ class _HomePageState extends State<HomePage> {
                             context.read<UserInterestData>().reset();
                             Navigator.pushAndRemoveUntil(
                               context,
-                              MaterialPageRoute(builder: (context) => Authentication()),
+                              MaterialPageRoute(builder: (context) => AuthRouter()),
                               ModalRoute.withName('/'),
                             );
                           },
@@ -286,7 +286,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                         TextButton(
                           onPressed: (){setState((){
-                            context.read<SettingProvider>().addDetailTest(10000, null);
+                            context.read<SettingProvider>().pointTest([10000]);
                             point = context.read<SettingProvider>().point;
                             hasNewNotice = context.read<SettingProvider>().hasNewNotice;
                           });},

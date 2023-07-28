@@ -6,14 +6,14 @@ import 'package:provider/provider.dart';
 final List<String> bankList = ['국민은행', '하나은행', '신한은행', '우리은행', '농협은행', '기업은행', '산업은행', '제일은행', '카카오뱅크', '케이뱅크', '토스뱅크'];
 
 
-class Bank extends StatefulWidget {
-  const Bank({super.key});
+class BankDataScreen extends StatefulWidget {
+  const BankDataScreen({super.key});
 
   @override
-  State<Bank> createState() => _BankState();
+  State<BankDataScreen> createState() => _BankDataScreenState();
 }
 
-class _BankState extends State<Bank> {
+class _BankDataScreenState extends State<BankDataScreen> {
   List<bool> isSelectBanks = List.filled(bankList.length, false);
   bool isHasAcc = false;
   List bankData = List.empty(growable: true);
@@ -99,7 +99,7 @@ class _BankState extends State<Bank> {
                   ?() {
                     setState(() => isHasAcc = true);
                     context.read<SettingProvider>().setBank(bank, acc);
-                    Navigator.pop(context);
+                    Navigator.pop(context, [true, bank, acc]);
                   }
                   :null, 
                 child: Text('계좌등록'))

@@ -1,5 +1,6 @@
 import 'package:data_project/data/password_setter.dart';
 import 'package:data_project/forget_password_dialog.dart';
+import 'package:data_project/screens/widget_style.dart';
 import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
 
@@ -28,8 +29,7 @@ passwordDialog(context, callback) {
                   ),
               
               SizedBox(height: 174,),
-              Text("비밀번호", 
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),),
+              Text("비밀번호", style: fontSmallTitle),
               SizedBox(height: 8,),
               Text("비밀번호를 입력하세요"),
               SizedBox(height: 8,),
@@ -40,32 +40,9 @@ passwordDialog(context, callback) {
               ),
               SizedBox(height: 20,),
               Pinput(
-                defaultPinTheme: PinTheme(
-                  height: 60,
-                  width: 60,
-                  decoration: BoxDecoration(
-                    color: Colors.grey.shade200,
-                    borderRadius: BorderRadius.circular(20)
-                  )
-                ),
-                focusedPinTheme: PinTheme(
-                  height: 60,
-                  width: 60,
-                  decoration: BoxDecoration(
-                    color: Colors.purple.shade100,
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: Colors.purple, width: 1.2 )
-                  ),
-                ),
-                submittedPinTheme: PinTheme(
-                  height: 60,
-                  width: 60,
-                  decoration: BoxDecoration(
-                    color: Colors.grey.shade200,
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: Colors.purple.shade200, width: 1),
-                  )
-                ),
+                defaultPinTheme: defaultPin,
+                focusedPinTheme: focusedPin,
+                submittedPinTheme: submittedPin,
                 autofocus : true,
                 obscureText : isVisibility? false :true,
                 obscuringCharacter: "⁕",

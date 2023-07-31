@@ -2,6 +2,7 @@ import 'package:data_project/data/question.dart';
 import 'package:data_project/provider/new_user_provider.dart';
 import 'package:data_project/provider/user_basic_data_provider.dart';
 import 'package:data_project/screens/setting/data/interest.dart';
+import 'package:data_project/screens/widget_style.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -64,46 +65,26 @@ class _BasicDataScreenState extends State<BasicDataScreen> {
                     children: [
                       Icon(Icons.info, color: Colors.deepPurple.shade400, size: 32,),
                       SizedBox(width: 8,),
-                      Text("기본정보",
-                        style: TextStyle(
-                          color: Colors.deepPurple.shade400,
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                      ),),
+                      Text("기본정보", style: fontBigColorTitle),
                   ],),
                   SizedBox(height: 4,),
                   Text('정보가 많을 수록 더 많은 리워드를 받을 수 있습니다.',),
                   
                   SizedBox(height: 28,),
-                  Text("닉네임", 
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                  ),),
+                  Text("닉네임", style: fontSmallTitle),
                   SizedBox(height: 6,),
                   TextFormField(
                     initialValue: userNickname, 
                     maxLength: 15,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      contentPadding: EdgeInsets.all(12),
-                      counterText: "",
-                    ),
+                    decoration: inputDecoration,
                     onChanged: (value) => userNickname = value,
                   ),
                   SizedBox(height: 20,),
-                  Text("이메일", 
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                  ),),
+                  Text("이메일", style: fontSmallTitle),
                   SizedBox(height: 6,),
                   TextFormField(
                     initialValue: userEmail, 
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      contentPadding: EdgeInsets.all(12),
-                    ),
+                    decoration: inputDecoration,
                     onChanged: (value) => userEmail = value,
                   ),
                   
@@ -193,25 +174,18 @@ class _BasicDataScreenState extends State<BasicDataScreen> {
                       ],
                     ),
                   ),
-
-                  Container(
-                    margin: EdgeInsets.only(top: 20, bottom: 20),
-                    width: double.maxFinite,
-                    height: 44,
-                    child: ElevatedButton(
-                      onPressed: (){
-                        userData.setData(selecteds);
-                        if(isNewUser){
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => InterestScreen()),
-                          );
-                        }else{
-                          Navigator.pop(context);
-                        }
-                      }, 
-                      child: Text('확인 저장')
-                    ),
+                  SizedBox(height: 20),
+                  ElevatedButton(
+                    style: btnStyle,
+                    onPressed: (){
+                      userData.setData(selecteds);
+                      if(isNewUser){
+                        navPush(context, InterestScreen());
+                      }else{
+                        Navigator.pop(context);
+                      }
+                    }, 
+                    child: Text('확인 저장')
                   ),
                 ],
               ),

@@ -1,3 +1,4 @@
+import 'package:data_project/screens/widget_style.dart';
 import 'package:flutter/material.dart';
 
 List tradeDetailTitleTexts = ["타이틀", "거래ID", "거래종류", "거래일시", "포인트 변화", "구매자", "구매내역"];
@@ -26,7 +27,7 @@ detailDialog(context, loopInt, newDetails) {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(detailValueList[0], style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+                  Text(detailValueList[0], style: fontSmallTitle),
                   SizedBox(height: 15),
                   for (int i = 1; i < 4; i++)
                     createDetailText(tradeDetailTitleTexts[i], detailValueList[i]),
@@ -93,8 +94,5 @@ detailDialog(context, loopInt, newDetails) {
 createDetailText(title, value){
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    children: [
-      Text(title),
-      Text(value),
-  ]);
+    children: [ Text(title), Text(value),]);
 }

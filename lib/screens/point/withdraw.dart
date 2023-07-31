@@ -2,6 +2,7 @@ import 'package:data_project/password_dialog.dart';
 import 'package:data_project/provider/setting_provider.dart';
 import 'package:data_project/screens/home/home.dart';
 import 'package:data_project/screens/point/bank_data.dart';
+import 'package:data_project/screens/widget_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pinput/pinput.dart';
@@ -68,14 +69,14 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
           SizedBox(height: 30,),
           InkWell(
             onTap: () async{
-              final data = await Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => BankDataScreen()));
-              setState((){
-                isHasAcc = data[0];
-                bank = data[1];
-                account = data[2];
-              });
+              final List? data = await navPush(context, BankDataScreen());
+              if (data != null) {
+                setState((){
+                  isHasAcc = data[0];
+                  bank = data[1];
+                  account = data[2];
+                });
+              }
             },
             child: 
             Container(
@@ -153,12 +154,7 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
               amountCalculate();
             },
           ),
-          Text("포인트를 입력하세요",
-            style: TextStyle(
-              fontSize: 12,
-              color: Colors.grey,
-            ),
-          ),
+          Text("포인트를 입력하세요", style: fontSmallGrey),
           SizedBox(height: 4,),
           Text('보유포인트 : ${point.toString()} P',),
           SizedBox(height: 30,),
@@ -174,7 +170,7 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
                   Text('${fee.toString()} P'),
                   ],
                 ),
-                Text("10,000P 이상 신청 시 무료",style: TextStyle(fontSize: 12, color: Colors.grey),),
+                Text("10,000P 이상 신청 시 무료",style: fontSmallGrey),
                 SizedBox(height: 4,),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -188,9 +184,9 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                  Text('최종 이체 금액',style: TextStyle(fontWeight: FontWeight.bold),),
+                  Text('최종 이체 금액',style: fontSmallTitle),
                   Text((amount > 0) ? '${amount.toString()} 원' : "0 원", 
-                    style: TextStyle(fontWeight: FontWeight.bold),),
+                    style: fontSmallTitle),
                   ],
                 ),
                 SizedBox(height: 5,),
@@ -201,16 +197,13 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
           Spacer(),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: SizedBox(
-              width: double.infinity,
-              height: 44,
-              child: ElevatedButton(
-                onPressed: 
-                  (amount > 0 && isHasAcc)
-                  ? () => passwordDialog(context, withdraw)
-                  : null, 
-                child: Text('출금신청'),
-              ),
+            child: ElevatedButton(
+              style: btnStyle,
+              onPressed: 
+                (amount > 0 && isHasAcc)
+                ? () => passwordDialog(context, withdraw)
+                : null, 
+              child: Text('출금신청'),
             ),
           ),
           SizedBox(height:40),

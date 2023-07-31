@@ -1,4 +1,5 @@
 import 'package:data_project/screens/setting/set_password.dart';
+import 'package:data_project/screens/widget_style.dart';
 import 'package:flutter/material.dart';
 
 forgetPasswordDialog(context) {
@@ -20,7 +21,7 @@ forgetPasswordDialog(context) {
               ],
             ),
             SizedBox(height: 160,),
-            Text("비밀번호 찾기", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),),
+            Text("비밀번호 찾기", style: fontSmallTitle),
             SizedBox(height: 28,),
             Text("본인인증으로 비밀번호를 다시 설정하세요"),
             SizedBox(height: 120,),

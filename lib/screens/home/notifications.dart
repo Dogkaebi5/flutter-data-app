@@ -1,6 +1,7 @@
 import 'package:data_project/provider/setting_provider.dart';
 import 'package:data_project/screens/home/home.dart';
 import 'package:data_project/screens/setting/setting.dart';
+import 'package:data_project/screens/widget_style.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -34,22 +35,12 @@ class _NotificationScreenState extends State<NotificationScreen> {
       appBar: AppBar(
         title: Text("알림", style: TextStyle(fontWeight: FontWeight.bold,)),
         leading: IconButton(icon: Icon(Icons.arrow_back_ios_new,),
-          onPressed: (){
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => HomeScreen()),
-            );
-          },
+          onPressed: () => navPush(context, HomeScreen())
         ),
       ),
       body: Column(
         children: [
-          InkWell(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const SettingScreen()));},
-            child: Container(
+          Container(
               margin: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
               padding: EdgeInsets.symmetric(vertical: 40, horizontal: 28),
               decoration: BoxDecoration(
@@ -62,7 +53,12 @@ class _NotificationScreenState extends State<NotificationScreen> {
                   offset: Offset(2, 4)
                 ),],
               ),
-              child: Row(
+              child: InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const SettingScreen()));},
+                child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: const [
                   Row(
@@ -138,9 +134,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                         children: [
                           Text(
                             notifications[i]['title'], 
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold, 
-                            ),
+                            style: TextStyle(fontWeight: FontWeight.bold),
                             overflow: TextOverflow.ellipsis,
                             textAlign: TextAlign.justify,
                             maxLines: 1,
@@ -155,9 +149,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                           SizedBox(height: 4,),
                           Text(
                             notifications[i]['date'],
-                            style: TextStyle(
-                              color: Color.fromARGB(255, 132, 132, 132),
-                            ),
+                            style: fontSmallGrey,
                           ),
                         ],
                       ),
@@ -168,15 +160,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
                 ),
               ),
           TextButton(
-            onPressed: (){
-              setState(() {
-                context.read<SettingProvider>().clearNotice();
-              });
-            }, 
-            child: Text("/test\ndel all",
-              style: TextStyle(color: Colors.grey.shade400, 
-                decoration: TextDecoration.underline
-            ))
+            onPressed: () => setState(() => context.read<SettingProvider>().clearNotice()),
+            child: Text("/test\ndel all", style: testBtnStyle)
           )
         ]
       )
@@ -220,7 +205,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('텔레마케팅 데이터 판매', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+                  Text('텔레마케팅 데이터 판매', style: fontSmallTitle),
                   SizedBox(height: 15),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,

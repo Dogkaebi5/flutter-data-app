@@ -2,6 +2,7 @@ import 'package:data_project/data/password_setter.dart';
 import 'package:data_project/main.dart';
 import 'package:data_project/provider/new_user_provider.dart';
 import 'package:data_project/screens/setting/data/basic.dart';
+import 'package:data_project/screens/widget_style.dart';
 import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
 import 'package:provider/provider.dart';
@@ -16,6 +17,7 @@ class SetPasswordScreen extends StatefulWidget {
 class _SetPasswordScreen extends State<SetPasswordScreen> {
   bool _isVisibilityNew = false;
   bool _isVisibilityCheck = false;
+
   bool? isCorrectPassword;
   String _newPassword = "";
   String _checkNewPassword = "";
@@ -43,9 +45,7 @@ class _SetPasswordScreen extends State<SetPasswordScreen> {
             Column(
               children:[
                 SizedBox(height: 224,),
-                Text(
-                  "새로운 비밀번호", 
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),),
+                Text("새로운 비밀번호", style: fontSmallTitle),
                 SizedBox(height: 8,),
                 Text("숫자 4자리을 입력하세요"),
                 SizedBox(height: 8,),
@@ -56,29 +56,9 @@ class _SetPasswordScreen extends State<SetPasswordScreen> {
                 ),
                 SizedBox(height: 20,),
                 Pinput(
-                  defaultPinTheme: PinTheme(
-                    height: 60,
-                    width: 60,
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade200,
-                      borderRadius: BorderRadius.circular(20)
-                  )),
-                  focusedPinTheme: PinTheme(
-                    height: 60,
-                    width: 60,
-                    decoration: BoxDecoration(
-                      color: Colors.purple.shade100,
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: Colors.purple, width: 1.2 )
-                  ),),
-                  submittedPinTheme: PinTheme(
-                    height: 60,
-                    width: 60,
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade200,
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: Colors.purple.shade200, width: 1),
-                  )),
+                  defaultPinTheme: defaultPin,
+                  focusedPinTheme: focusedPin,
+                  submittedPinTheme: submittedPin,
                   autofocus : true,
                   obscureText : _isVisibilityNew? false :true,
                   obscuringCharacter: "⁕",
@@ -107,9 +87,7 @@ class _SetPasswordScreen extends State<SetPasswordScreen> {
                   ),
                 ),
                 SizedBox(height: 160,),
-                Text(
-                  "비밀번호 다시 확인", 
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),),
+                Text("비밀번호 다시 확인", style: fontSmallTitle),
                 SizedBox(height: 8,),
                 Text("입력한 비밀번호를 다시 입력해주세요"),
                 SizedBox(height: 8,),
@@ -120,29 +98,9 @@ class _SetPasswordScreen extends State<SetPasswordScreen> {
                 ),
                 SizedBox(height: 20 ,),
                 Pinput(
-                  defaultPinTheme: PinTheme(
-                    height: 60,
-                    width: 60,
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade200,
-                      borderRadius: BorderRadius.circular(20)
-                  )),
-                  focusedPinTheme: PinTheme(
-                    height: 60,
-                    width: 60,
-                    decoration: BoxDecoration(
-                      color: Colors.purple.shade100,
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: Colors.purple, width: 1.2 )
-                  ),),
-                  submittedPinTheme: PinTheme(
-                    height: 60,
-                    width: 60,
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade200,
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: Colors.purple.shade200, width: 1),
-                  )),
+                  defaultPinTheme: defaultPin,
+                  focusedPinTheme: focusedPin,
+                  submittedPinTheme: submittedPin,
                   autofocus : true,
                   obscureText : _isVisibilityCheck? false :true,
                   obscuringCharacter: "⁕",

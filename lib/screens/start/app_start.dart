@@ -1,5 +1,6 @@
 import 'package:data_project/screens/start/firebase_auth.dart';
 import 'package:data_project/screens/webview/webview.dart';
+import 'package:data_project/screens/widget_style.dart';
 import 'package:flutter/material.dart';
 
 class AppStartScreen extends StatefulWidget {
@@ -50,25 +51,16 @@ class _AppStartScreenState extends State<AppStartScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Spacer(),
-                    SizedBox(
-                      width: double.infinity, 
-                      height: 44, 
-                      child: ElevatedButton(
-                        onPressed:(){
-                          Navigator.push(
-                            context, 
-                            MaterialPageRoute(builder: (context) => const FirebaseAuthPage()),
-                          );
-                        }, 
-                        child: Text("본인인증"), 
-                      )
+                    ElevatedButton(
+                      style: btnStyle,
+                      onPressed:(){
+                        navPush(context, FirebaseAuthPage());
+                      }, 
+                      child: Text("본인인증"), 
                     ),
                     TextButton(
                       onPressed: (){
-                        Navigator.push(
-                          context, 
-                          MaterialPageRoute(builder: (context) => const Webview()),
-                        );
+                        navPush(context, Webview());
                       }, 
                       child: Text('고객센터', 
                       style: TextStyle(

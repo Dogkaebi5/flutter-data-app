@@ -2,6 +2,7 @@ import 'package:data_project/data/question.dart';
 import 'package:data_project/provider/new_user_provider.dart';
 import 'package:data_project/provider/user_interest_data_provider.dart';
 import 'package:data_project/screens/setting/data/additional.dart';
+import 'package:data_project/screens/widget_style.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -53,12 +54,7 @@ class _InterestScreenState extends State<InterestScreen> {
                     children: [
                       Icon(Icons.interests, color: Colors.deepPurple.shade400, size: 32,),
                       SizedBox(width: 8,),
-                      Text("관심사",
-                        style: TextStyle(
-                          color: Colors.deepPurple.shade400,
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                      ),),
+                      Text("관심사",style: fontBigColorTitle),
                   ],),
                   SizedBox(height: 4,),
                   Text('관심사를 최대 3개 선택하세요.'),
@@ -85,23 +81,17 @@ class _InterestScreenState extends State<InterestScreen> {
                         ],
                       ),
                   ),
-                  SizedBox(
-                    width: double.infinity,
-                    height: 44,
-                    child: ElevatedButton(
-                      onPressed: (){
-                        saveInterestData();
-                        if(isNewUser){
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => AdditionalScreen()),
-                          );
-                        }else{
-                          Navigator.pop(context);
-                        }
-                      }, 
-                      child: Text('확인 저장')
-                    ),
+                  ElevatedButton(
+                    style: btnStyle,
+                    onPressed: (){
+                      saveInterestData();
+                      if(isNewUser){
+                        navPush(context, AdditionalScreen());
+                      }else{
+                        Navigator.pop(context);
+                      }
+                    }, 
+                    child: Text('확인 저장')
                   ),
                 ],
               ),

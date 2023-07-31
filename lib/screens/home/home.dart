@@ -6,6 +6,7 @@ import 'package:data_project/screens/home/detail_dialog.dart';
 import 'package:data_project/screens/home/notifications.dart';
 import 'package:data_project/screens/setting/setting.dart';
 import 'package:data_project/screens/start/auth_router.dart';
+import 'package:data_project/screens/widget_style.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:data_project/screens/point/withdraw.dart';
@@ -115,24 +116,20 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],),
                     SizedBox(height: 8,),
                     ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => WithdrawScreen()),
-                        );},
-                        child: SizedBox(
-                          width: 120,
-                          height: 44,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
-                              Icon(Icons.toll,),
-                              SizedBox(width: 4),
-                              Text("출금신청"),
-                              SizedBox(width: 8),
-                            ],
-                          ),
-                        )),
+                      onPressed: () => navPush(context, WithdrawScreen()),
+                      child: SizedBox(
+                        width: 120,
+                        height: 44,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            Icon(Icons.toll,),
+                            SizedBox(width: 4),
+                            Text("출금신청"),
+                            SizedBox(width: 8),
+                          ],
+                        ),
+                      )),
                   ],
                 ),
               ),
@@ -212,10 +209,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ModalRoute.withName('/'),
                             );
                           },
-                          child: Text("/test\nlogout",
-                            style: TextStyle(
-                              color: Colors.grey.shade400, 
-                              decoration: TextDecoration.underline))
+                          child: Text("/test\nlogout",style: testBtnStyle)
                         ),
                         TextButton(
                           onPressed: (){
@@ -230,9 +224,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ModalRoute.withName('/'),
                             );
                           },
-                          child: Text("/test\nnewUser",
-                            style: TextStyle(color: Colors.grey.shade400, 
-                              decoration: TextDecoration.underline))
+                          child: Text("/test\nnewUser", style: testBtnStyle)
                         ),
                         TextButton(
                           onPressed: (){setState((){
@@ -240,18 +232,14 @@ class _HomeScreenState extends State<HomeScreen> {
                             point = context.read<SettingProvider>().point;
                             hasNewNotice = context.read<SettingProvider>().hasNewNotice;
                           });},
-                          child: Text("/test\n+10k",
-                            style: TextStyle(color: Colors.grey.shade400, 
-                              decoration: TextDecoration.underline))
+                          child: Text("/test\n+10k", style: testBtnStyle)
                         ),
                         TextButton(
                           onPressed: (){setState((){
                             context.read<SettingProvider>().clearDetail();
                             point = context.read<SettingProvider>().point;
                           });},
-                          child: Text("/test\ndel all",
-                            style: TextStyle(color: Colors.grey.shade400, 
-                              decoration: TextDecoration.underline))
+                          child: Text("/test\ndel all", style: testBtnStyle)
                         ),
                       ],
                     ),
@@ -315,14 +303,8 @@ class _HomeScreenState extends State<HomeScreen> {
           onTap: (index){
             switch(index){
               case 0 : break;
-              case 1 : Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => NotificationScreen()),
-              );
-              case 2 : Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => SettingScreen()),
-              );
+              case 1 : navPush(context, NotificationScreen());
+              case 2 : navPush(context, SettingScreen());
             }
           },
         ),
@@ -383,10 +365,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   SizedBox(height: 4,),
                   Text(
                     details[loopInt]['date'].split(' ')[0], 
-                    style: TextStyle(
-                      color: Colors.grey, 
-                      fontSize: 12
-                    ),
+                    style: fontSmallGrey
                   ),
                 ],
               ),

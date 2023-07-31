@@ -1,5 +1,6 @@
 import 'package:data_project/provider/setting_provider.dart';
 import 'package:data_project/screens/setting/set_password.dart';
+import 'package:data_project/screens/widget_style.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -12,7 +13,21 @@ class TermsScreen extends StatefulWidget{
 
 class _TermsScreen extends State<TermsScreen>{
   List<bool> checklist = List.filled(5, false);
-  
+  final boxDecoration = BoxDecoration(
+    border: Border(
+      bottom: BorderSide(
+        color: Colors.black,
+        width: .8,
+  )));
+
+  createCheckbox(i) => Checkbox(
+    value: checklist[i], 
+    onChanged: (value){
+      setState(() => checklist[i] = value!);
+      allCheckControl();
+    }
+  );
+
   void allCheck(){
     setState(() {
       checklist[0] = !checklist[0];
@@ -60,24 +75,13 @@ class _TermsScreen extends State<TermsScreen>{
                       // need link
                     },
                     child: Container(
-                      decoration: BoxDecoration(
-                        border: Border(
-                          bottom: BorderSide(
-                            color: Colors.black,
-                            width: .8,
-                      ))),
+                      decoration: boxDecoration,
                       child: Text('서비스 이용약관 동의',),
                     ),
                   ), 
                   Text(" (필수)", style: TextStyle(color: Colors.deepPurple),),
                   Spacer(),
-                  Checkbox(
-                    value: checklist[1], 
-                    onChanged: (value){
-                      setState(() => checklist[1] = value!);
-                      allCheckControl();
-                    }
-                  )
+                  createCheckbox(1),
                 ],
               ),
               Row(
@@ -86,26 +90,13 @@ class _TermsScreen extends State<TermsScreen>{
                   InkWell(
                     onTap: (){},
                     child: Container(
-                      decoration: BoxDecoration(
-                        border: Border(
-                          bottom: BorderSide(
-                            color: Colors.black,
-                            width: .8,
-                          )
-                        )
-                      ),
+                      decoration: boxDecoration,
                       child: Text('개인정보이용동의',),
                     ),
                   ), 
                   Text(" (필수)", style: TextStyle(color: Colors.deepPurple),),
                   Spacer(), 
-                  Checkbox(
-                    value: checklist[2], 
-                    onChanged: (value){
-                      setState(() => checklist[2] = value!);
-                      allCheckControl();
-                    }
-                  )
+                  createCheckbox(2),
                 ],
               ),
               Row(
@@ -114,25 +105,12 @@ class _TermsScreen extends State<TermsScreen>{
                   InkWell(
                     onTap: (){},
                     child: Container(
-                      decoration: BoxDecoration(
-                        border: Border(
-                          bottom: BorderSide(
-                            color: Colors.black,
-                            width: .8,
-                          )
-                        )
-                      ),
+                      decoration: boxDecoration,
                       child: Text('텔레마케팅 활용 동의',),
                     ),
                   ), 
                   Spacer(),
-                  Checkbox(
-                    value: checklist[3], 
-                    onChanged: (value){
-                      setState(() => checklist[3] = value!);
-                      allCheckControl();
-                    }
-                  )
+                  createCheckbox(3),
                 ],
               ),
               Row(
@@ -141,30 +119,18 @@ class _TermsScreen extends State<TermsScreen>{
                   Text('만 14세 이상입니다'),
                   Text(" (필수)", style: TextStyle(color: Colors.deepPurple),),
                   Spacer(),
-                  Checkbox(
-                    value: checklist[4], 
-                    onChanged: (value){
-                      setState(() => checklist[4] = value!);
-                      allCheckControl();
-                    }
-                  )
+                  createCheckbox(4),
                 ],
               ),
-              Container(
-                padding: EdgeInsets.only(top: 20),
-                width: double.infinity,
-                height: 60, 
-                child: ElevatedButton(
-                  onPressed:(checklist[1] && checklist[2] && checklist[4])
-                    ?(){
-                      context.read<SettingProvider>().setTmPermission(checklist[3]);
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const SetPasswordScreen()),
-                      );
-                    } : null,
-                  child: Text("다음"),
-                ),
+              SizedBox(height: 16),
+              ElevatedButton(
+                style: btnStyle,
+                onPressed:(checklist[1] && checklist[2] && checklist[4])
+                  ?(){
+                    context.read<SettingProvider>().setTmPermission(checklist[3]);
+                    navPush(context, SetPasswordScreen());
+                  } : null,
+                child: Text("다음"),
               ),
             ],
           ),

@@ -1,4 +1,5 @@
 import 'package:data_project/provider/setting_provider.dart';
+import 'package:data_project/screens/widget_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -64,13 +65,15 @@ class _BankDataScreenState extends State<BankDataScreen> {
             
             SizedBox(
               height: 48,
-              width: 120,
+              width: 140,
               child: OutlinedButton(
                 onPressed: ()=> bankListDialog(),
-                child: Row(children: [
-                  Icon(Icons.account_balance),
-                  SizedBox(width: 4,),
-                  Text( bank ?? '은행선택')
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.account_balance),
+                    SizedBox(width: 6,),
+                    Text( bank ?? '은행선택')
                 ]),
               ),
             ),
@@ -91,19 +94,16 @@ class _BankDataScreenState extends State<BankDataScreen> {
               ),
             ),
             Spacer(),
-            SizedBox(
-              height: 44,
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: (bank != null && acc!= null)
-                  ?() {
-                    setState(() => isHasAcc = true);
-                    context.read<SettingProvider>().setBank(bank, acc);
-                    Navigator.pop(context, [true, bank, acc]);
-                  }
-                  :null, 
-                child: Text('계좌등록'))
-            ),
+            ElevatedButton(
+              style: btnStyle,
+              onPressed: (bank != null && acc!= null)
+                ?() {
+                  setState(() => isHasAcc = true);
+                  context.read<SettingProvider>().setBank(bank, acc);
+                  Navigator.pop(context, [true, bank, acc]);
+                }
+                :null, 
+              child: Text('계좌등록')),
             SizedBox(height: 40,)
             // Text(
             //   style: TextStyle(color: Colors.red) , 

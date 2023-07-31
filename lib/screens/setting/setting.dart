@@ -5,6 +5,7 @@ import 'package:data_project/screens/setting/data/data_setting.dart';
 import 'package:data_project/screens/setting/del_user_dialog.dart';
 import 'package:data_project/screens/setting/set_password.dart';
 import 'package:data_project/screens/webview/webview.dart';
+import 'package:data_project/screens/widget_style.dart';
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
@@ -53,12 +54,7 @@ class _SettingScreenState extends State<SettingScreen> {
         title: Text('설정', style: TextStyle(fontWeight: FontWeight.bold)),
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios_new),
-          onPressed: (){
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => HomeScreen()),
-            );
-          },
+          onPressed: () => navPush(context, HomeScreen())
         ),
       ),
       body: SingleChildScrollView(
@@ -130,12 +126,7 @@ class _SettingScreenState extends State<SettingScreen> {
                           isServiceNotice = !isServiceNotice;
                           context.read<SettingProvider>().setNoticeService(isServiceNotice);
                         }),
-                        child: Text('서비스 알림 설정',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                          ),
-                        ),
+                        child: Text('서비스 알림 설정', style: fontSmallTitle),
                       ),
                       Switch(
                         value: isServiceNotice, 
@@ -155,12 +146,7 @@ class _SettingScreenState extends State<SettingScreen> {
                           isMarketNotice = !isMarketNotice;
                           context.read<SettingProvider>().setNoticeMarket(isMarketNotice);
                         }),
-                        child: Text('마케팅 알림 설정',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                          ),
-                        ),
+                        child: Text('마케팅 알림 설정', style: fontSmallTitle),
                       ),
                       Switch(
                         value: isMarketNotice, 
@@ -187,12 +173,8 @@ class _SettingScreenState extends State<SettingScreen> {
                   color: Colors.white,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
-                      Text("비밀번호 설정",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold),
-                        ),
+                    children: [
+                      Text("비밀번호 설정", style: fontSmallTitle ),
                       Icon(Icons.arrow_forward_ios,
                         color: Colors.grey,
                         size: 16
@@ -204,12 +186,7 @@ class _SettingScreenState extends State<SettingScreen> {
             ),
             SizedBox(height: 1,),
             InkWell(
-              onTap: () {
-                Navigator.push(
-                  context, 
-                  MaterialPageRoute(builder: (context) => const Webview()),
-                );
-              },
+              onTap: () => navPush(context, Webview()),
               child: SizedBox(
                 height: 60,
                 child: Container(
@@ -221,12 +198,7 @@ class _SettingScreenState extends State<SettingScreen> {
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          Text('휴대폰 변경 설정',
-                            style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                            ),
-                          ),
+                          Text('휴대폰 변경 설정', style: fontSmallTitle ),
                           SizedBox(width: 8,),
                           Text("010-****-$mobile",
                             style: TextStyle(
@@ -248,24 +220,14 @@ class _SettingScreenState extends State<SettingScreen> {
             Padding(
               padding: const EdgeInsets.only(left: 12),
               child: TextButton(
-                onPressed: (){
-                  Navigator.push(
-                    context, 
-                    MaterialPageRoute(builder: (context) => const Webview()),
-                  );
-                },
+                onPressed: () => navPush(context, Webview()),
                 child: Text('이용약관')
               ),
             ),
             Padding(
               padding: const EdgeInsets.only(left: 12),
               child: TextButton(
-                onPressed: (){
-                  Navigator.push(
-                    context, 
-                    MaterialPageRoute(builder: (context) => const Webview()),
-                  );
-                }, 
+                onPressed: () => navPush(context, Webview()),
                 child: Text('고객센터')
               ),
             ),

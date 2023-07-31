@@ -2,6 +2,7 @@ import 'package:data_project/data/question.dart';
 import 'package:data_project/provider/new_user_provider.dart';
 import 'package:data_project/provider/user_interest_data_provider.dart';
 import 'package:data_project/screens/home/home.dart';
+import 'package:data_project/screens/widget_style.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -40,7 +41,6 @@ class _AdditionalScreenState extends State<AdditionalScreen> {
       if (interestCount > 0) {
         nowSelectedQuestions = questions[interstSelecteds[0]];
       }
-      // toggleSelects.indexOf(true);
       switch(interestCount){
         case 1 : toggleSelects = [true]; break;
         case 2 : toggleSelects = [true, false]; break;
@@ -69,11 +69,7 @@ class _AdditionalScreenState extends State<AdditionalScreen> {
                     Icon(Icons.library_add, color: Colors.deepPurple.shade400, size: 32,),
                     SizedBox(width: 8,),
                     Text("추가정보",
-                      style: TextStyle(
-                        color: Colors.deepPurple.shade400,
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                    ),),
+                      style: fontBigColorTitle),
                   ],),
                   SizedBox(height: 4,),
                   Text('정보가 많을 수록 판매될 확률이 높아집니다.'),
@@ -101,9 +97,7 @@ class _AdditionalScreenState extends State<AdditionalScreen> {
                                 padding: EdgeInsets.all(2),
                                 child: Text(interstSelecteds[i], 
                                   textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold),
+                                  style: fontSmallTitle,
                       ),),],),),
                       SizedBox(height: 12,),
                       createInterestDateText(),
@@ -155,40 +149,37 @@ class _AdditionalScreenState extends State<AdditionalScreen> {
                       SizedBox(height: 80,),
                     ],
                   ),
-                  SizedBox(
-                    width: double.infinity,
-                    height: 44,
-                    child: ElevatedButton(
-                      onPressed: (){
-                        switch (interestCount) {
-                          case 1 : setData(); router(); break;
-                          case 2 : 
-                            if(toggleSelects[0]){
-                              setState((){
-                                nowToggleIndex++;
-                                toggleSelects = [false, true];
-                                nowSelectedQuestions = questions[interstSelecteds[nowToggleIndex]];
-                              });
-                            }else{setData(); router(); break;}
-                          case 3 : 
-                            if(toggleSelects[0]){
-                              setState((){
-                                nowToggleIndex++;
-                                toggleSelects = [false, true, false];
-                                nowSelectedQuestions = questions[interstSelecteds[nowToggleIndex]];
-                              });
-                            }else if (toggleSelects[1]){
-                              setState((){
-                                nowToggleIndex++;
-                                toggleSelects = [false, false, true];
-                                nowSelectedQuestions = questions[interstSelecteds[nowToggleIndex]];
-                              });
-                            }else {setData(); router(); break;}
-                          default: setData(); router(); break;
-                        }
-                      }, 
-                      child: Text('확인 저장')
-                    ),
+                  ElevatedButton(
+                    style: btnStyle,
+                    onPressed: (){
+                      switch (interestCount) {
+                        case 1 : setData(); router(); break;
+                        case 2 : 
+                          if(toggleSelects[0]){
+                            setState((){
+                              nowToggleIndex++;
+                              toggleSelects = [false, true];
+                              nowSelectedQuestions = questions[interstSelecteds[nowToggleIndex]];
+                            });
+                          }else{setData(); router(); break;}
+                        case 3 : 
+                          if(toggleSelects[0]){
+                            setState((){
+                              nowToggleIndex++;
+                              toggleSelects = [false, true, false];
+                              nowSelectedQuestions = questions[interstSelecteds[nowToggleIndex]];
+                            });
+                          }else if (toggleSelects[1]){
+                            setState((){
+                              nowToggleIndex++;
+                              toggleSelects = [false, false, true];
+                              nowSelectedQuestions = questions[interstSelecteds[nowToggleIndex]];
+                            });
+                          }else {setData(); router(); break;}
+                        default: setData(); router(); break;
+                      }
+                    }, 
+                    child: Text('확인 저장')
                   ),
                   SizedBox(height: 20,),
                 ],
@@ -201,11 +192,8 @@ class _AdditionalScreenState extends State<AdditionalScreen> {
   }
 
   router(){
-    if (isNewUser){
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => HomeScreen()),
-      );
+    if(isNewUser){
+      navPush(context, HomeScreen());
     }else{
       Navigator.pop(context);
     }

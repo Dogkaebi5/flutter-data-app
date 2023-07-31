@@ -92,7 +92,6 @@ class _SetPasswordScreen extends State<SetPasswordScreen> {
 
             Column(
               children:[
-                
                 Padding(
                   padding: const EdgeInsets.all(20.0),
                   child: Align(

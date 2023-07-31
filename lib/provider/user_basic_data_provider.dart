@@ -8,6 +8,15 @@ class UserBasicData extends ChangeNotifier {
   
   String? _married, _childHas, _education, _occupation, _income, _residence, _area;
   String? _marriedDate, _childHasDate, _educationDate, _occupationDate, _incomeDate, _residenceDate;
+  
+  bool _isMarriedPermit = false;
+  bool _isChildHasPermit = false;
+  bool _isEducationPermit = false;
+  bool _isOccupationPermit = false;
+  bool _isIncomePermit = false;
+  bool _isResidencePermit = false;
+  bool _isAreaPermit = false;
+
   List _isPermitBasicDatas = List.filled(Questions().basicInfo.length + 2, false);
   
   String get nickname => (_nickname == "")?SettingProvider().userName :_nickname;

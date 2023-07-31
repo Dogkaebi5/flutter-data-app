@@ -23,7 +23,6 @@ class _HomeScreenState extends State<HomeScreen> {
   List details = List.empty(growable: true);
   int point = 0;
 
-  int navSelectedIndex = 0;
   bool hasNewNotice = false;
 
   List<bool> sortSelections = [true, false];
@@ -31,13 +30,21 @@ class _HomeScreenState extends State<HomeScreen> {
   DateTime today = DateTime.now();
   String sortStartDate ="2023-01-01";
   String sortEndDate ="2023-01-31";
-  setSortDateText(selectStartDate, selectEndDate){
+  
+  void setSortDateText(selectStartDate, selectEndDate){
     setState((){
       sortStartDate = selectStartDate;
       sortEndDate = selectEndDate;
     });
   }
-  
+  void setOneMonth(){
+    setState((){
+      sortSelections = [true, false];
+      sortStartDate = today.subtract(Duration(days:30)).toString().split(' ')[0];
+      sortEndDate =  today.toString().split(' ')[0];
+    });
+  }
+
   @override
   void initState(){
     super.initState();
@@ -45,75 +52,17 @@ class _HomeScreenState extends State<HomeScreen> {
       details = context.read<SettingProvider>().details;
       point = context.read<SettingProvider>().point;
       hasNewNotice = context.read<SettingProvider>().hasNewNotice;
+      setSortDateText(
+        today.subtract(Duration(days:30)).toString().split(' ')[0],
+        today.toString().split(' ')[0]);
     });
-    changeSortTextToMonth();
   }
 
   @override
   Widget build(BuildContext context, ) {
     return Scaffold(
       backgroundColor: Colors.deepPurple.shade400,
-      bottomSheet: Container(
-      height: 60,
-      margin: EdgeInsets.only(bottom: 12, left: 8, right: 8),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(30),
-        boxShadow: [BoxShadow(
-          color: Colors.black.withOpacity(.6),
-          blurRadius: 6,
-          spreadRadius : 1,
-          offset: Offset(2, 4)
-        ),],
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(30),
-        child: BottomNavigationBar(
-          items:[
-            BottomNavigationBarItem(icon: Icon(Icons.home), label: "홈"),
-            BottomNavigationBarItem(
-              icon: (hasNewNotice) 
-                ?Stack(children: [
-                  Icon(Icons.notifications),
-                  Positioned(
-                    top: 2,
-                    right: 2,
-                    child: Container(
-                      width: 8,
-                      height: 8,
-                      decoration: BoxDecoration(
-                        color: Colors.red,
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                    ),
-                  )
-                ],) 
-                :Icon(Icons.notifications),
-              label: "알림"
-            ),
-            BottomNavigationBarItem(icon: Icon(Icons.settings), label: "설정")
-          ],
-          selectedItemColor: Colors.white,
-          backgroundColor: Colors.deepPurple,
-          currentIndex: navSelectedIndex,
-          unselectedItemColor: Colors.deepPurple.shade300,
-          
-          onTap: (index){
-            switch(index){
-              case 0 : break;
-              case 1 : Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => NotificationScreen()),
-              );
-              case 2 : Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => SettingScreen()),
-              );
-            }
-            setState(()=> navSelectedIndex = index);
-          },
-        ),
-      ),
-    ),
+      bottomSheet: customNavBar(), 
       body:  WillPopScope(
         onWillPop: () => Future(() => false),
         child: SafeArea(
@@ -172,7 +121,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           MaterialPageRoute(builder: (context) => WithdrawScreen()),
                         );},
                         child: SizedBox(
-                          width: 112,
+                          width: 120,
                           height: 44,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -213,7 +162,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         if (index == 1) {
                           showDatePickerDialog();
                         } else {
-                          changeSortTextToMonth();
+                          setOneMonth();
                         }
                       },              
                       children: const [
@@ -239,7 +188,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     SizedBox(height: 12,),
                 
-                    //디테일 링크
                     if(details.isEmpty)
                       Row(
                         children: const [Padding(
@@ -250,6 +198,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     else 
                       for(int i = details.length-1; i > -1; i--)
                         createDetailCards(i),
+
+                    //test btn
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -317,13 +267,68 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
   
-  void changeSortTextToMonth(){
-    String monthAgo = today.subtract(Duration(days:30)).toString().split(' ')[0];
-    String todayDate = today.toString().split(' ')[0];
-    setSortDateText(monthAgo, todayDate);
+  customNavBar(){
+    return Container(
+        height: 60,
+        margin: EdgeInsets.only(bottom: 12, left: 8, right: 8),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(30),
+          boxShadow: [BoxShadow(
+            color: Colors.black.withOpacity(.6),
+            blurRadius: 6,
+            spreadRadius : 1,
+            offset: Offset(2, 4)
+          ),],
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(30),
+          child: BottomNavigationBar(
+            items:[
+              BottomNavigationBarItem(icon: Icon(Icons.home), label: "홈"),
+              BottomNavigationBarItem(
+                icon: (hasNewNotice) 
+                  ?Stack(children: [
+                    Icon(Icons.notifications),
+                    Positioned(
+                      top: 2,
+                      right: 2,
+                      child: Container(
+                        width: 8,
+                        height: 8,
+                        decoration: BoxDecoration(
+                          color: Colors.red,
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                      ),
+                    )
+                  ],) 
+                  :Icon(Icons.notifications),
+                label: "알림"
+              ),
+              BottomNavigationBarItem(icon: Icon(Icons.settings), label: "설정")
+            ],
+          selectedItemColor: Colors.white,
+          backgroundColor: Colors.deepPurple,
+          currentIndex: 0,
+          unselectedItemColor: Colors.deepPurple.shade200,
+          
+          onTap: (index){
+            switch(index){
+              case 0 : break;
+              case 1 : Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => NotificationScreen()),
+              );
+              case 2 : Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SettingScreen()),
+              );
+            }
+          },
+        ),
+      ),
+    );
   }
-
-  void setMon() => setState(() => sortSelections = [true, false]);
 
   showDatePickerDialog()=>
     showDialog(
@@ -338,27 +343,21 @@ class _HomeScreenState extends State<HomeScreen> {
             minDate: signUpDate,
             onCancel: (){
               Navigator.pop(context);
-              setMon();
+              setOneMonth();
             },
-            onSubmit: (p0) {
-              String? selectSta;
-              String? selectEnd;
-              if (p0 == null) {
+            onSubmit: (pickerDate) {
+              List date = pickerDate.toString().split(" ");
+              if (date.length > 4 && date[4] != "null)"){
+                setSortDateText(date[1], date[4]);
+                print("4: $date");
                 Navigator.pop(context);
-                setMon();
+              } else if (date.length > 4 && date[4] == "null)"){
+                setSortDateText(date[1], date[1]);
+                print("1: $date");
+                Navigator.pop(context);
               } else {
-                selectSta = p0.toString().split(' ')[1];
-                selectEnd = p0.toString().split(' ')[4];
-                if (selectEnd == 'null)'){
-                  selectSta = p0.toString().split(' ')[1];
-                  setSortDateText(selectSta, selectSta);
-                  Navigator.pop(context);
-                }else {
-                  selectSta = p0.toString().split(' ')[1];
-                  selectEnd = p0.toString().split(' ')[4];
-                  setSortDateText(selectSta, selectEnd);
-                  Navigator.pop(context);
-                }
+                setOneMonth();
+                Navigator.pop(context);
               }
             }
           ),
@@ -381,7 +380,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   Text(details[loopInt]['title'],
                     style: TextStyle(fontWeight: FontWeight.bold),),
-                  // newDetails[loopInt]['point']
                   SizedBox(height: 4,),
                   Text(
                     details[loopInt]['date'].split(' ')[0], 

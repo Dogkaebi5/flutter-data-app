@@ -193,7 +193,11 @@ class _AdditionalScreenState extends State<AdditionalScreen> {
 
   router(){
     if(isNewUser){
-      navPush(context, HomeScreen());
+      Navigator.pushAndRemoveUntil(
+        context, 
+        MaterialPageRoute(builder: (context) => HomeScreen()), 
+        ModalRoute.withName('/'),
+      );
     }else{
       Navigator.pop(context);
     }

@@ -3,6 +3,7 @@ import 'package:data_project/screens/setting/data/additional.dart';
 import 'package:data_project/screens/setting/data/basic.dart';
 import 'package:data_project/screens/setting/data/permission.dart';
 import 'package:data_project/screens/setting/setting.dart';
+import 'package:data_project/screens/widget_style.dart';
 import 'package:flutter/material.dart';
 
 class DataScreen extends StatelessWidget {
@@ -10,12 +11,7 @@ class DataScreen extends StatelessWidget {
 
   createLinkBox(context, title, color, screen){
     return InkWell(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => screen),
-        );
-      },
+      onTap: () => navPush(context, screen),
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 12),
         padding: EdgeInsets.symmetric(vertical: 48, horizontal: 28),
@@ -41,30 +37,14 @@ class DataScreen extends StatelessWidget {
             Icon(Icons.arrow_forward_ios,
               size: 16,
               color: Colors.deepPurple.shade50,
-            ),
-          ]
-        ),
-      ),
-    );
+    )])));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 240, 240, 240),
-      appBar: AppBar(
-        title: Text('데이터 설정',
-          style: TextStyle(fontWeight: FontWeight.bold),),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios_new,),
-          onPressed: (){
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => SettingScreen()),
-            );
-          },
-        ),  
-      ),
+      appBar: AppBar(title: Text('데이터 설정')),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

@@ -31,13 +31,7 @@ forgetPasswordDialog(context) {
               width: double.infinity,
               height: 40, 
               child: ElevatedButton(
-                onPressed: (){
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (context) => SetPasswordScreen()),
-                    ModalRoute.withName('/'),
-                  );
-                },
+                onPressed: () => navPush(context, SetPasswordScreen()),
                 child: Text('본인인증'), 
               )
             ),

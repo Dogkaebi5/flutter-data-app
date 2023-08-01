@@ -1,6 +1,6 @@
 import 'package:data_project/data/password_setter.dart';
-import 'package:data_project/main.dart';
 import 'package:data_project/provider/new_user_provider.dart';
+import 'package:data_project/screens/home/home.dart';
 import 'package:data_project/screens/setting/data/basic.dart';
 import 'package:data_project/screens/widget_style.dart';
 import 'package:flutter/material.dart';
@@ -109,16 +109,11 @@ class _SetPasswordScreen extends State<SetPasswordScreen> {
                     if(_newPassword == _checkNewPassword){
                       PasswordStorage().writePassword(_newPassword);
                       if (context.read<NewUserProvider>().isNewUser) {
-                        Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(builder: (context) =>  BasicDataScreen()),
-                          ModalRoute.withName('/'),
-                        );
+                        navPush(context, BasicDataScreen());
                       }else {
-                        Navigator.pushAndRemoveUntil(
+                        Navigator.pushReplacement(
                           context,
-                          MaterialPageRoute(builder: (context) =>  MyApp()),
-                          ModalRoute.withName('/'),
+                          MaterialPageRoute(builder: (context) => HomeScreen()),
                         );
                       }
                     }else{

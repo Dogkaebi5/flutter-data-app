@@ -45,12 +45,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 245, 245, 245),
-      appBar: AppBar(
-        title: Text("알림", style: TextStyle(fontWeight: FontWeight.bold,)),
-        leading: IconButton(icon: Icon(Icons.arrow_back_ios_new,),
-          onPressed: () => navPush(context, HomeScreen())
-        ),
-      ),
+      appBar: AppBar(title: Text("알림")),
       body: SingleChildScrollView(
         child: Column(
           children: [

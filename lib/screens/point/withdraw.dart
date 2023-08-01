@@ -213,10 +213,6 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
   }
   withdraw(){
     context.read<SettingProvider>().pointTest([-inputPoint, fee, tax, amount]);
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute<void>(builder: (BuildContext context) => HomeScreen()),
-      ModalRoute.withName('/'),
-    );
+    Navigator.pop(context);
   }
 }

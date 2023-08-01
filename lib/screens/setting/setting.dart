@@ -49,13 +49,8 @@ class _SettingScreenState extends State<SettingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 240, 240, 240),
-      appBar: AppBar(
+      appBar: AppBar(title: Text('설정'),
         shadowColor: const Color.fromARGB(0, 0, 0, 0),
-        title: Text('설정', style: TextStyle(fontWeight: FontWeight.bold)),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios_new),
-          onPressed: () => navPush(context, HomeScreen())
-        ),
       ),
       body: SingleChildScrollView(
         child: Column(

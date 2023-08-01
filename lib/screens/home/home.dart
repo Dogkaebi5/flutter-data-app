@@ -100,9 +100,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 30,),),
-                            ],),
-                        ],),
+                                    fontSize: 30))
+                            ])
+                        ]),
                         Container(
                           height: 40,
                           width: 40,
@@ -112,9 +112,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: Icon(
                             Icons.analytics,
                             color: Colors.deepPurple,
-                            size: 28,),)
-                    ],),
-                    SizedBox(height: 8,),
+                            size: 28))
+                    ]),
+                    SizedBox(height: 8),
                     ElevatedButton(
                       onPressed: () => navPush(context, WithdrawScreen()),
                       child: SizedBox(
@@ -144,7 +144,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     color: Colors.black.withOpacity(.6),
                     blurRadius: 6,
                     spreadRadius : 1,
-                  ),],
+                  )]
                 ),
                 child: Column(
                   children: [
@@ -178,10 +178,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     if(sortSelections[1])
                       Text(
                         '검색기간 : $sortStartDate ~ $sortEndDate', 
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 12,
-                        ),  
+                        style: fontSmallGrey
                       ),
                     SizedBox(height: 12,),
                 
@@ -196,7 +193,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       for(int i = details.length-1; i > -1; i--)
                         createDetailCards(i),
 
-                    //test btn
+                    //test btns
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [

@@ -21,6 +21,8 @@ class _BankDataScreenState extends State<BankDataScreen> {
   String? bank;
   String? acc;
   
+  String? newBank;
+
   @override
   void initState() {
     super.initState();
@@ -33,7 +35,7 @@ class _BankDataScreenState extends State<BankDataScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 240, 240, 240),
+      backgroundColor: Color.fromARGB(255, 245, 245, 245),
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.black87),
         backgroundColor: Color.fromARGB(255, 240, 240, 240),
@@ -54,7 +56,7 @@ class _BankDataScreenState extends State<BankDataScreen> {
               margin: EdgeInsets.symmetric(vertical: 20,),
               padding: EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: Colors.deepPurple.shade50,
                 borderRadius: BorderRadius.circular(12)
               ),
               child: 
@@ -63,19 +65,26 @@ class _BankDataScreenState extends State<BankDataScreen> {
                 :Text("현재 등록계좌 :\n없음")
               ),
             
-            SizedBox(
-              height: 48,
-              width: 140,
-              child: OutlinedButton(
-                onPressed: ()=> bankListDialog(),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.account_balance),
-                    SizedBox(width: 6,),
-                    Text( bank ?? '은행선택')
-                ]),
+            OutlinedButton(
+              style: FilledButton.styleFrom(
+                backgroundColor: Colors.white,
+                minimumSize: Size(double.infinity, 64),
               ),
+              onPressed: () async {
+                newBank = await bankListDialog();
+                if(newBank != null){
+                  setState(() => bank = newBank);
+                }
+              },
+              child: Row(
+                children: [
+                  Icon(Icons.account_balance),
+                  SizedBox(width: 6,),
+                  Text( bank ?? '은행선택',
+                    style: TextStyle(fontSize: 16),),
+                  Spacer(),
+                  Icon(Icons.arrow_drop_down_circle)
+              ]),
             ),
             SizedBox(height: 20,),
             TextField(
@@ -85,9 +94,9 @@ class _BankDataScreenState extends State<BankDataScreen> {
               inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[0-9]'))],
               decoration: InputDecoration(
                 filled: true,
-                fillColor: Colors.grey.shade300,
+                fillColor: Colors.white,
                 counterText: "",
-                border: InputBorder.none,
+                border: OutlineInputBorder(),
                 hintText: "본인명의 계좌를 입력하세요",
                 hintStyle: TextStyle(color: Colors.black54),
                 
@@ -115,9 +124,8 @@ class _BankDataScreenState extends State<BankDataScreen> {
     );
   }
 
-  bankListDialog(){
-    showDialog(
-      context: context,
+  Future<String?> bankListDialog() async{
+    await showDialog(context: context,
       builder: (context) {
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setState){
@@ -130,51 +138,44 @@ class _BankDataScreenState extends State<BankDataScreen> {
                     children: [
                       IconButton(
                         iconSize: 30,
-                        onPressed: (){
-                          Navigator.pop(context);
-                        }, 
+                        onPressed: () => Navigator.pop(context),
                         icon: Icon(Icons.close)
                       ),
-                      Text('은행선택', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+                      Text('은행선택', style: fontSmallTitle),
                       SizedBox(width: 30,),
                     ],
                   ),
-                  Padding(
+                  Container(
+                    width: double.infinity,
                     padding: const EdgeInsets.all(20.0),
-                    child: ListView(
-                      shrinkWrap: true,
-                      scrollDirection: Axis.vertical, 
+                    child: Wrap(
+                      direction: Axis.horizontal, 
+                      alignment:  WrapAlignment.center,
                       children: [
-                        Wrap(
-                          direction: Axis.horizontal, 
-                          children: [
-                            for(var i = 0; i < bankList.length; i++)
-                              InkWell(
-                                child: Container(
-                                  margin: EdgeInsets.all(2),
-                                  height: 60,
-                                  width: 110,
-                                  child: 
-                                  Card(
-                                    color: isSelectBanks[i] ?  Color.fromARGB(255, 142, 57, 246)  : Colors.white,
-                                    child: Center(
-                                      child:Text(
-                                        bankList[i],
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(color: isSelectBanks[i] ? Colors.white : Colors.black),
-                                ),),),),
-                                onTap: (){
-                                  setState(() {
-                                    for(int j = 0; j < isSelectBanks.length; j++){
-                                      isSelectBanks[j] = false;
-                                    }
-                                    isSelectBanks[i] = !isSelectBanks[i];
-                                    setBank(bankList[i]);
-                                  });
+                        for(var i = 0; i < bankList.length; i++)
+                          InkWell(
+                            child: SizedBox(
+                              height: 60, width: 100,
+                              child: 
+                              Card(
+                                color: isSelectBanks[i] ?  Color.fromARGB(255, 142, 57, 246)  : Colors.white,
+                                child: Center(
+                                  child:Text(
+                                    bankList[i],
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(color: isSelectBanks[i] ? Colors.white : Colors.black),
+                            ),),),),
+                            onTap: (){
+                              setState(() {
+                                for(int j = 0; j < isSelectBanks.length; j++){
+                                  isSelectBanks[j] = false;
                                 }
-                              ),
-                          ],
-                        ),
+                                isSelectBanks[i] = !isSelectBanks[i];
+                                newBank = bankList[i];
+                              });
+                              Navigator.pop(context);
+                            }
+                          ),
                       ],
                     ),
                   ),
@@ -183,11 +184,6 @@ class _BankDataScreenState extends State<BankDataScreen> {
             );
       });}
     );
-  }
-
-  setBank(newBank){
-    setState(() {
-      bank = newBank;
-    }); 
+    return newBank;
   }
 }

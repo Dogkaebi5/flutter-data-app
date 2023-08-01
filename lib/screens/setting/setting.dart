@@ -122,19 +122,17 @@ class _SettingScreenState extends State<SettingScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       InkWell(
-                        onTap:() => setState((){
-                          isServiceNotice = !isServiceNotice;
+                        onTap: () {
+                          setState(() => isServiceNotice = !isServiceNotice);
                           context.read<SettingProvider>().setNoticeService(isServiceNotice);
-                        }),
+                        },
                         child: Text('서비스 알림 설정', style: fontSmallTitle),
                       ),
                       Switch(
                         value: isServiceNotice, 
                         onChanged: (value){
-                          setState(() {
-                            isServiceNotice = value;
-                            context.read<SettingProvider>().setNoticeService(value);
-                          });
+                          setState(() => isServiceNotice = value);
+                          context.read<SettingProvider>().setNoticeService(value);
                         })
                     ],
                   ),
@@ -142,21 +140,18 @@ class _SettingScreenState extends State<SettingScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       InkWell(
-                        onTap:() => setState((){
-                          isMarketNotice = !isMarketNotice;
+                        onTap: () {
+                          setState(() => isMarketNotice = !isMarketNotice);
                           context.read<SettingProvider>().setNoticeMarket(isMarketNotice);
-                        }),
+                        },
                         child: Text('마케팅 알림 설정', style: fontSmallTitle),
                       ),
                       Switch(
                         value: isMarketNotice, 
                         onChanged: (value){
-                          setState(() {
-                            isMarketNotice = value;
-                            context.read<SettingProvider>().setNoticeMarket(value);
-                          });
-                        }
-                      )
+                          setState(() => isMarketNotice = value);
+                          context.read<SettingProvider>().setNoticeMarket(value);
+                        })
                     ],
                   ),
                 ],

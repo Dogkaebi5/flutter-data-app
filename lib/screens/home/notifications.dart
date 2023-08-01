@@ -1,6 +1,5 @@
 import 'package:data_project/provider/setting_provider.dart';
 import 'package:data_project/screens/home/home.dart';
-import 'package:data_project/screens/setting/setting.dart';
 import 'package:data_project/screens/widget_style.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -17,6 +16,17 @@ class NotificationScreen extends StatefulWidget {
 class _NotificationScreenState extends State<NotificationScreen> {
   List notifications = List.empty(growable: true);
   int newNoticesCount = 0;
+  bool isNoticeService = false;
+  bool isNoticeMarketing = false;
+  bool isNoticePermit = false;
+
+  void setIsNotice(){
+    setState(() {
+      isNoticePermit = !isNoticePermit;
+    });
+    context.read<SettingProvider>().setNoticeService(isNoticePermit);
+    context.read<SettingProvider>().setNoticeMarket(isNoticePermit);
+  }
 
   @override
   void initState(){
@@ -25,6 +35,9 @@ class _NotificationScreenState extends State<NotificationScreen> {
       notifications = context.read<SettingProvider>().notices;
       context.read<SettingProvider>().setHasNewNotice(false);
       newNoticesCount = context.read<SettingProvider>().newNoticesCount;
+      isNoticeService = context.read<SettingProvider>().isNotice[0];
+      isNoticeMarketing = context.read<SettingProvider>().isNotice[1];
+      isNoticePermit = (isNoticeService && isNoticeMarketing)?true:false;
     });
   }
 
@@ -38,36 +51,32 @@ class _NotificationScreenState extends State<NotificationScreen> {
           onPressed: () => navPush(context, HomeScreen())
         ),
       ),
-      body: Column(
-        children: [
-          Container(
-              margin: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
-              padding: EdgeInsets.symmetric(vertical: 40, horizontal: 28),
-              decoration: BoxDecoration(
-                color: Colors.deepPurple.shade50,
-                borderRadius: BorderRadius.circular(24),
-                boxShadow: [BoxShadow(
-                  color: Colors.grey.withOpacity(.6),
-                  blurRadius: 6,
-                  spreadRadius : 1,
-                  offset: Offset(2, 4)
-                ),],
-              ),
-              child: InkWell(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const SettingScreen()));},
-                child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            GestureDetector(
+              onTap: () => setIsNotice(),
+              child: Container(
+                  margin: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
+                  padding: EdgeInsets.symmetric(horizontal: 40),
+                  height: 100,
+                  decoration: BoxDecoration(
+                    color: Colors.deepPurple.shade50,
+                    borderRadius: BorderRadius.circular(50),
+                    boxShadow: [BoxShadow(
+                      color: Colors.grey.withOpacity(.6),
+                      blurRadius: 6,
+                      spreadRadius : 1,
+                      offset: Offset(2, 4)
+                    ),],
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Icon(
                         Icons.notifications_on,
                         size: 28,
-                        color: Colors.deepPurple,
+                        color: isNoticePermit? Colors.deepPurple : Colors.grey,
                       ),
                       SizedBox(width: 12),
                       Text(
@@ -75,95 +84,98 @@ class _NotificationScreenState extends State<NotificationScreen> {
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 18,
-                          color: Colors.black87
+                          color: isNoticePermit? Colors.black87 : Colors.black54
                         ),
                       ),
+                      Spacer(),
+                      Switch(
+                        value: isNoticePermit, 
+                        onChanged: (value) => setIsNotice()
+                      )
                     ],
                   ),
-                  Icon(Icons.arrow_forward_ios),
-                ]
               ),
             ),
-          ),
-          if (notifications.isEmpty)
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-              child: Align(
-                alignment: Alignment.topLeft,
-                child: Text("알림이 없습니다.")))
-          else
-            for(int i = notifications.length-1; i > -1; i--)
-              InkWell(
-                onTap: (){
-                  if(notifications[i]["type"] == "tele"){
-                    notificationDialog(i);
-                  }else if (notifications[i]["type"] == "normal"){
-                    int index = 0;
-                    String id = notifications[i]["id"];
-                    List<Map> details = context.read<SettingProvider>().details;
-                    for (var detail in details) {
-                      if(detail.containsValue(id)){
-                        break;
+            if (notifications.isEmpty)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+                child: Align(
+                  alignment: Alignment.topLeft,
+                  child: Text("알림이 없습니다.")))
+            else
+              for(int i = notifications.length-1; i > -1; i--)
+                InkWell(
+                  onTap: (){
+                    if(notifications[i]["type"] == "tele"){
+                      notificationDialog(i);
+                    }else if (notifications[i]["type"] == "normal"){
+                      int index = 0;
+                      String id = notifications[i]["id"];
+                      List<Map> details = context.read<SettingProvider>().details;
+                      for (var detail in details) {
+                        if(detail.containsValue(id)){
+                          break;
+                        }
+                        index++;
                       }
-                      index++;
+                      if (index < details.length) {
+                        detailDialog(context, index, details);
+                      }else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text("상세내역을 찾지 못했습니다."),
+                            duration: Duration(seconds: 3), 
+                            action: SnackBarAction(
+                              label: 'Close',
+                              onPressed: (){},
+                            ),
+                          )
+                        );
+                      }
                     }
-                    if (index < details.length) {
-                      detailDialog(context, index, details);
-                    }else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text("상세내역을 찾지 못했습니다."),
-                          duration: Duration(seconds: 3), 
-                          action: SnackBarAction(
-                            label: 'Close',
-                            onPressed: (){},
-                          ),
-                        )
-                      );
-                    }
-                  }
-                },
-                child: Card(
-                  margin: EdgeInsets.all(1),
-                  child: Stack(
-                    children:[Container(
-                      width: double.infinity,
-                      padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            notifications[i]['title'], 
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.justify,
-                            maxLines: 1,
-                          ),
-                          SizedBox(height: 4,),
-                          Text(
-                            notifications[i]['content'], 
-                            overflow: TextOverflow.clip,
-                            textAlign: TextAlign.justify,
-                            maxLines: 2,
-                          ),
-                          SizedBox(height: 4,),
-                          Text(
-                            notifications[i]['date'],
-                            style: fontSmallGrey,
-                          ),
-                        ],
+                  },
+                  child: Card(
+                    margin: EdgeInsets.all(1),
+                    child: Stack(
+                      children:[Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              notifications[i]['title'], 
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                              overflow: TextOverflow.ellipsis,
+                              textAlign: TextAlign.justify,
+                              maxLines: 1,
+                            ),
+                            SizedBox(height: 4,),
+                            Text(
+                              notifications[i]['content'], 
+                              overflow: TextOverflow.clip,
+                              textAlign: TextAlign.justify,
+                              maxLines: 2,
+                            ),
+                            SizedBox(height: 4,),
+                            Text(
+                              notifications[i]['date'],
+                              style: fontSmallGrey,
+                            ),
+                          ],
+                        ),
                       ),
+                      setBadge(),
+                      ]
                     ),
-                    setBadge(),
-                    ]
                   ),
                 ),
-              ),
-          TextButton(
-            onPressed: () => setState(() => context.read<SettingProvider>().clearNotice()),
-            child: Text("/test\ndel all", style: testBtnStyle)
-          )
-        ]
+            TextButton(
+              onPressed: () => setState(() => context.read<SettingProvider>().clearNotice()),
+              child: Text("/test\ndel all", style: testBtnStyle)
+            )
+          ]
+        ),
       )
     );
   }

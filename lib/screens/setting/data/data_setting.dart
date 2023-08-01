@@ -2,7 +2,6 @@ import 'package:data_project/screens/setting/data/interest.dart';
 import 'package:data_project/screens/setting/data/additional.dart';
 import 'package:data_project/screens/setting/data/basic.dart';
 import 'package:data_project/screens/setting/data/permission.dart';
-import 'package:data_project/screens/setting/setting.dart';
 import 'package:data_project/screens/widget_style.dart';
 import 'package:flutter/material.dart';
 

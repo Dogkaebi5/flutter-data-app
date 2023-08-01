@@ -56,44 +56,45 @@ class _NotificationScreenState extends State<NotificationScreen> {
           children: [
             GestureDetector(
               onTap: () => setIsNotice(),
-              child: Container(
-                  margin: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
-                  padding: EdgeInsets.symmetric(horizontal: 40),
-                  height: 100,
-                  decoration: BoxDecoration(
-                    color: Colors.deepPurple.shade50,
-                    borderRadius: BorderRadius.circular(50),
-                    boxShadow: [BoxShadow(
-                      color: Colors.grey.withOpacity(.6),
-                      blurRadius: 6,
-                      spreadRadius : 1,
-                      offset: Offset(2, 4)
-                    ),],
-                  ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.notifications_on,
-                        size: 28,
-                        color: isNoticePermit? Colors.deepPurple : Colors.grey,
+              child: AnimatedContainer(
+                duration: Duration(milliseconds: 300),
+                margin: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
+                padding: EdgeInsets.symmetric(horizontal: isNoticePermit? 20 : 40),
+                height: isNoticePermit ? 40 : 100,
+                decoration: BoxDecoration(
+                  color: Colors.deepPurple.shade50,
+                  borderRadius: BorderRadius.circular(50),
+                  boxShadow: [BoxShadow(
+                    color: Colors.grey.withOpacity(.6),
+                    blurRadius: 6,
+                    spreadRadius : 1,
+                    offset: Offset(2, 4)
+                  ),],
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.notifications_on,
+                      size: 28,
+                      color: isNoticePermit? Colors.deepPurple : Colors.grey,
+                    ),
+                    SizedBox(width: 12),
+                    Text(
+                      "알림설정",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                        color: isNoticePermit? Colors.black87 : Colors.black54
                       ),
-                      SizedBox(width: 12),
-                      Text(
-                        "알림설정",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                          color: isNoticePermit? Colors.black87 : Colors.black54
-                        ),
-                      ),
-                      Spacer(),
-                      Switch(
-                        value: isNoticePermit, 
-                        onChanged: (value) => setIsNotice()
-                      )
-                    ],
-                  ),
+                    ),
+                    Spacer(),
+                    Switch(
+                      value: isNoticePermit, 
+                      onChanged: (value) => setIsNotice()
+                    )
+                  ],
+                ),
               ),
             ),
             if (notifications.isEmpty)

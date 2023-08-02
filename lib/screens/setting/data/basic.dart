@@ -2,6 +2,7 @@ import 'package:data_project/data/question.dart';
 import 'package:data_project/provider/new_user_provider.dart';
 import 'package:data_project/provider/user_basic_data_provider.dart';
 import 'package:data_project/screens/setting/data/interest.dart';
+import 'package:data_project/widgets/data_pages_header.dart';
 import 'package:data_project/widgets/widget_style.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -60,16 +61,10 @@ class _BasicDataScreenState extends State<BasicDataScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: 40,),
-                  Row(
-                    children: [
-                      Icon(Icons.info, color: Colors.deepPurple.shade400, size: 32,),
-                      SizedBox(width: 8,),
-                      Text("기본정보", style: fontBigColorTitle),
-                  ],),
-                  SizedBox(height: 4,),
-                  Text('정보가 많을 수록 더 많은 리워드를 받을 수 있습니다.',),
-                  
+                  DataPageHeader(
+                    title: "기본정보", 
+                    description: "정보가 많을 수록 더 많은 리워드를 받을 수 있습니다.",
+                    icon: Icons.info),
                   SizedBox(height: 28,),
                   Text("닉네임", style: fontSmallTitle),
                   SizedBox(height: 6,),
@@ -103,7 +98,7 @@ class _BasicDataScreenState extends State<BasicDataScreen> {
                     decoration: BoxDecoration(
                       color: (dateList?[5] == null || dateList?[5] == "")
                         ? Colors.deepPurple.shade50
-                        : Colors.grey,
+                        : Colors.grey.shade200,
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Column(
@@ -206,7 +201,7 @@ class _BasicDataScreenState extends State<BasicDataScreen> {
             decoration: BoxDecoration(
               color: (dateList?[i] == null || dateList?[i] == "")
               ? Colors.deepPurple.shade50
-              : Colors.grey,
+              : Colors.grey.shade200,
               borderRadius: BorderRadius.circular(20),
             ),
             child: Column(

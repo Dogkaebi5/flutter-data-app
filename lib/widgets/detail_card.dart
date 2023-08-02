@@ -2,10 +2,10 @@ import 'package:data_project/widgets/widget_style.dart';
 import 'package:flutter/material.dart';
 
 class DetailCard extends StatefulWidget {
-  String title;
-  String date;
-  String point;
-  var onTap;
+  final String title;
+  final String date;
+  final String point;
+  final onTap;
   DetailCard({
     required this.title,
     required this.date,

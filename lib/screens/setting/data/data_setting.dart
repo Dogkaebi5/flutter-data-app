@@ -55,12 +55,7 @@ class DataScreen extends StatelessWidget {
           createLinkBox(context, "추가정보 설정", Colors.purple.shade200, AdditionalScreen()),
           SizedBox(height: 20,),
           InkWell(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const PermissionScreen()),
-              );
-            },
+            onTap: () => navPush(context, PermissionScreen()),
             child: Container(
               margin: EdgeInsets.symmetric(horizontal: 12),
               padding: EdgeInsets.symmetric(vertical: 32, horizontal: 28),

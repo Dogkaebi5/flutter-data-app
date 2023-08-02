@@ -4,6 +4,7 @@ import 'package:data_project/data/question.dart';
 import 'package:data_project/provider/new_user_provider.dart';
 import 'package:data_project/provider/user_interest_data_provider.dart';
 import 'package:data_project/screens/home/home.dart';
+import 'package:data_project/widgets/data_pages_header.dart';
 import 'package:data_project/widgets/widget_style.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -67,17 +68,10 @@ class _AdditionalScreenState extends State<AdditionalScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: 40,),
-                  Row(
-                  children: [
-                    Icon(Icons.library_add, color: Colors.deepPurple.shade400, size: 32,),
-                    SizedBox(width: 8,),
-                    Text("추가정보",
-                      style: fontBigColorTitle),
-                  ],),
-                  SizedBox(height: 4,),
-                  Text('정보가 많을 수록 판매될 확률이 높아집니다.'),
-                  Text('입력된 정보는 3개월간 수정 불가합니다.'),
+                  DataPageHeader(
+                    title: "추가정보", 
+                    description: "정보가 많을 수록 판매될 확률이 높아집니다.\n입력된 정보는 3개월간 수정 불가합니다.", 
+                    icon: Icons.library_add),
                   SizedBox(height: 32,),
 
                   (interestCount > 0)

@@ -2,6 +2,7 @@ import 'package:data_project/data/question.dart';
 import 'package:data_project/provider/new_user_provider.dart';
 import 'package:data_project/provider/user_interest_data_provider.dart';
 import 'package:data_project/screens/setting/data/additional.dart';
+import 'package:data_project/widgets/data_pages_header.dart';
 import 'package:data_project/widgets/widget_style.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -51,17 +52,11 @@ class _InterestScreenState extends State<InterestScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: 40,),
-                  Row(
-                    children: [
-                      Icon(Icons.interests, color: Colors.deepPurple.shade400, size: 32,),
-                      SizedBox(width: 8,),
-                      Text("관심사",style: fontBigColorTitle),
-                  ],),
-                  SizedBox(height: 4,),
-                  Text('관심사를 최대 3개 선택하세요.'),
-                  Text('선택된 정보는 3개월간 수정 불가합니다.'),
-                  SizedBox(height: 4,),
+                  DataPageHeader(
+                    title: "관심사", 
+                    description: "관심사를 최대 3개 선택하세요.\n선택된 정보는 3개월간 수정 불가합니다.", 
+                    icon: Icons.interests),
+                  SizedBox(height: 8),
                   Container(
                     padding: EdgeInsets.all(12),
                     height: 108,

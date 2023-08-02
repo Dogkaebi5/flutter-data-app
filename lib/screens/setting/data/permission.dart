@@ -30,8 +30,6 @@ class _PermissionScreenState extends State<PermissionScreen> {
     fontSize: 16,
   );
 
-  void setPermitProvider() => context.read<UserBasicData>().setPermissions(isPermitBasics);
-
   @override
   void initState() {
     super.initState();
@@ -80,8 +78,8 @@ class _PermissionScreenState extends State<PermissionScreen> {
                           context.read<SettingProvider>().setPermissions(isPermitUsers);
                       });}
                     )
-                  ],
-                ),
+                ]),
+
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -95,12 +93,11 @@ class _PermissionScreenState extends State<PermissionScreen> {
                             isPermitUsers[4] = val;
                             tmDate = DateTime.now().toString().split(" ")[0];
                             context.read<SettingProvider>().setTmPermission(val);
-                          });
-                        }
+                        });}
                         :null,
                   ),
-                ],
-              ),
+              ]),
+
               if(isPermitUsers[4])
                 Text("텔레마케팅 동의일자 : $tmDate", style: fontSmallGrey),
               SizedBox(height: 8,),
@@ -136,8 +133,7 @@ class _PermissionScreenState extends State<PermissionScreen> {
                           context.read<UserInterestData>().setPermissions(isPremitInterest);
                       });}
                     )
-                  ],
-                ),
+                ]),
             ],
           )
         ),

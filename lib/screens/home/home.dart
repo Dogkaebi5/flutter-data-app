@@ -149,11 +149,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           sortSelections = [false, false];
                           sortSelections[index] = !sortSelections[index];
                         });
-                        if (index == 1) {
-                          showDatePickerDialog();
-                        } else {
-                          setOneMonth();
-                        }
+                        if (index == 1) {showDatePickerDialog();
+                        }else {setOneMonth();}
                       },              
                       children: const [
                         SizedBox(
@@ -176,12 +173,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     SizedBox(height: 12,),
                 
                     if(details.isEmpty)
-                      Row(
-                        children: const [Padding(
-                          padding: EdgeInsets.all(28),
-                          child: Text("기록이 없습니다."),
-                        )],
-                      )
+                      Row(children: const[
+                        SizedBox(height:30, width:24),
+                        Text("기록이 없습니다."),
+                      ])
                     else 
                       for(int i = details.length-1; i > -1; i--)
                         DetailCard(
@@ -191,7 +186,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           onTap: (){detailDialog(context, i, details);}
                         ),
 
-                    //test btns
+                    /////////////////test btns
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [

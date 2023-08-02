@@ -3,9 +3,8 @@ import 'package:data_project/provider/setting_provider.dart';
 import 'package:data_project/provider/user_basic_data_provider.dart';
 import 'package:data_project/provider/user_interest_data_provider.dart';
 import 'package:data_project/screens/home/detail_dialog.dart';
-import 'package:data_project/screens/home/notifications.dart';
-import 'package:data_project/screens/setting/setting.dart';
 import 'package:data_project/screens/start/auth_router.dart';
+import 'package:data_project/widgets/detail_card.dart';
 import 'package:data_project/widgets/nav_bar.dart';
 import 'package:data_project/widgets/widget_style.dart';
 import 'package:provider/provider.dart';
@@ -69,8 +68,7 @@ class _HomeScreenState extends State<HomeScreen> {
         onWillPop: () => Future(() => false),
         child: SafeArea(
           child: SingleChildScrollView(
-            child: Column(
-            children: [
+            child: Column(children: [
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 20, horizontal:24),
                 child: Column(
@@ -85,9 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text("My Point", 
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18, ),),
+                              style: TextStyle(color: Colors.white, fontSize: 18)),
                             SizedBox(height: 4,),
                             Row(
                               children: [
@@ -95,7 +91,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   Icons.account_balance_wallet,
                                   color: Colors.white,
                                   size: 32,
-                                  ),
+                                ),
                                 SizedBox(width: 12,),
                                 Text("$point P", 
                                   style: TextStyle(
@@ -118,19 +114,15 @@ class _HomeScreenState extends State<HomeScreen> {
                     SizedBox(height: 8),
                     ElevatedButton(
                       onPressed: () => navPush(context, WithdrawScreen()),
-                      child: SizedBox(
-                        width: 120,
-                        height: 44,
+                      child: SizedBox(width: 120, height: 44,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: const [
-                            Icon(Icons.toll,),
-                            SizedBox(width: 4),
-                            Text("출금신청"),
-                            SizedBox(width: 8),
+                            Icon(Icons.toll,), SizedBox(width: 4),
+                            Text("출금신청"), SizedBox(width: 8),
                           ],
                         ),
-                      )),
+                    )),
                   ],
                 ),
               ),
@@ -192,7 +184,12 @@ class _HomeScreenState extends State<HomeScreen> {
                       )
                     else 
                       for(int i = details.length-1; i > -1; i--)
-                        createDetailCards(i),
+                        DetailCard(
+                          title: details[i]['title'], 
+                          date: details[i]['date'], 
+                          point: details[i]['point'],
+                          onTap: (){detailDialog(context, i, details);}
+                        ),
 
                     //test btns
                     Row(
@@ -287,41 +284,4 @@ class _HomeScreenState extends State<HomeScreen> {
         )
       )
     );
-
-  createDetailCards(int loopInt){
-    return InkWell(
-      onTap: () => detailDialog(context, loopInt, details), 
-      child: Card(
-        margin: EdgeInsets.all(1),
-        child: Container(
-          padding: EdgeInsets.all(20),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(details[loopInt]['title'],
-                    style: TextStyle(fontWeight: FontWeight.bold),),
-                  SizedBox(height: 4,),
-                  Text(
-                    details[loopInt]['date'].split(' ')[0], 
-                    style: fontSmallGrey
-                  ),
-                ],
-              ),
-              Text(details[loopInt]['point'],
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: details[loopInt]['point'].split(' ')[0] == "+"
-                    ? Colors.deepPurple.shade300
-                    : Colors.red.shade300
-                ),)
-              // Icon(Icons.arrow_forward_ios),
-          ]),
-        ),
-      ),
-    );
-  }
 }

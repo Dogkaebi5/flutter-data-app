@@ -6,6 +6,7 @@ import 'package:data_project/screens/home/detail_dialog.dart';
 import 'package:data_project/screens/home/notifications.dart';
 import 'package:data_project/screens/setting/setting.dart';
 import 'package:data_project/screens/start/auth_router.dart';
+import 'package:data_project/widgets/nav_bar.dart';
 import 'package:data_project/widgets/widget_style.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
@@ -63,7 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context, ) {
     return Scaffold(
       backgroundColor: Colors.deepPurple.shade400,
-      bottomSheet: customNavBar(), 
+      bottomSheet: NavBar(), 
       body:  WillPopScope(
         onWillPop: () => Future(() => false),
         child: SafeArea(
@@ -248,63 +249,6 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
           ),
         )
-      ),
-    );
-  }
-  
-  customNavBar(){
-    return Container(
-        height: 60,
-        margin: EdgeInsets.only(bottom: 12, left: 8, right: 8),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(30),
-          boxShadow: [BoxShadow(
-            color: Colors.black.withOpacity(.6),
-            blurRadius: 6,
-            spreadRadius : 1,
-            offset: Offset(2, 4)
-          ),],
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(30),
-          child: BottomNavigationBar(
-            items:[
-              BottomNavigationBarItem(icon: Icon(Icons.home), label: "홈"),
-              BottomNavigationBarItem(
-                icon: (hasNewNotice) 
-                  ?Stack(children: [
-                    Icon(Icons.notifications),
-                    Positioned(
-                      top: 2,
-                      right: 2,
-                      child: Container(
-                        width: 8,
-                        height: 8,
-                        decoration: BoxDecoration(
-                          color: Colors.red,
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                      ),
-                    )
-                  ],) 
-                  :Icon(Icons.notifications),
-                label: "알림"
-              ),
-              BottomNavigationBarItem(icon: Icon(Icons.settings), label: "설정")
-            ],
-          selectedItemColor: Colors.white,
-          backgroundColor: Colors.deepPurple,
-          currentIndex: 0,
-          unselectedItemColor: Colors.deepPurple.shade200,
-          
-          onTap: (index){
-            switch(index){
-              case 0 : break;
-              case 1 : navPush(context, NotificationScreen());
-              case 2 : navPush(context, SettingScreen());
-            }
-          },
-        ),
       ),
     );
   }

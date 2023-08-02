@@ -8,7 +8,7 @@ class SettingProvider extends ChangeNotifier {
 
   bool _isNoticeService = false;
   bool _isNoticeMarketing = false;
-  List _isPermitUserData  = List.filled(6, false);
+  List _isPermitUserData  = List.filled(6, true);
   String? _permitTmDate;
   String name = "홍길동";
   bool _isHasAcc = false;

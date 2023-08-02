@@ -1,4 +1,4 @@
-import 'package:data_project/screens/widget_style.dart';
+import 'package:data_project/widgets/widget_style.dart';
 import 'package:flutter/material.dart';
 
 List tradeDetailTitleTexts = ["타이틀", "거래ID", "거래종류", "거래일시", "포인트 변화", "구매자", "구매내역"];

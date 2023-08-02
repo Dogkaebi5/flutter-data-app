@@ -1,6 +1,6 @@
 import 'package:data_project/data/password_setter.dart';
 import 'package:data_project/forget_password_dialog.dart';
-import 'package:data_project/screens/widget_style.dart';
+import 'package:data_project/widgets/widget_style.dart';
 import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
 

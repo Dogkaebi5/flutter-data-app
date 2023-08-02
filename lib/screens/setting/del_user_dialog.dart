@@ -1,4 +1,4 @@
-import 'package:data_project/screens/widget_style.dart';
+import 'package:data_project/widgets/widget_style.dart';
 import 'package:flutter/material.dart';
 
 deleteUserDialog(context) {

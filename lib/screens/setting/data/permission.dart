@@ -1,6 +1,7 @@
 import 'package:data_project/provider/setting_provider.dart';
 import 'package:data_project/provider/user_basic_data_provider.dart';
 import 'package:data_project/provider/user_interest_data_provider.dart';
+import 'package:data_project/widgets/widget_style.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -21,9 +22,16 @@ class _PermissionScreenState extends State<PermissionScreen> {
   List isPermitUsers = List.empty(growable: true);
   List isPermitBasics = List.empty(growable: true);
   List isPremitInterest = List.empty(growable: true);
+  List basicDatas = List.empty(growable: true);
 
   String? tmDate;
-  
+  final TextStyle _textStyle = TextStyle(
+    color: Colors.black87,
+    fontSize: 16,
+  );
+
+  void setPermitProvider() => context.read<UserBasicData>().setPermissions(isPermitBasics);
+
   @override
   void initState() {
     super.initState();
@@ -33,6 +41,7 @@ class _PermissionScreenState extends State<PermissionScreen> {
       isPermitBasics = context.read<UserBasicData>().basicPermissions;
       isPremitInterest = context.read<UserInterestData>().permissions;
       tmDate = context.read<SettingProvider>().permitTmDate;
+      basicDatas = context.read<UserBasicData>().selected;
     });
   }
 
@@ -47,36 +56,21 @@ class _PermissionScreenState extends State<PermissionScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               for (int i = 0; i < necessaryDataTexts.length; i++)
-                Padding(
-                  padding: EdgeInsets.only(bottom: 16, right: 16),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(necessaryDataTexts[i],
-                          style: TextStyle(
-                          color: Colors.black87,
-                          fontSize: 16,
-                          ),
-                        ),
-                        Text('필수', 
-                          style: TextStyle(
-                            color: Colors.deepPurple,
-                          ),
-                        ),
-                      ]
-                  ),
+                Row(
+                  children: [
+                    Text(necessaryDataTexts[i], style: _textStyle),
+                    Spacer(),
+                    SizedBox(height: 36, width: 40,
+                      child: Text('필수', style: TextStyle(color: Colors.deepPurple))
+                    )
+                  ]
                 ),
               
               for (int i = 0; i < userDataTexts.length-1; i++)
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(userDataTexts[i],
-                      style: TextStyle(
-                        color: Colors.black87,
-                        fontSize: 16,
-                      ),
-                    ),
+                    Text(userDataTexts[i], style: _textStyle),
                     Switch(
                       value: isPermitUsers[i], 
                       onChanged: (val){
@@ -89,46 +83,42 @@ class _PermissionScreenState extends State<PermissionScreen> {
                   ],
                 ),
               Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text("— 텔레마케팅 동의",),
-                    Switch(
-                      value: isPermitUsers[4],
-                      onChanged: (isPermitUsers[3])?
-                        (val){
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("— 텔레마케팅 동의",),
+                  Switch(
+                    value: isPermitUsers[4],
+                    onChanged: 
+                      (isPermitUsers[3])
+                        ?(val){
                           setState(() {
                             isPermitUsers[4] = val;
                             tmDate = DateTime.now().toString().split(" ")[0];
                             context.read<SettingProvider>().setTmPermission(val);
                           });
                         }
-                      : null,
-                    ),
-                  ],
-                ),
+                        :null,
+                  ),
+                ],
+              ),
               if(isPermitUsers[4])
-                Text("텔레마케팅 동의일자 : $tmDate",
-                  style: TextStyle(
-                    fontSize: 12,
-                  ),),
+                Text("텔레마케팅 동의일자 : $tmDate", style: fontSmallGrey),
               SizedBox(height: 8,),
+
               for (int i = 0; i < basciDataTexts.length; i++)
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(basciDataTexts[i],
-                      style: TextStyle(
-                        color: Colors.black87,
-                        fontSize: 16,
-                      ),
-                    ),
+                    Text(basciDataTexts[i], style: _textStyle),
                     Switch(
                       value: isPermitBasics[i],
-                      onChanged: (val){
-                        setState(() {
-                          isPermitBasics[i] = val;
-                          context.read<UserBasicData>().setPermissions(isPermitBasics);
-                      });}
+                      onChanged: (basicDatas[i] != null)
+                        ?(val){
+                          setState(() {
+                            isPermitBasics[i] = val;
+                            context.read<UserBasicData>().setPermissions(isPermitBasics);
+                        });}
+                        : null
                     )
                   ],
                 ),
@@ -137,12 +127,7 @@ class _PermissionScreenState extends State<PermissionScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("관심사 ${(i+1).toString()} : ${interests[i]}",
-                      style: TextStyle(
-                        color: Colors.black87,
-                        fontSize: 16,
-                      ),
-                    ),
+                    Text("관심사 ${(i+1).toString()} : ${interests[i]}", style: _textStyle),
                     Switch(
                       value: isPremitInterest[i],
                       onChanged: (val){
@@ -153,12 +138,26 @@ class _PermissionScreenState extends State<PermissionScreen> {
                     )
                   ],
                 ),
-              
-              SizedBox(height: 20,)
             ],
           )
         ),
       )
+    );
+  }
+
+  createSwitch(title, value, void setter){
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(title, style: _textStyle),
+        Switch(
+          value: value,
+          onChanged: (val){
+            setState(() => value = val);
+            setter;
+          }
+        )
+      ],
     );
   }
 }

@@ -1,8 +1,10 @@
+import 'dart:convert';
+
 import 'package:data_project/data/question.dart';
 import 'package:data_project/provider/new_user_provider.dart';
 import 'package:data_project/provider/user_interest_data_provider.dart';
 import 'package:data_project/screens/home/home.dart';
-import 'package:data_project/screens/widget_style.dart';
+import 'package:data_project/widgets/widget_style.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -27,6 +29,7 @@ class _AdditionalScreenState extends State<AdditionalScreen> {
   Map questions = Questions().interests;
   List nowSelectedQuestions = List.empty(growable: true);
   Map additionalSeleteds = {};
+  Map originSelecteds = {};
   
   List quests = List.empty(growable: true);
   
@@ -47,6 +50,7 @@ class _AdditionalScreenState extends State<AdditionalScreen> {
         case 3 : toggleSelects = [true, false, false]; break;
       }
       additionalSeleteds = context.read<UserInterestData>().additionalData;
+      originSelecteds = json.decode(json.encode(context.read<UserInterestData>().additionalData));
     });
   }
 
@@ -109,7 +113,9 @@ class _AdditionalScreenState extends State<AdditionalScreen> {
                             Container(
                               padding: EdgeInsets.all(12),
                               decoration: BoxDecoration(
-                                color: Color.fromARGB(92, 209, 196, 233),
+                                color: (originSelecteds[interstSelecteds[nowToggleIndex]][i] == null)
+                                  ? Colors.deepPurple.shade50
+                                  : Colors.grey.shade200,
                                 borderRadius: BorderRadius.circular(20),
                               ),
                               child: Column(
@@ -127,6 +133,7 @@ class _AdditionalScreenState extends State<AdditionalScreen> {
                                       items: (nowSelectedQuestions[i]["option"] as List).map((e)=> 
                                         DropdownMenuItem(
                                           value: e,
+                                          enabled: (originSelecteds[interstSelecteds[nowToggleIndex]][i] == null)?true:false,
                                           child: Text(e),
                                         )).toList(), 
                                       onChanged: (value) {

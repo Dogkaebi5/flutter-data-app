@@ -6,7 +6,7 @@ import 'package:data_project/screens/home/detail_dialog.dart';
 import 'package:data_project/screens/home/notifications.dart';
 import 'package:data_project/screens/setting/setting.dart';
 import 'package:data_project/screens/start/auth_router.dart';
-import 'package:data_project/screens/widget_style.dart';
+import 'package:data_project/widgets/widget_style.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:data_project/screens/point/withdraw.dart';

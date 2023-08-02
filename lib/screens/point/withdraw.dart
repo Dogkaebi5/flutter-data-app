@@ -1,7 +1,7 @@
 import 'package:data_project/password_dialog.dart';
 import 'package:data_project/provider/setting_provider.dart';
 import 'package:data_project/screens/point/bank_data.dart';
-import 'package:data_project/screens/widget_style.dart';
+import 'package:data_project/widgets/widget_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pinput/pinput.dart';

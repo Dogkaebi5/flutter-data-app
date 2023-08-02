@@ -4,7 +4,7 @@ import 'package:data_project/screens/setting/data/data_setting.dart';
 import 'package:data_project/screens/setting/del_user_dialog.dart';
 import 'package:data_project/screens/setting/set_password.dart';
 import 'package:data_project/screens/webview/webview.dart';
-import 'package:data_project/screens/widget_style.dart';
+import 'package:data_project/widgets/widget_style.dart';
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';

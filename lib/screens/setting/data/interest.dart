@@ -2,7 +2,7 @@ import 'package:data_project/data/question.dart';
 import 'package:data_project/provider/new_user_provider.dart';
 import 'package:data_project/provider/user_interest_data_provider.dart';
 import 'package:data_project/screens/setting/data/additional.dart';
-import 'package:data_project/screens/widget_style.dart';
+import 'package:data_project/widgets/widget_style.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -16,7 +16,8 @@ class _InterestScreenState extends State<InterestScreen> {
   bool isNewUser = false;
   UserInterestData userData = UserInterestData();
   List<String> interestOptions = Questions().interests.keys.toList();
-  List selecteds = List.empty(growable: true);
+  List newSelecteds = List.empty(growable: true);
+  List originSelecteds = List.empty(growable: true);
   List isSelecteds = List.empty(growable: true);
   List selectedDates = List.empty(growable: true);
   List permissions = List.empty(growable: true);
@@ -29,10 +30,11 @@ class _InterestScreenState extends State<InterestScreen> {
       isNewUser = context.read<NewUserProvider>().isNewUser;
       userData = context.read<UserInterestData>();
       isSelecteds = userData.isSelecteds;
-      selecteds = userData.selecteds;
+      originSelecteds = List.from(userData.selecteds);
+      newSelecteds = List.from(userData.selecteds);
       selectedDates = userData.selectedDates;
       permissions = userData.permissions;
-      selectedCount = selecteds.length;
+      selectedCount = originSelecteds.length;
     });
   }
   
@@ -84,7 +86,7 @@ class _InterestScreenState extends State<InterestScreen> {
                   ElevatedButton(
                     style: btnStyle,
                     onPressed: (){
-                      saveInterestData();
+                      userData.setSeleceds(newSelecteds);
                       if(isNewUser){
                         navPush(context, AdditionalScreen());
                       }else{
@@ -102,13 +104,6 @@ class _InterestScreenState extends State<InterestScreen> {
     );
   }
 
-  saveInterestData(){
-    userData.setSeleceds(selecteds);
-    userData.setIsSelecteds(isSelecteds);
-    userData.setDates(selectedDates);
-    userData.setPermissions(permissions);
-  }
-
   createInterestListText(){
     if(selectedCount>0) {
       return Column(
@@ -119,11 +114,8 @@ class _InterestScreenState extends State<InterestScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [Padding(
                 padding: const EdgeInsets.all(2.0),
-                child: Text(selecteds[i], 
-                  style: TextStyle(
-                    color: Colors.deepPurple,
-                    fontSize: 16,
-                ),),
+                child: Text(newSelecteds[i], 
+                  style: TextStyle(color: Colors.deepPurple,fontSize: 16,),),
               ),
               Text('저장 유지기간 : ~ ${selectedDates[i]}',),
             ],),
@@ -133,6 +125,28 @@ class _InterestScreenState extends State<InterestScreen> {
   }
   createInterstCard(i){
     return InkWell(
+      onTap: (originSelecteds.contains(interestOptions[i]))
+        ? (){}
+        : (){
+        setState(() {
+          if(newSelecteds.contains(interestOptions[i])){
+            isSelecteds[i] = false;
+            selectedDates.removeAt(newSelecteds.indexOf(interestOptions[i]));
+            permissions.removeAt(newSelecteds.indexOf(interestOptions[i]));
+            newSelecteds.remove(interestOptions[i]);
+            selectedCount --;
+          }else if(selectedCount < 3){
+            String after30days = DateTime.now().add(Duration(days: 30)).toString().split(" ")[0];
+            isSelecteds[i] = true;
+            newSelecteds.add(interestOptions[i]);
+            selectedDates.add(after30days);
+            permissions.add(true);
+            selectedCount ++;
+          }
+        });
+        print("origin : $originSelecteds");
+        print("new : $newSelecteds");
+      },
       child: SizedBox(
         height: 60,
         width: (MediaQuery.of(context).size.width > 360)
@@ -140,44 +154,29 @@ class _InterestScreenState extends State<InterestScreen> {
           :MediaQuery.of(context).size.width/2 - 26,
         child: 
         Card(
-          color: isSelecteds[i]? Colors.deepPurple : Colors.white,
+          color: (originSelecteds.contains(interestOptions[i]))
+            ?Colors.deepPurple.shade200
+            : isSelecteds[i]? Colors.deepPurple : Colors.white,
           child: Center(
             child:
               isSelecteds[i] ? 
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text((interestOptions[i]), style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Text((interestOptions[i]), 
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white)),
+                  if(!originSelecteds.contains(interestOptions[i]))
                     Icon(Icons.close, color: Colors.white, size: 16,),
-                  ]),
-              )
+                ])
               : Text(
               interestOptions[i],
               textAlign: TextAlign.center,
             ),
           ),
         ),
-      ),
-      onTap: (){
-        setState(() {
-          if(selecteds.contains(interestOptions[i])){
-            isSelecteds[i] = false;
-            selectedDates.removeAt(selecteds.indexOf(interestOptions[i]));
-            permissions.removeAt(selecteds.indexOf(interestOptions[i]));
-            selecteds.remove(interestOptions[i]);
-            selectedCount --;
-          }else if(selectedCount < 3){
-            String after30days = DateTime.now().add(Duration(days: 30)).toString().split(" ")[0];
-            isSelecteds[i] = true;
-            selecteds.add(interestOptions[i]);
-            selectedDates.add(after30days);
-            permissions.add(true);
-            selectedCount ++;
-          }
-        });
-      }
+      )
     );
   }
 }

@@ -2,7 +2,7 @@ import 'package:data_project/data/question.dart';
 import 'package:data_project/provider/new_user_provider.dart';
 import 'package:data_project/provider/user_basic_data_provider.dart';
 import 'package:data_project/screens/setting/data/interest.dart';
-import 'package:data_project/screens/widget_style.dart';
+import 'package:data_project/widgets/widget_style.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

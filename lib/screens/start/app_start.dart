@@ -1,6 +1,6 @@
 import 'package:data_project/screens/start/firebase_auth.dart';
 import 'package:data_project/screens/webview/webview.dart';
-import 'package:data_project/screens/widget_style.dart';
+import 'package:data_project/widgets/widget_style.dart';
 import 'package:flutter/material.dart';
 
 class AppStartScreen extends StatefulWidget {

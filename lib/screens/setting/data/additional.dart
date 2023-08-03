@@ -5,6 +5,7 @@ import 'package:data_project/provider/new_user_provider.dart';
 import 'package:data_project/provider/user_interest_data_provider.dart';
 import 'package:data_project/screens/home/home.dart';
 import 'package:data_project/widgets/data_pages_header.dart';
+import 'package:data_project/widgets/question_dropdown.dart';
 import 'package:data_project/widgets/widget_style.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -77,72 +78,44 @@ class _AdditionalScreenState extends State<AdditionalScreen> {
                   (interestCount > 0)
                   ?Column(
                     children: [
-                      Center(
-                        child: ToggleButtons(
-                          onPressed: (index) {
+                      ToggleButtons(
+                        onPressed:  (index) {
+                          if (index != nowToggleIndex){
                             setState(() {
                               toggleSelects = List.filled(toggleSelects.length, false);
-                              toggleSelects[index] = !toggleSelects[index];
+                              toggleSelects[index] = true;
                               nowToggleIndex = index;
                               nowSelectedQuestions = questions[interstSelecteds[index]];
                             });
-                          },
-                          isSelected: toggleSelects,
-                          children: [
-                            for (int i = 0; i < interstSelecteds.length; i++)
-                              Container(
-                                width: 100,
-                                padding: EdgeInsets.all(2),
-                                child: Text(interstSelecteds[i], 
-                                  textAlign: TextAlign.center,
-                                  style: fontSmallTitle,
-                      ),),],),),
+                          }
+                        },
+                        isSelected: toggleSelects,
+                        children: [
+                          for (int i = 0; i < interstSelecteds.length; i++)
+                            Container(
+                              width: 100,
+                              padding: EdgeInsets.all(2),
+                              child: Text(interstSelecteds[i], 
+                                textAlign: TextAlign.center,
+                                style: fontSmallTitle,
+                            )),
+                      ]),
                       SizedBox(height: 12,),
                       createInterestDateText(),
                       SizedBox(height: 40,),
 
                       for (int i = 0; i < nowSelectedQuestions.length; i++)
-                        Column(
-                          children: [
-                            Container(
-                              padding: EdgeInsets.all(12),
-                              decoration: BoxDecoration(
-                                color: (originSelecteds[interstSelecteds[nowToggleIndex]][i] == null)
-                                  ? Colors.deepPurple.shade50
-                                  : Colors.grey.shade200,
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    nowSelectedQuestions[i]["title"],
-                                    style: TextStyle(fontWeight: FontWeight.bold,),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.symmetric(horizontal: 8),
-                                    child: DropdownButton(
-                                      isExpanded: true,
-                                      value: additionalSeleteds[interstSelecteds[nowToggleIndex]][i],
-                                      items: (nowSelectedQuestions[i]["option"] as List).map((e)=> 
-                                        DropdownMenuItem(
-                                          value: e,
-                                          enabled: (originSelecteds[interstSelecteds[nowToggleIndex]][i] == null)?true:false,
-                                          child: Text(e),
-                                        )).toList(), 
-                                      onChanged: (value) {
-                                        setState((){
-                                          additionalSeleteds[interstSelecteds[nowToggleIndex]][i] = value;
-                                        });
-                                      }
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(height: 24,),
-                          ],
-                        ),
+                        QuestionDropDown(
+                          isEnabled: (originSelecteds[interstSelecteds[nowToggleIndex]][i] == null), 
+                          question: nowSelectedQuestions[i]["title"], 
+                          options: nowSelectedQuestions[i]["option"], 
+                          selected: additionalSeleteds[interstSelecteds[nowToggleIndex]][i], 
+                          onChanged: (value) {
+                            setState((){
+                              additionalSeleteds[interstSelecteds[nowToggleIndex]][i] = value;
+                            });}
+                          ),
+
                   ])
                   : Column(
                     children: const [

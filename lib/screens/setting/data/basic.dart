@@ -3,6 +3,7 @@ import 'package:data_project/provider/new_user_provider.dart';
 import 'package:data_project/provider/user_basic_data_provider.dart';
 import 'package:data_project/screens/setting/data/interest.dart';
 import 'package:data_project/widgets/data_pages_header.dart';
+import 'package:data_project/widgets/question_dropdown.dart';
 import 'package:data_project/widgets/widget_style.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -18,9 +19,11 @@ class _BasicDataScreenState extends State<BasicDataScreen> {
   late bool isNewUser;
   String? userNickname, userEmail;
   String? residence;
+  String? area;
   String? tempString;
-  List? selecteds = List.empty(growable: true);
-  List? dateList = List.empty(growable: true);
+  
+  List selecteds = List.empty(growable: true);
+  List dateList = List.empty(growable: true);
 
   List basicQuestions = Questions().basicInfo;
   Map residenceMap = Questions().region;
@@ -40,9 +43,10 @@ class _BasicDataScreenState extends State<BasicDataScreen> {
       userNickname = userData.nickname;
       userEmail = userData.email;
       selecteds = userData.selected;
+      area = selecteds[6];
       dateList = userData.selectedDate;
-      if(selecteds?[5] != null){
-        areaOptions = residenceMap[selecteds?[5]];
+      if(selecteds[5] != null){
+        areaOptions = residenceMap[selecteds[5]];
       }
       //temporary reader
     });
@@ -89,86 +93,41 @@ class _BasicDataScreenState extends State<BasicDataScreen> {
                   ),
                   SizedBox(height: 40,),
                   
-                  for (int i = 0; i < basicQuestions.length-2; i++) 
-                    createBasicDataDropDown(
-                      basicQuestions[i]["title"], basicQuestions[i]["option"], i),
+                  for (int i = 0; i < basicQuestions.length-2; i++)
+                    QuestionDropDown(
+                      isEnabled: dateList[i] == null, 
+                      question: basicQuestions[i]["title"], 
+                      options: basicQuestions[i]["option"], 
+                      selected: selecteds[i],
+                      onChanged: (value) => setState(() => selecteds[i] = value as String?)
+                    ),
                   
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    decoration: BoxDecoration(
-                      color: (dateList?[5] == null || dateList?[5] == "")
-                        ? Colors.deepPurple.shade50
-                        : Colors.grey.shade200,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(basicQuestions[5]["title"],
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(left:8, right:8),
-                          child: DropdownButton(
-                            isExpanded: true,
-                            value: selecteds?[5],
-                            items: residenceOptions.map((e)=> DropdownMenuItem(
-                              enabled: (dateList?[5] == null || dateList?[5] == "")?true:false,
-                              value: e,
-                              child: Text(e),
-                            )).toList(), 
-                            onChanged: (value) {
-                              setState((){
-                                selecteds?[5] = value as String?;
-                                selecteds?[6] = tempString;
-                                residence = value as String?;
-                                areaOptions = residenceMap[residence];
-                              });
-                            }
-                          ),
-                        ),
-                      ],
-                    ),
+                  QuestionDropDown(
+                    isEnabled: dateList[5] == null, 
+                    question: basicQuestions[5]["title"], 
+                    options: residenceOptions, 
+                    selected: selecteds[5], 
+                    onChanged: (value){
+                      setState((){
+                        selecteds[5] = value as String?;
+                        residence = value;
+                        areaOptions = residenceMap[residence];
+                        selecteds[6] = null;
+                    });}
                   ),
-                  SizedBox(height: 8,),
 
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    decoration: BoxDecoration(
-                      color: Colors.deepPurple.shade50,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(basicQuestions[6]["title"],
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(left:8, right:8),
-                          child: DropdownButton(
-                            isExpanded: true,
-                            value: selecteds?[6],
-                            items: areaOptions.map((e)=> DropdownMenuItem(
-                              value: e,
-                              child: Text(e!),
-                            )).toList(), 
-                            onChanged: (value) {
-                              setState((){
-                                selecteds?[6] = value as String?;
-                              });
-                            }
-                          ),
-                        ),
-                      ],
-                    ),
+                  QuestionDropDown(
+                    isEnabled: true, 
+                    question: basicQuestions[6]["title"], 
+                    options: areaOptions, 
+                    selected: selecteds[6], 
+                    onChanged: (value) {
+                      setState((){
+                        selecteds[6] = value as String?;
+                      });
+                    }
                   ),
+                  
                   SizedBox(height: 20),
                   ElevatedButton(
                     style: btnStyle,

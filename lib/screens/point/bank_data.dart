@@ -57,7 +57,7 @@ class _BankDataScreenState extends State<BankDataScreen> {
               padding: EdgeInsets.all(20),
               decoration: BoxDecoration(
                 color: Colors.deepPurple.shade50,
-                borderRadius: BorderRadius.circular(12)
+                borderRadius: BorderRadius.circular(20)
               ),
               child: 
                 isHasAcc?
@@ -68,7 +68,7 @@ class _BankDataScreenState extends State<BankDataScreen> {
             OutlinedButton(
               style: FilledButton.styleFrom(
                 backgroundColor: Colors.white,
-                minimumSize: Size(double.infinity, 64),
+                minimumSize: Size(double.infinity, 64)
               ),
               onPressed: () async {
                 newBank = await bankListDialog();
@@ -80,13 +80,12 @@ class _BankDataScreenState extends State<BankDataScreen> {
                 children: [
                   Icon(Icons.account_balance),
                   SizedBox(width: 6,),
-                  Text( bank ?? '은행선택',
-                    style: TextStyle(fontSize: 16),),
+                  Text(bank ?? '은행선택', style: TextStyle(fontSize: 16)),
                   Spacer(),
                   Icon(Icons.arrow_drop_down_circle)
               ]),
             ),
-            SizedBox(height: 20,),
+            SizedBox(height: 20),
             TextField(
               onChanged: (value) => setState(() => acc = value.toString()),
               keyboardType: TextInputType.number,
@@ -98,8 +97,7 @@ class _BankDataScreenState extends State<BankDataScreen> {
                 counterText: "",
                 border: OutlineInputBorder(),
                 hintText: "본인명의 계좌를 입력하세요",
-                hintStyle: TextStyle(color: Colors.black54),
-                
+                hintStyle: TextStyle(color: Colors.black54)
               ),
             ),
             Spacer(),
@@ -113,7 +111,7 @@ class _BankDataScreenState extends State<BankDataScreen> {
                 }
                 :null, 
               child: Text('계좌등록')),
-            SizedBox(height: 40,)
+            SizedBox(height: 40)
             // Text(
             //   style: TextStyle(color: Colors.red) , 
             //   '회원과 예금주 명의가 불일치합니다.'
@@ -130,6 +128,7 @@ class _BankDataScreenState extends State<BankDataScreen> {
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setState){
             return Dialog.fullscreen(
+              backgroundColor: Color.fromARGB(255, 240, 240, 240),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -142,41 +141,40 @@ class _BankDataScreenState extends State<BankDataScreen> {
                         icon: Icon(Icons.close)
                       ),
                       Text('은행선택', style: fontSmallTitle),
-                      SizedBox(width: 30,),
-                    ],
-                  ),
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(20.0),
-                    child: Wrap(
-                      direction: Axis.horizontal, 
-                      alignment:  WrapAlignment.center,
-                      children: [
-                        for(var i = 0; i < bankList.length; i++)
-                          InkWell(
-                            child: SizedBox(
-                              height: 60, width: 100,
-                              child: 
-                              Card(
-                                color: isSelectBanks[i] ?  Color.fromARGB(255, 142, 57, 246)  : Colors.white,
-                                child: Center(
-                                  child:Text(
-                                    bankList[i],
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(color: isSelectBanks[i] ? Colors.white : Colors.black),
-                            ),),),),
-                            onTap: (){
-                              setState(() {
-                                for(int j = 0; j < isSelectBanks.length; j++){
-                                  isSelectBanks[j] = false;
-                                }
-                                isSelectBanks[i] = !isSelectBanks[i];
-                                newBank = bankList[i];
-                              });
-                              Navigator.pop(context);
-                            }
-                          ),
-                      ],
+                      SizedBox(width: 48)
+                  ]),
+                  SingleChildScrollView(
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: Wrap(
+                        direction: Axis.horizontal, 
+                        alignment:  WrapAlignment.center,
+                        children: [
+                          for(var i = 0; i < bankList.length; i++)
+                            InkWell(
+                              child: SizedBox(
+                                height: 60, width: MediaQuery.of(context).size.width/3 - 20,
+                                child: Card(
+                                  color: isSelectBanks[i] ?  Colors.deepPurple  : Colors.white,
+                                  child: Center(
+                                    child:Text(
+                                      bankList[i],
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(color: isSelectBanks[i] ? Colors.white : Colors.black),
+                              ),),),),
+                              onTap: (){
+                                setState(() {
+                                  for(int j = 0; j < isSelectBanks.length; j++){
+                                    isSelectBanks[j] = false;
+                                  }
+                                  isSelectBanks[i] = !isSelectBanks[i];
+                                  newBank = bankList[i];
+                                });
+                                Navigator.pop(context);
+                              }
+                            ),
+                        ],
+                      ),
                     ),
                   ),
                 ]

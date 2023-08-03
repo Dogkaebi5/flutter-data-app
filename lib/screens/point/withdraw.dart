@@ -35,21 +35,6 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
       account = context.read<SettingProvider>().bankData[2];
     });
   }
-  feeCalculate(){
-    setState((){
-      (inputPoint < 10000) ? fee = 1000 : fee = 0;
-    });
-  }
-  taxCalculate(){
-    setState((){
-      tax = (inputPoint * 0.033).floor();
-    });
-  }
-  amountCalculate() {
-    setState(() {
-      amount = inputPoint - fee - tax;
-    }); 
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -86,6 +71,7 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
                 border: Border.all(color: Colors.grey.shade300),
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(30),
+                boxShadow: [greyShadow]
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -95,18 +81,15 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("출금계좌 : ",
-                          style: TextStyle(color: Colors.black87),
-                        ),
+                        Text("출금계좌 : "),
                         Text("$bank  $account",
                           style: TextStyle(
                             color: Colors.deepPurpleAccent,
                             fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                        )),
                       ],
                     )
-                    : Text("출금계좌 등록하기",  style: TextStyle(color: Colors.black87)),
+                    : Text("출금계좌 등록하기"),
                   Icon(Icons.arrow_forward_ios,
                     size: 16,
                     color: Colors.grey,
@@ -115,7 +98,7 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
               ),
             ),
           ),
-          SizedBox(height: 30,),
+          SizedBox(height: 40),
           TextField(
             textAlign: TextAlign.center,
             keyboardType: TextInputType.number,
@@ -125,10 +108,7 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
               counterText: "",
               border: InputBorder.none,
               hintText: "0",
-              hintStyle: TextStyle(
-                fontSize: 40,
-                color: Colors.black,
-              ),
+              hintStyle: TextStyle(fontSize: 40, color: Colors.black),
             ),
             maxLength: point.toString().length + 1,
             inputFormatters: [
@@ -148,9 +128,11 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
               }else {
                 setState(() => inputPoint = int.parse(value));
               }
-              feeCalculate();
-              taxCalculate();
-              amountCalculate();
+              setState(() {
+                (inputPoint < 10000) ? fee = 1000 : fee = 0;
+                tax = (inputPoint * 0.033).floor();
+                amount = inputPoint - fee - tax;
+              });
             },
           ),
           Text("포인트를 입력하세요", style: fontSmallGrey),

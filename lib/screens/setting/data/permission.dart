@@ -26,10 +26,6 @@ class _PermissionScreenState extends State<PermissionScreen> {
   List basicDatas = List.empty(growable: true);
 
   String? tmDate;
-  final TextStyle _textStyle = TextStyle(
-    color: Colors.black87,
-    fontSize: 16,
-  );
 
   @override
   void initState() {

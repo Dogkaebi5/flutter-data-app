@@ -12,6 +12,13 @@ final inputDecoration = InputDecoration(
   counterText: "",
 );
 
+final greyShadow = BoxShadow(
+  color: Colors.grey.withOpacity(.6),
+  blurRadius: 6,
+  spreadRadius : 1,
+  offset: Offset(2, 4)
+);
+
 final fontBigColorTitle = TextStyle(
   fontWeight: FontWeight.bold,
   fontSize: 24,

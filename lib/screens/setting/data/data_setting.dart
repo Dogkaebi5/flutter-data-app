@@ -17,12 +17,7 @@ class DataScreen extends StatelessWidget {
         decoration: BoxDecoration(
           color: color,
           borderRadius: BorderRadius.circular(20),
-          boxShadow: [BoxShadow(
-              color: Colors.grey.withOpacity(.6),
-              blurRadius: 6,
-              spreadRadius : 1,
-              offset: Offset(2, 4)
-            )],
+          boxShadow: [greyShadow],
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -62,12 +57,7 @@ class DataScreen extends StatelessWidget {
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(20),
-                boxShadow: [BoxShadow(
-                    color: Colors.grey.withOpacity(.6),
-                    blurRadius: 6,
-                    spreadRadius : 1,
-                    offset: Offset(2, 4)
-                  )],
+                boxShadow: [greyShadow],
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

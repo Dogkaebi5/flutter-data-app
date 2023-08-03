@@ -15,7 +15,7 @@ class _AppStartScreenState extends State<AppStartScreen> {
   bool repeatAnimatedState = true;
   setFirstAnimatedState(){
     setState(()=> firstAnimatedState = false);
-    return SizedBox.shrink();
+    return Spacer();
   }  
 
   @override
@@ -30,7 +30,7 @@ class _AppStartScreenState extends State<AppStartScreen> {
             children: [
               AnimatedPositioned(
                 height: size.height,
-                duration: Duration(seconds: 14),
+                duration: Duration(seconds: 16),
                 right: (firstAnimatedState) ? -1000 : (repeatAnimatedState) ? 0 : -999,
                 curve: Curves.linear,
                 onEnd: () => setState(() {
@@ -50,7 +50,7 @@ class _AppStartScreenState extends State<AppStartScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Spacer(),
+                    setFirstAnimatedState(),
                     ElevatedButton(
                       style: btnStyle,
                       onPressed:(){
@@ -67,7 +67,6 @@ class _AppStartScreenState extends State<AppStartScreen> {
                         decoration: TextDecoration.underline),
                       )
                     ),
-                    setFirstAnimatedState()
                   ]
                 ),
               ),

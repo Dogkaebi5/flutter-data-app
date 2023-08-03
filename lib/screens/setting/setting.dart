@@ -66,12 +66,7 @@ class _SettingScreenState extends State<SettingScreen> {
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
-                  boxShadow: [BoxShadow(
-                    color: Colors.grey.withOpacity(.6),
-                    blurRadius: 6,
-                    spreadRadius : 1,
-                    offset: Offset(2, 4)
-                  )],
+                  boxShadow: [greyShadow],
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,

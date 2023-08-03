@@ -58,24 +58,17 @@ class _NotificationScreenState extends State<NotificationScreen> {
                 decoration: BoxDecoration(
                   color: Colors.deepPurple.shade50,
                   borderRadius: BorderRadius.circular(50),
-                  boxShadow: [BoxShadow(
-                    color: Colors.grey.withOpacity(.6),
-                    blurRadius: 6,
-                    spreadRadius : 1,
-                    offset: Offset(2, 4)
-                  ),],
+                  boxShadow: [greyShadow],
                 ),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Icon(
-                      Icons.notifications_on,
+                    Icon(Icons.notifications_on,
                       size: 28,
                       color: isNoticePermit? Colors.deepPurple : Colors.grey,
                     ),
                     SizedBox(width: 12),
-                    Text(
-                      "알림설정",
+                    Text("알림설정",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 18,
@@ -108,9 +101,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                       String id = notifications[i]["id"];
                       List<Map> details = context.read<SettingProvider>().details;
                       for (var detail in details) {
-                        if(detail.containsValue(id)){
-                          break;
-                        }
+                        if(detail.containsValue(id)){ break; }
                         index++;
                       }
                       if (index < details.length) {

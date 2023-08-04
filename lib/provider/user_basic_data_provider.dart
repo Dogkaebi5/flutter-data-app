@@ -7,7 +7,7 @@ class UserBasicData extends ChangeNotifier {
   String _email = "example@example.com";
   
   String? _married, _childHas, _education, _occupation, _income, _residence, _area;
-  String? _marriedDate, _childHasDate, _educationDate, _occupationDate, _incomeDate, _residenceDate;
+  String? _marriedDate, _childHasDate, _educationDate, _occupationDate, _incomeDate, _residenceDate, _areaDate;
   
   // bool _isMarriedPermit = false;
   // bool _isChildHasPermit = false;
@@ -17,12 +17,12 @@ class UserBasicData extends ChangeNotifier {
   // bool _isResidencePermit = false;
   // bool _isAreaPermit = false;
 
-  List _isPermitBasicDatas = List.filled(Questions().basicInfo.length + 2, false);
+  List _isPermitBasicDatas = List.filled(Questions().basicInfo.length, false);
   
   String get nickname => (_nickname == "")?SettingProvider().userName :_nickname;
   String get email => _email;
   List get selected => [ _married, _childHas, _education, _occupation, _income, _residence, _area];
-  List get selectedDate => [_marriedDate, _childHasDate, _educationDate, _occupationDate, _incomeDate, _residenceDate];
+  List get selectedDate => [_marriedDate, _childHasDate, _educationDate, _occupationDate, _incomeDate, _residenceDate, _areaDate];
   List get basicPermissions => _isPermitBasicDatas;
 
 
@@ -72,7 +72,7 @@ class UserBasicData extends ChangeNotifier {
   }
   void setArea(String? value) {
     _area = value;
-    _residenceDate = DateTime.now().toString().split(" ")[0];
+    _areaDate = _residenceDate;
     _isPermitBasicDatas[6] = true;
   }
 
@@ -93,7 +93,8 @@ class UserBasicData extends ChangeNotifier {
     _occupationDate = null;
     _incomeDate = null;
     _residenceDate = null;
+    _area = null;
     
-    _isPermitBasicDatas = List.filled(Questions().basicInfo.length + 2, false);
+    _isPermitBasicDatas = List.filled(Questions().basicInfo.length, false);
   }
 }

@@ -89,8 +89,7 @@ class _BasicDataScreenState extends State<BasicDataScreen> {
                   
                   SizedBox(height: 40,),
                   Text('※ 아래 입력된 정보는 3개월간 수정 불가합니다.',
-                    style: TextStyle(color: Colors.deepPurple.shade400),
-                  ),
+                    style: TextStyle(color: Colors.deepPurple)),
                   SizedBox(height: 40,),
                   
                   for (int i = 0; i < basicQuestions.length-2; i++)
@@ -117,7 +116,7 @@ class _BasicDataScreenState extends State<BasicDataScreen> {
                   ),
 
                   QuestionDropDown(
-                    isEnabled: true, 
+                    isEnabled: dateList[6] == null, 
                     question: basicQuestions[6]["title"], 
                     options: areaOptions, 
                     selected: selecteds[6], 

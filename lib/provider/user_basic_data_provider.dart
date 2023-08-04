@@ -9,13 +9,13 @@ class UserBasicData extends ChangeNotifier {
   String? _married, _childHas, _education, _occupation, _income, _residence, _area;
   String? _marriedDate, _childHasDate, _educationDate, _occupationDate, _incomeDate, _residenceDate, _areaDate;
   
-  // bool _isMarriedPermit = false;
-  // bool _isChildHasPermit = false;
-  // bool _isEducationPermit = false;
-  // bool _isOccupationPermit = false;
-  // bool _isIncomePermit = false;
-  // bool _isResidencePermit = false;
-  // bool _isAreaPermit = false;
+  bool _isMarriedPermit = false;
+  bool _isChildHasPermit = false;
+  bool _isEducationPermit = false;
+  bool _isOccupationPermit = false;
+  bool _isIncomePermit = false;
+  bool _isResidencePermit = false;
+  bool _isAreaPermit = false;
 
   List _isPermitBasicDatas = List.filled(Questions().basicInfo.length, false);
   
@@ -23,12 +23,20 @@ class UserBasicData extends ChangeNotifier {
   String get email => _email;
   List get selected => [ _married, _childHas, _education, _occupation, _income, _residence, _area];
   List get selectedDate => [_marriedDate, _childHasDate, _educationDate, _occupationDate, _incomeDate, _residenceDate, _areaDate];
-  List get basicPermissions => _isPermitBasicDatas;
+  List get basicPermissions => [_isMarriedPermit, _isChildHasPermit, _isEducationPermit, _isOccupationPermit, _isIncomePermit, _isResidencePermit, _isAreaPermit];
 
 
   void setNickname(String nickname){_nickname = nickname; notifyListeners();}
   void setEmail(String email){_email = email; notifyListeners();}
-  void setPermissions(list){_isPermitBasicDatas = List.from(list); notifyListeners();}
+  void setPermissions(permits){
+    _isMarriedPermit = permits[0];
+    _isChildHasPermit = permits[1];
+    _isEducationPermit = permits[2];
+    _isOccupationPermit = permits[3];
+    _isIncomePermit = permits[4];
+    _isResidencePermit = permits[5];
+    _isAreaPermit = permits[6];
+  }
   
   void setData(data){
     if(data[0] != _married){setMarried(data[0]);}
@@ -43,37 +51,37 @@ class UserBasicData extends ChangeNotifier {
   void setMarried(String? value){
     _married = value; 
     _marriedDate = DateTime.now().toString().split(" ")[0]; 
-    _isPermitBasicDatas[0] = true;
+    _isMarriedPermit = true;
   }
   void setChildHas(String? value){
     _childHas = value; 
     _childHasDate = DateTime.now().toString().split(" ")[0];
-    _isPermitBasicDatas[1] = true;
+    _isChildHasPermit = true;
   }
   void setEducation(String? value){
     _education = value; 
     _educationDate = DateTime.now().toString().split(" ")[0];
-    _isPermitBasicDatas[2] = true;
+    _isEducationPermit = true;
   }
   void setOccupation(String? value){
     _occupation = value; 
     _occupationDate = DateTime.now().toString().split(" ")[0];
-    _isPermitBasicDatas[3] = true;
+    _isOccupationPermit = true;
   }
   void setIncome(String? value){
     _income = value; 
     _incomeDate = DateTime.now().toString().split(" ")[0];
-    _isPermitBasicDatas[4] = true;
+    _isIncomePermit = true;
   }
   void setResidence(String? value){
     _residence = value; 
     _residenceDate = DateTime.now().toString().split(" ")[0];
-    _isPermitBasicDatas[5] = true;
+    _isResidencePermit = true;
   }
   void setArea(String? value) {
     _area = value;
     _areaDate = _residenceDate;
-    _isPermitBasicDatas[6] = true;
+    _isAreaPermit = true;
   }
 
   void reset(){
@@ -95,6 +103,12 @@ class UserBasicData extends ChangeNotifier {
     _residenceDate = null;
     _area = null;
     
-    _isPermitBasicDatas = List.filled(Questions().basicInfo.length, false);
+    _isMarriedPermit = false;
+    _isChildHasPermit = false;
+    _isEducationPermit = false;
+    _isOccupationPermit = false;
+    _isIncomePermit = false;
+    _isResidencePermit = false;
+    _isAreaPermit = false;
   }
 }

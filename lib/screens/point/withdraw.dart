@@ -14,8 +14,7 @@ class WithdrawScreen extends StatefulWidget {
 }
 
 class _WithdrawScreenState extends State<WithdrawScreen> {
-  int point = 0;
-  int inputPoint = 0;
+  int? inputPoint = 0;
   int fee = 1000;
   int tax = 0;
   int amount = 0;
@@ -24,11 +23,21 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
   bool isHasAcc = false;
   String? bank;
   String? account;
+  int point = 0;
 
-  withdraw(){
-    context.read<SettingProvider>().pointTest([-inputPoint, fee, tax, amount]);
+  int calculateFee(int? point) => (point != null && point < 10000 ) ? 1000 : 0;
+  int calculateTax(int? point) => (point != null) ? (point * 0.033).floor() : 0;
+  int calculateAmount(int? point) {
+    int val = 0;
+    val = (point != null) ? point - fee - tax : 0;
+    return (val > 0) ? val : 0; 
+  }
+  void withdraw(){
+    context.read<SettingProvider>().pointTest([-inputPoint!, fee, tax, amount]);
     Navigator.pop(context);
   }
+
+
 
   @override
   void initState() {
@@ -45,19 +54,19 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 240, 240, 240),
+      backgroundColor: const Color.fromARGB(255, 240, 240, 240),
       appBar: AppBar(
-        iconTheme: IconThemeData(color: Colors.black87),
-        backgroundColor: Color.fromARGB(255, 240, 240, 240),
-        shadowColor: Color.fromARGB(0, 0, 0, 0),
-        title: Text("출금신청", style: TextStyle(color: Colors.black87,),),
+        iconTheme: const IconThemeData(color: Colors.black87),
+        backgroundColor: const Color.fromARGB(255, 240, 240, 240),
+        shadowColor: const Color.fromARGB(0, 0, 0, 0),
+        title: const Text("출금신청", style: TextStyle(color: Colors.black87,),),
         centerTitle: true,
       ), 
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 28),
         child: Column(
           children: [
-            SizedBox(height: 30),
+            const SizedBox(height: 30),
             InkWell(
               onTap: () async{
                 final List? data = await navPush(context, BankDataScreen());
@@ -69,10 +78,10 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
                   });
                 }
               },
-              child:Container(
+              child: Container(
                 width: 280,
                 height: 60,
-                padding: EdgeInsets.symmetric(horizontal: 20),
+                padding: const EdgeInsets.symmetric(horizontal: 20),
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.grey.shade300),
                   color: Colors.white,
@@ -86,30 +95,27 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("출금계좌 : "),
+                          const Text("출금계좌 : "),
                           Text("$bank  $account",
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.deepPurpleAccent,
                               fontWeight: FontWeight.bold,
                           )),
                         ],
                       )
-                      : Text("출금계좌 등록하기"),
-                    Icon(Icons.arrow_forward_ios,
-                      size: 16,
-                      color: Colors.grey,
-                    ),
+                      : const Text("출금계좌 등록하기"),
+                    const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
                   ]
                 ),
               ),
             ),
-            SizedBox(height: 40),
+            const SizedBox(height: 40),
             TextField(
               textAlign: TextAlign.center,
               keyboardType: TextInputType.number,
               showCursor: false,
-              style: TextStyle(fontSize: 40,),
-              decoration: InputDecoration(
+              style: const TextStyle(fontSize: 40,),
+              decoration: const InputDecoration(
                 counterText: "",
                 border: InputBorder.none,
                 hintText: "0",
@@ -123,59 +129,61 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
               controller: _controller,
               onTap: () => _controller.selection = TextSelection.collapsed(offset: _controller.text.length),
               onChanged: (value) {
-                if (value == "") {
-                  _controller.clear();
-                }else if (int.parse(value) > point) {
-                  setState((){
-                    _controller.setText(point.toString());
-                    inputPoint = int.parse(point.toString());
-                  });
-                }else {
-                  setState(() => inputPoint = int.parse(value));
-                }
                 setState(() {
-                  (inputPoint < 10000) ? fee = 1000 : fee = 0;
-                  tax = (inputPoint * 0.033).floor();
-                  amount = inputPoint - fee - tax;
+                  if (value == ""){
+                    inputPoint = 0;
+                    _controller.clear();
+                  }else {
+                    inputPoint = int.parse(value);
+                    if (inputPoint! > point){
+                      _controller.setText(point.toString());
+                      inputPoint = point;
+                    }
+                  }
+                  fee = calculateFee(inputPoint);
+                  tax = calculateTax(inputPoint);
+                  amount = calculateAmount(inputPoint);
                 });
               },
             ),
-            Text("포인트를 입력하세요", style: fontSmallGrey),
-            SizedBox(height: 4),
+            const Text("포인트를 입력하세요", style: fontSmallGrey),
+            const SizedBox(height: 4),
             Text('보유포인트 : ${point.toString()} P',),
-            SizedBox(height: 48),
+            const SizedBox(height: 48),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [Text('출금 수수료'), Text('${fee.toString()} P')],
+                  children: [
+                    const Text('출금 수수료'), 
+                    Text('${fee.toString()} P')],
                 ),
-                Text("10,000P 이상 신청 시 무료",style: fontSmallGrey),
-                SizedBox(height: 4,),
-                Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [Text('사업소득세(3.3%)'),Text('${tax.toString()} P')],
-                ),
-                Divider(color: Colors.black, thickness: 1,),
-                SizedBox(height: 4),
+                const Text("10,000P 이상 신청 시 무료",style: fontSmallGrey),
+                const SizedBox(height: 4,),
                 Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                  Text('최종 이체 금액',style: fontSmallTitle),
-                  Text(
-                    (amount > 0) ? '${amount.toString()} 원' : "0 원", 
-                    style: fontSmallTitle),
+                    const Text('사업소득세(3.3%)'),
+                    Text('${tax.toString()} P')],
+                ),
+                const Divider(color: Colors.black, thickness: 1,),
+                const SizedBox(height: 4),
+                Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                  const Text('최종 이체 금액',style: fontSmallTitle),
+                  Text('${amount.toString()} 원', style: fontSmallTitle),
                   ],
                 ),
-                SizedBox(height: 5,),
-                Divider(color: Colors.black, thickness: 1,),
+                const SizedBox(height: 5,),
+                const Divider(color: Colors.black, thickness: 1,),
               ],
             ),
-            Spacer(),
+            const Spacer(),
             ElevatedButton(
               style: btnStyle,
               onPressed: (amount > 0 && isHasAcc) ? () => passwordDialog(context, withdraw) : null, 
-              child: Text('출금신청'),
+              child: const Text('출금신청'),
             ),
-            SizedBox(height:40),
+            const SizedBox(height:40),
           ]
         ),
       ),

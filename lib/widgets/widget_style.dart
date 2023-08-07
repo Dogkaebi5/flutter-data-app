@@ -6,7 +6,7 @@ final testBtnStyle = TextStyle(
   color: Colors.grey.shade400, 
   decoration: TextDecoration.underline
 );
-final inputDecoration = InputDecoration(
+const inputDecoration = InputDecoration(
   border: OutlineInputBorder(),
   contentPadding: EdgeInsets.all(12),
   counterText: "",
@@ -24,10 +24,10 @@ final fontBigColorTitle = TextStyle(
   fontSize: 24,
   color: Colors.deepPurple.shade400,
 );
-final fontSmallTitle =  TextStyle(
+const fontSmallTitle =  TextStyle(
   fontWeight: FontWeight.bold,
   fontSize: 16);
-final fontSmallGrey = TextStyle(
+const fontSmallGrey = TextStyle(
   fontSize: 12,
   color: Colors.grey
 );

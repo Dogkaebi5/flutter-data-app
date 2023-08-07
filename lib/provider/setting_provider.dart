@@ -44,10 +44,8 @@ class SettingProvider extends ChangeNotifier {
     _permitTmDate = DateTime.now().toString().split(' ')[0];
     notifyListeners();
   }
-  void changeMobile(String mobileNum){
-    _mobile = mobileNum;
-    notifyListeners();
-  } 
+  void changeMobile(String mobileNum) => _mobile = mobileNum;
+
   void setBank(bank, acc){
     _bankName = bank;
     _bankAccNum = acc;
@@ -63,9 +61,9 @@ class SettingProvider extends ChangeNotifier {
     _details.add(detail);
     notifyListeners();
   }
-  void clearDetail() => _details.clear();
+
   void addNotice(notice) => _notices.add(notice);
-  void clearNotice() => _notices.clear();
+
   void setHasNewNotice(bool a) => _hasNewNotice = a;
   void countNewNotice(bool a) => (a)? _newNoticesCount++ : _newNoticesCount = 0;
 
@@ -152,4 +150,6 @@ class SettingProvider extends ChangeNotifier {
     clearDetail();
     clearNotice();
   }
+  void clearDetail() => _details.clear();
+  void clearNotice() => _notices.clear();
 }

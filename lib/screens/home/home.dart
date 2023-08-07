@@ -23,9 +23,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   List details = List.empty(growable: true);
   int point = 0;
-
   bool hasNewNotice = false;
-
   List<bool> sortSelections = [true, false];
   DateTime signUpDate = DateTime(2023, 1, 1);
   DateTime today = DateTime.now();
@@ -74,7 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    SizedBox(height: 40,),
+                    const SizedBox(height: 40,),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -82,42 +80,33 @@ class _HomeScreenState extends State<HomeScreen> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("My Point", 
-                              style: TextStyle(color: Colors.white, fontSize: 18)),
-                            SizedBox(height: 4,),
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.account_balance_wallet,
+                            const Text("My Point",  style: TextStyle(color: Colors.white, fontSize: 18)),
+                            const SizedBox(height: 4,),
+                            Row(children: [
+                              const Icon(Icons.account_balance_wallet, color: Colors.white, size: 32),
+                              const SizedBox(width: 12,),
+                              Text("$point P", 
+                                style: const TextStyle(
                                   color: Colors.white,
-                                  size: 32,
-                                ),
-                                SizedBox(width: 12,),
-                                Text("$point P", 
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 30))
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 30))
                             ])
                         ]),
                         Container(
                           height: 40,
                           width: 40,
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(100),
+                            borderRadius: BorderRadius.circular(20),
                             color: Colors.white,),
-                          child: Icon(
-                            Icons.analytics,
-                            color: Colors.deepPurple,
-                            size: 28))
+                            child: const Icon(Icons.analytics, color: Colors.deepPurple, size: 28))
                     ]),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     ElevatedButton(
                       onPressed: () => navPush(context, WithdrawScreen()),
-                      child: SizedBox(width: 120, height: 44,
+                      child: const SizedBox(width: 120, height: 44,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
+                          children: [
                             Icon(Icons.toll,), SizedBox(width: 4),
                             Text("출금신청"), SizedBox(width: 8),
                           ],
@@ -141,7 +130,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 child: Column(
                   children: [
-                    SizedBox(height: 28,),
+                    const SizedBox(height: 28,),
                     ToggleButtons(
                       isSelected: sortSelections,
                       onPressed: (index) {
@@ -163,14 +152,14 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 8,),
+                    const SizedBox(height: 8),
                   
                     if(sortSelections[1])
                       Text(
                         '검색기간 : $sortStartDate ~ $sortEndDate', 
                         style: fontSmallGrey
                       ),
-                    SizedBox(height: 12,),
+                    const SizedBox(height: 12,),
                 
                     if(details.isEmpty)
                       Row(children: const[
@@ -233,7 +222,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 80,),
+                    const SizedBox(height: 80,),
                   ]
                 ),
               ),

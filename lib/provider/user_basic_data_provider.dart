@@ -1,4 +1,3 @@
-import 'package:data_project/data/question.dart';
 import 'package:data_project/provider/setting_provider.dart';
 import 'package:flutter/material.dart';
 
@@ -16,8 +15,6 @@ class UserBasicData extends ChangeNotifier {
   bool _isIncomePermit = false;
   bool _isResidencePermit = false;
   bool _isAreaPermit = false;
-
-  List _isPermitBasicDatas = List.filled(Questions().basicInfo.length, false);
   
   String get nickname => (_nickname == "")?SettingProvider().userName :_nickname;
   String get email => _email;

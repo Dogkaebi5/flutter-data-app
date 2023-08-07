@@ -199,8 +199,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             IconButton(icon: const Icon(Icons.close),
-              onPressed: () => Navigator.pop(context)
-            ),
+              onPressed: () => Navigator.pop(context)),
             Padding(
               padding: const EdgeInsets.all(20),
               child: Column(
@@ -213,7 +212,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                   setContent("접수일시", notifications[i]["date"]),
                   const SizedBox(height: 20),
                   setContent("상태", notifications[i]["tmdata"]["state"]),
-                ]),
+              ]),
             ),
           ]
         ),

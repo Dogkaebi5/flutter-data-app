@@ -15,35 +15,35 @@ detailDialog(context, loopInt, newDetails) {
     builder: (BuildContext context) => Dialog.fullscreen(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
+        children: [
           IconButton(
             onPressed: (){
               Navigator.pop(context);
             }, 
-            icon: Icon(Icons.close)
+            icon: const Icon(Icons.close)
           ),
             Padding(
-              padding: EdgeInsets.all(20),
+              padding: const EdgeInsets.all(20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(detailValueList[0], style: fontSmallTitle),
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
                   for (int i = 1; i < 4; i++)
                     createDetailText(tradeDetailTitleTexts[i], detailValueList[i]),
-                  SizedBox(height: 16,),
-                  Divider(color: Colors.black54,),
-                  SizedBox(height: 16,),
+                  const SizedBox(height: 16,),
+                  const Divider(color: Colors.black54,),
+                  const SizedBox(height: 16,),
                   createDetailText(tradeDetailTitleTexts[4], detailValueList[4]),
                   if (detailValueList[2] == "리워드")
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(height: 28,),
+                        const SizedBox(height: 28,),
                         createDetailText(tradeDetailTitleTexts[5], detailValueList[5]),
-                        SizedBox(height: 28,),
+                        const SizedBox(height: 28,),
                         createDetailText(tradeDetailTitleTexts[6], ""),
-                        SizedBox(height: 20,),
+                        const SizedBox(height: 20,),
                         for (int j = 0; j < detailValueList[6].length; j++)
                           Container(
                             margin: const EdgeInsets.only(left: 10),
@@ -55,7 +55,7 @@ detailDialog(context, loopInt, newDetails) {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Padding(
-                          padding: EdgeInsets.all(12),
+                          padding: const EdgeInsets.all(12),
                           child: Column(
                             children: [
                               for (int i = 5; i < 9; i++)
@@ -63,21 +63,21 @@ detailDialog(context, loopInt, newDetails) {
                             ]
                           )
                         ),
-                        SizedBox(height: 10,),
+                        const SizedBox(height: 10,),
                         createDetailText(withDrawDetailTitleTexts[9], ""),
                         Padding(
-                          padding: EdgeInsets.all(12),
+                          padding: const EdgeInsets.all(12),
                           child: 
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(detailValueList[9][0]),
-                              SizedBox(height: 4,),
+                              const SizedBox(height: 4,),
                               Text(detailValueList[9][1]),
                             ],
                           )
                         ),
-                        SizedBox(height: 10,),
+                        const SizedBox(height: 10,),
                         createDetailText(withDrawDetailTitleTexts[10], detailValueList[10]),
                       ],
                     ),

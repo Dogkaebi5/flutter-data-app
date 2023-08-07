@@ -60,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context, ) {
     return Scaffold(
-      backgroundColor: Colors.deepPurple.shade400,
+      backgroundColor: const Color.fromRGBO(126, 87, 194, 1),
       bottomSheet: NavBar(), 
       body:  WillPopScope(
         onWillPop: () => Future(() => false),
@@ -68,7 +68,7 @@ class _HomeScreenState extends State<HomeScreen> {
           child: SingleChildScrollView(
             child: Column(children: [
               Padding(
-                padding: EdgeInsets.symmetric(vertical: 20, horizontal:24),
+                padding: const EdgeInsets.symmetric(vertical: 20, horizontal:24),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
@@ -97,7 +97,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           width: 40,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
-                            color: Colors.white,),
+                            color: const Color.fromRGBO(255, 255, 255, 1),),
                             child: const Icon(Icons.analytics, color: Colors.deepPurple, size: 28))
                     ]),
                     const SizedBox(height: 8),
@@ -121,9 +121,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(20),
                     topRight: Radius.circular(20),),
-                  color: Color.fromARGB(255, 245, 245, 245),
+                  color: const Color.fromARGB(255, 245, 245, 245),
                   boxShadow: [BoxShadow(
-                    color: Colors.black.withOpacity(.6),
+                    color: const Color.fromRGBO(0, 0, 0, 1).withOpacity(.6),
                     blurRadius: 6,
                     spreadRadius : 1,
                   )]
@@ -142,12 +142,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         }else {setOneMonth();}
                       },              
                       children: const [
-                        SizedBox(
-                          width: 120,
+                        SizedBox(width: 120,
                           child: Text("1개월", textAlign: TextAlign.center,)
                         ),
-                        SizedBox(
-                          width: 120,
+                        SizedBox(width: 120,
                           child: Text("직접입력", textAlign: TextAlign.center,)
                         ),
                       ],
@@ -188,7 +186,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ModalRoute.withName('/'),
                             );
                           },
-                          child: Text("/test\nlogout",style: testBtnStyle)
+                          child: const Text("/test\nlogout",style: testBtnStyle)
                         ),
                         TextButton(
                           onPressed: (){
@@ -203,7 +201,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ModalRoute.withName('/'),
                             );
                           },
-                          child: Text("/test\nnewUser", style: testBtnStyle)
+                          child: const Text("/test\nnewUser", style: testBtnStyle)
                         ),
                         TextButton(
                           onPressed: (){setState((){
@@ -211,14 +209,14 @@ class _HomeScreenState extends State<HomeScreen> {
                             point = context.read<SettingProvider>().point;
                             hasNewNotice = context.read<SettingProvider>().hasNewNotice;
                           });},
-                          child: Text("/test\n+10k", style: testBtnStyle)
+                          child: const Text("/test\n+10k", style: testBtnStyle)
                         ),
                         TextButton(
                           onPressed: (){setState((){
                             context.read<SettingProvider>().clearDetail();
                             point = context.read<SettingProvider>().point;
                           });},
-                          child: Text("/test\ndel all", style: testBtnStyle)
+                          child: const Text("/test\ndel all", style: testBtnStyle)
                         ),
                       ],
                     ),

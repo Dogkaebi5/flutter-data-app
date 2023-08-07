@@ -41,11 +41,11 @@ class _TermsScreen extends State<TermsScreen>{
                 children: [
                   InkWell(
                     onTap: () => allCheck(),
-                    child: Text('전체동의',
+                    child: const Text('전체동의',
                       style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold))), 
                   Checkbox(value: checklist[0], onChanged: (val) => allCheck()),
               ]),
-              Divider(thickness: 2),
+              const Divider(thickness: 2),
 
               TermCheckbox(text: "서비스 이용약관 동의", isLink: true, isRequired: true, 
                 isChecked: checklist[1], 
@@ -87,7 +87,7 @@ class _TermsScreen extends State<TermsScreen>{
                     context.read<SettingProvider>().setTmPermission(checklist[3]);
                     navPush(context, SetPasswordScreen());
                   } : null,
-                child: Text("다음"),
+                child: const Text("다음"),
               ),
             ],
           ),

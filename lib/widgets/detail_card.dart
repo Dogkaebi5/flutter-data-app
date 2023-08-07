@@ -23,9 +23,9 @@ class _DetailCardState extends State<DetailCard> {
     return InkWell(
       onTap: widget.onTap,
       child: Card(
-        margin: EdgeInsets.all(1),
+        margin: const EdgeInsets.all(1),
         child: Container(
-          padding: EdgeInsets.all(20),
+          padding: const EdgeInsets.all(20),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -33,8 +33,8 @@ class _DetailCardState extends State<DetailCard> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(widget.title,
-                    style: TextStyle(fontWeight: FontWeight.bold),),
-                  SizedBox(height: 4,),
+                    style: const TextStyle(fontWeight: FontWeight.bold),),
+                  const SizedBox(height: 4,),
                   Text(
                     widget.date.split(' ')[0], 
                     style: fontSmallGrey
@@ -46,8 +46,8 @@ class _DetailCardState extends State<DetailCard> {
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: widget.point.split(' ')[0] == "+"
-                    ? Colors.deepPurple.shade300
-                    : Colors.red.shade300
+                    ? const Color.fromRGBO(149, 117, 205, 1)
+                    : const Color.fromRGBO(229, 115, 115, 1)
                 ),)
           ]),
         ),

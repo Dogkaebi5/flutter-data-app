@@ -23,7 +23,7 @@ class _PermitSwitchState extends State<PermitSwitch> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(widget.title, style: TextStyle(color: Colors.black87, fontSize: 16)),
+        Text(widget.title, style: const TextStyle(color: Colors.black87, fontSize: 16)),
         Switch(
           value: widget.switchValue, 
           onChanged: (widget.hasValue)?(value){

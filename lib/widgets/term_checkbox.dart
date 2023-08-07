@@ -30,7 +30,7 @@ class _TermCheckboxState extends State<TermCheckbox> {
         ?InkWell(
           onTap: ()=> widget.textOnTap,
           child: Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               border: Border(
                 bottom: BorderSide(
                   color: Colors.black,
@@ -38,8 +38,8 @@ class _TermCheckboxState extends State<TermCheckbox> {
             ))),
             child: Text(widget.text)))
         :Text(widget.text),
-        if (widget.isRequired) Text(" (필수)", style: TextStyle(color: Colors.deepPurple)),
-        Spacer(),
+        if (widget.isRequired) const Text(" (필수)", style: TextStyle(color: Colors.deepPurple)),
+        const Spacer(),
         Checkbox(
           value: widget.isChecked, 
           onChanged: (value){

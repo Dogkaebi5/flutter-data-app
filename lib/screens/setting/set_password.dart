@@ -44,17 +44,17 @@ class _SetPasswordScreen extends State<SetPasswordScreen> {
           children: [
             Column(
               children:[
-                SizedBox(height: 224,),
-                Text("새로운 비밀번호", style: fontSmallTitle),
-                SizedBox(height: 8,),
-                Text("숫자 4자리을 입력하세요"),
-                SizedBox(height: 8,),
+                const SizedBox(height: 224,),
+                const Text("새로운 비밀번호", style: fontSmallTitle),
+                const SizedBox(height: 8,),
+                const Text("숫자 4자리을 입력하세요"),
+                const SizedBox(height: 8,),
                 IconButton(
                   onPressed: () => setState(() => _isVisibilityNew = !_isVisibilityNew),
-                  icon: _isVisibilityNew ? Icon(Icons.visibility) : Icon(Icons.visibility_off),
-                  color: _isVisibilityNew ? Colors.purple.shade300 : Colors.grey ,
+                  icon: _isVisibilityNew ? const Icon(Icons.visibility) : const Icon(Icons.visibility_off),
+                  color: _isVisibilityNew ? const Color.fromRGBO(186, 104, 200, 1) : const Color.fromRGBO(158, 158, 158, 1) ,
                 ),
-                SizedBox(height: 20,),
+                const SizedBox(height: 20,),
                 Pinput(
                   defaultPinTheme: defaultPin,
                   focusedPinTheme: focusedPin,
@@ -65,7 +65,7 @@ class _SetPasswordScreen extends State<SetPasswordScreen> {
                   onChanged: (value)=> setState(()=> _newPassword = value),
                   onCompleted: (value){
                     _pageViewController.nextPage(
-                      duration: Duration(milliseconds: 300), 
+                      duration: const Duration(milliseconds: 300), 
                       curve: Curves.linear,
                   );}
             ),],),
@@ -79,24 +79,24 @@ class _SetPasswordScreen extends State<SetPasswordScreen> {
                     child: GestureDetector(
                       onTap: (){ 
                         _pageViewController.previousPage(
-                          duration: Duration(milliseconds: 300), 
+                          duration: const Duration(milliseconds: 300), 
                           curve: Curves.linear,);
                       },
                       child: const Icon(Icons.arrow_back),
                     ),
                   ),
                 ),
-                SizedBox(height: 160,),
-                Text("비밀번호 다시 확인", style: fontSmallTitle),
-                SizedBox(height: 8,),
-                Text("입력한 비밀번호를 다시 입력해주세요"),
-                SizedBox(height: 8,),
+                const SizedBox(height: 160,),
+                const Text("비밀번호 다시 확인", style: fontSmallTitle),
+                const SizedBox(height: 8,),
+                const Text("입력한 비밀번호를 다시 입력해주세요"),
+                const SizedBox(height: 8,),
                 IconButton(
                   onPressed: () => setState(() => _isVisibilityCheck = !_isVisibilityCheck),
-                  icon: _isVisibilityCheck ? Icon(Icons.visibility) : Icon(Icons.visibility_off),
-                  color: _isVisibilityCheck ? Colors.purple.shade300 : Colors.grey ,
+                  icon: _isVisibilityCheck ? const Icon(Icons.visibility) : const Icon(Icons.visibility_off),
+                  color: _isVisibilityCheck ? const Color.fromRGBO(186, 104, 200, 1) : const Color.fromRGBO(158, 158, 158, 1) ,
                 ),
-                SizedBox(height: 20 ,),
+                const SizedBox(height: 20 ,),
                 Pinput(
                   defaultPinTheme: defaultPin,
                   focusedPinTheme: focusedPin,
@@ -121,9 +121,9 @@ class _SetPasswordScreen extends State<SetPasswordScreen> {
                     }
                   }
                 ),
-                SizedBox(height: 20,),
+                const SizedBox(height: 20,),
                 if (isCorrectPassword != null && isCorrectPassword == false)
-                  Text("비밀번호가 일치하지 않습니다", style: TextStyle(color: Colors.red),),
+                  const Text("비밀번호가 일치하지 않습니다", style: TextStyle(color: Colors.red)),
             ],)
         ],),
         ),

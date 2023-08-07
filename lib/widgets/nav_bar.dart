@@ -26,25 +26,25 @@ class _NavBarState extends State<NavBar> {
   Widget build(BuildContext context) {
     return Container(
         height: 60,
-        margin: EdgeInsets.only(bottom: 12, left: 8, right: 8),
+        margin: const EdgeInsets.only(bottom: 12, left: 8, right: 8),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(30),
           boxShadow: [BoxShadow(
-            color: Colors.black.withOpacity(.6),
+            color: const Color.fromRGBO(0, 0, 0, 1).withOpacity(.6),
             blurRadius: 6,
             spreadRadius : 1,
-            offset: Offset(2, 4)
+            offset: const Offset(2, 4)
           ),],
         ),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(30),
           child: BottomNavigationBar(
             items:[
-              BottomNavigationBarItem(icon: Icon(Icons.home), label: "홈"),
+              const BottomNavigationBarItem(icon: Icon(Icons.home), label: "홈"),
               BottomNavigationBarItem(
                 icon: (hasNewNotice) 
                   ?Stack(children: [
-                    Icon(Icons.notifications),
+                    const Icon(Icons.notifications),
                     Positioned(
                       top: 2,
                       right: 2,
@@ -58,15 +58,15 @@ class _NavBarState extends State<NavBar> {
                       ),
                     )
                   ],) 
-                  :Icon(Icons.notifications),
+                  :const Icon(Icons.notifications),
                 label: "알림"
               ),
-              BottomNavigationBarItem(icon: Icon(Icons.settings), label: "설정")
+              const BottomNavigationBarItem(icon: Icon(Icons.settings), label: "설정")
             ],
-          selectedItemColor: Colors.white,
-          backgroundColor: Colors.deepPurple,
+          selectedItemColor: const Color.fromRGBO(255, 255, 255, 1),
+          backgroundColor: const Color.fromRGBO(103, 58, 183, 1),
           currentIndex: currentIndex,
-          unselectedItemColor: Colors.deepPurple.shade200,
+          unselectedItemColor: const Color.fromRGBO(179, 157, 219, 1),
           
           onTap: (index){
             switch(index){

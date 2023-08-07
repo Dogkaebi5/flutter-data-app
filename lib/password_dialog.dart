@@ -11,6 +11,16 @@ passwordDialog(context, callback) {
   bool isPasswordCorrect = true;
   int unCorrectCount = 0;
 
+  Future<bool> checkPassword(String input) async{
+    bool isCorrect = false;
+    PasswordStorage storage = PasswordStorage();
+    String correctPassword = await storage.readPassword();
+    if (input == correctPassword) {
+      isCorrect = true;
+    }
+    return isCorrect;
+  }
+
   return showDialog(
     context: context,
     builder: (context) => StatefulBuilder(
@@ -21,24 +31,23 @@ passwordDialog(context, callback) {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Align(
-                    alignment: Alignment.topLeft,
-                    child: GestureDetector(
-                      onTap: (){Navigator.pop(context);},
-                      child: const Icon(Icons.close),
-                    ),
-                  ),
-              
-              SizedBox(height: 174,),
-              Text("비밀번호", style: fontSmallTitle),
-              SizedBox(height: 8,),
-              Text("비밀번호를 입력하세요"),
-              SizedBox(height: 8,),
+                alignment: Alignment.topLeft,
+                child: GestureDetector(
+                  onTap: (){Navigator.pop(context);},
+                  child: const Icon(Icons.close),
+                ),
+              ),
+              const SizedBox(height: 174,),
+              const Text("비밀번호", style: fontSmallTitle),
+              const SizedBox(height: 8,),
+              const Text("비밀번호를 입력하세요"),
+              const SizedBox(height: 8,),
               IconButton(
                 onPressed: () => setState(() => isVisibility = !isVisibility), 
-                icon: isVisibility ? Icon(Icons.visibility) : Icon(Icons.visibility_off),
-                color: isVisibility ? Colors.purple.shade300 : Colors.grey ,
+                icon: isVisibility ? const Icon(Icons.visibility) : const Icon(Icons.visibility_off),
+                color: isVisibility ? const Color.fromRGBO(186, 104, 200, 1) : const Color.fromRGBO(158, 158, 158, 1) ,
               ),
-              SizedBox(height: 20,),
+              const SizedBox(height: 20,),
               Pinput(
                 defaultPinTheme: defaultPin,
                 focusedPinTheme: focusedPin,
@@ -60,22 +69,20 @@ passwordDialog(context, callback) {
                   }
                 },
               ),
-              SizedBox(height: 12,),
+              const SizedBox(height: 12,),
               if (!isPasswordCorrect)
                 (unCorrectCount < 5)?
                 Text(
                   '비밀번호가 일치하지 않습니다. (${unCorrectCount.toString()}/5)',
-                  style: TextStyle(color: Colors.red),
+                  style: const TextStyle(color: Colors.red),
                 )
-                :Text(
+                :const Text(
                   '비밀번호를 다시 설정해주세요.',
                   style: TextStyle(color: Colors.red),
                 ),
               OutlinedButton(
-                onPressed: (){
-                  forgetPasswordDialog(context);
-                }, 
-                child: Text("비밀번호 찾기")),
+                onPressed: () => forgetPasswordDialog(context),
+                child: const Text("비밀번호 찾기")),
             ],
           ),
         ),
@@ -84,12 +91,3 @@ passwordDialog(context, callback) {
   );
 }
 
-Future<bool> checkPassword(String input) async{
-  bool isCorrect = false;
-  PasswordStorage storage = PasswordStorage();
-  String correctPassword = await storage.readPassword();
-  if (input == correctPassword) {
-    isCorrect = true;
-  }
-  return isCorrect;
-}

@@ -22,8 +22,8 @@ class _QuestionDropDownState extends State<QuestionDropDown> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(bottom: 8),
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      margin: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
         color: (widget.isEnabled)
           ? Colors.deepPurple.shade50
@@ -34,13 +34,13 @@ class _QuestionDropDownState extends State<QuestionDropDown> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(widget.question,
-            style: TextStyle(
+            style: const TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 14,
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(left:8, right:8),
+            padding: const EdgeInsets.only(left:8, right:8),
             child: DropdownButton(
               isExpanded: true,
               value: widget.selected,

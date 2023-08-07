@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
 
 final btnStyle = ElevatedButton.styleFrom(minimumSize: Size(double.infinity, 44));
-final testBtnStyle = TextStyle(
-  color: Colors.grey.shade400, 
+const testBtnStyle = TextStyle(
+  color: Color.fromRGBO(189, 189, 189, 1), 
   decoration: TextDecoration.underline
 );
 const inputDecoration = InputDecoration(
@@ -19,10 +19,10 @@ final greyShadow = BoxShadow(
   offset: Offset(2, 4)
 );
 
-final fontBigColorTitle = TextStyle(
+const fontBigColorTitle = TextStyle(
   fontWeight: FontWeight.bold,
   fontSize: 24,
-  color: Colors.deepPurple.shade400,
+  color: Color.fromRGBO(126, 87, 194, 1),
 );
 const fontSmallTitle =  TextStyle(
   fontWeight: FontWeight.bold,

@@ -15,19 +15,19 @@ class DataPageHeader extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(height: 40),
+        const SizedBox(height: 40),
         Row(
           children: [
-            Icon(icon, color: Colors.deepPurple.shade400, size: 32,),
-            SizedBox(width: 8,),
+            Icon(icon, color: const Color.fromRGBO(126, 87, 194, 1), size: 32,),
+            const SizedBox(width: 8,),
             Text(title,
-              style: TextStyle(
+              style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 24,
-                color: Colors.deepPurple.shade400,
+                color: Color.fromRGBO(126, 87, 194, 1),
             )),
         ],),
-        SizedBox(height: 4,),
+        const SizedBox(height: 4,),
         Text(description),
       ]
     );

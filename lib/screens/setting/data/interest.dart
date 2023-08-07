@@ -48,35 +48,33 @@ class _InterestScreenState extends State<InterestScreen> {
         body: SafeArea(
           child: SingleChildScrollView(
             child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 20, horizontal:24),
+              padding: const EdgeInsets.symmetric(vertical: 20, horizontal:24),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  DataPageHeader(
+                  const DataPageHeader(
                     title: "관심사", 
                     description: "관심사를 최대 3개 선택하세요.\n선택된 정보는 3개월간 수정 불가합니다.", 
                     icon: Icons.interests),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   Container(
-                    padding: EdgeInsets.all(12),
+                    padding: const EdgeInsets.all(12),
                     height: 108,
                     decoration: BoxDecoration(
-                      color: Colors.deepPurple.shade50,
+                      color: const Color.fromRGBO(237, 231, 246, 1),
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: createInterestListText(),
                   ),
                   Container(
-                    margin: EdgeInsets.symmetric(vertical:10),
+                    margin: const EdgeInsets.symmetric(vertical:10),
                     width: double.infinity,
-                    child:
-                      Wrap(
-                        alignment: WrapAlignment.center,
-                        children: [
-                          for(var i = 0; i < interestOptions.length; i++)
-                            createInterstCard(i)
-                        ],
-                      ),
+                    child:Wrap(
+                      alignment: WrapAlignment.center,
+                      children: [
+                        for(var i = 0; i < interestOptions.length; i++)
+                          createInterstCard(i)
+                    ]),
                   ),
                   ElevatedButton(
                     style: btnStyle,
@@ -88,7 +86,7 @@ class _InterestScreenState extends State<InterestScreen> {
                         Navigator.pop(context);
                       }
                     }, 
-                    child: Text('확인 저장')
+                    child: const Text('확인 저장')
                   ),
                 ],
               ),
@@ -107,12 +105,12 @@ class _InterestScreenState extends State<InterestScreen> {
           for(var i = 0; i < selectedCount; i++)
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [Padding(
-                padding: const EdgeInsets.all(2.0),
-                child: Text(newSelecteds[i], 
-                  style: TextStyle(color: Colors.deepPurple,fontSize: 16,),),
-              ),
-              Text('저장 유지기간 : ~ ${selectedDates[i]}',),
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(2.0),
+                  child: Text(newSelecteds[i], style: const TextStyle(color: Colors.deepPurple, fontSize: 16)),
+                ),
+                Text('저장 유지기간 : ~ ${selectedDates[i]}',),
             ],),
         ],
       );

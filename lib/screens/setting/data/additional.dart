@@ -34,6 +34,29 @@ class _AdditionalScreenState extends State<AdditionalScreen> {
   Map originSelecteds = {};
   
   List quests = List.empty(growable: true);
+
+  router(){
+    if(isNewUser){
+      Navigator.pushAndRemoveUntil(
+        context, 
+        MaterialPageRoute(builder: (context) => HomeScreen()), 
+        ModalRoute.withName('/'),
+      );
+    }else{
+      Navigator.pop(context);
+    }
+  }
+  setData(){
+    context.read<NewUserProvider>().notNewUser();
+  }
+
+  createInterestDateText(){
+    if (toggleSelects.isEmpty){return Center(child: Text(""),);
+    }else if (toggleSelects[0]){return Center(child: Text("내용유지 : ~ ${interestDates[0]}"));
+    }else if (toggleSelects[1]){return Center(child: Text("내용유지 : ~ ${interestDates[1]}"));
+    }else if (toggleSelects[2]){return Center(child: Text("내용유지 : ~ ${interestDates[2]}"));
+    }else {return const Text("예상하지 못한 에러");}
+  }
   
   @override
   void initState() {
@@ -65,15 +88,15 @@ class _AdditionalScreenState extends State<AdditionalScreen> {
         body: SafeArea(
           child: SingleChildScrollView(
             child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 20, horizontal:24),
+              padding: const EdgeInsets.symmetric(vertical: 20, horizontal:24),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  DataPageHeader(
+                  const DataPageHeader(
                     title: "추가정보", 
                     description: "정보가 많을 수록 판매될 확률이 높아집니다.\n입력된 정보는 3개월간 수정 불가합니다.", 
                     icon: Icons.library_add),
-                  SizedBox(height: 32,),
+                  const SizedBox(height: 32,),
 
                   (interestCount > 0)
                   ?Column(
@@ -94,15 +117,15 @@ class _AdditionalScreenState extends State<AdditionalScreen> {
                           for (int i = 0; i < interstSelecteds.length; i++)
                             Container(
                               width: 100,
-                              padding: EdgeInsets.all(2),
+                              padding: const EdgeInsets.all(2),
                               child: Text(interstSelecteds[i], 
                                 textAlign: TextAlign.center,
                                 style: fontSmallTitle,
                             )),
                       ]),
-                      SizedBox(height: 12,),
+                      const SizedBox(height: 12,),
                       createInterestDateText(),
-                      SizedBox(height: 40,),
+                      const SizedBox(height: 40,),
 
                       for (int i = 0; i < nowSelectedQuestions.length; i++)
                         QuestionDropDown(
@@ -153,9 +176,9 @@ class _AdditionalScreenState extends State<AdditionalScreen> {
                         default: setData(); router(); break;
                       }
                     }, 
-                    child: Text('확인 저장')
+                    child: const Text('확인 저장')
                   ),
-                  SizedBox(height: 20,),
+                  const SizedBox(height: 20,),
                 ],
               ),
             )
@@ -163,28 +186,5 @@ class _AdditionalScreenState extends State<AdditionalScreen> {
         )
       ),
     );
-  }
-
-  router(){
-    if(isNewUser){
-      Navigator.pushAndRemoveUntil(
-        context, 
-        MaterialPageRoute(builder: (context) => HomeScreen()), 
-        ModalRoute.withName('/'),
-      );
-    }else{
-      Navigator.pop(context);
-    }
-  }
-  setData(){
-    context.read<NewUserProvider>().notNewUser();
-  }
-
-  createInterestDateText(){
-    if (toggleSelects.isEmpty){return Center(child: Text(""),);
-    }else if (toggleSelects[0]){return Center(child:Text("내용유지 : ~ ${interestDates[0]}"));
-    }else if (toggleSelects[1]){return Center(child:Text("내용유지 : ~ ${interestDates[1]}"));
-    }else if (toggleSelects[2]){return Center(child:Text("내용유지 : ~ ${interestDates[2]}"));
-    }else {return Text("예상하지 못한 에러");}
   }
 }

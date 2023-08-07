@@ -43,10 +43,10 @@ class _PermissionScreenState extends State<PermissionScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('데이터 판매설정')),
+      appBar: AppBar(title: const Text('데이터 판매설정')),
       body: SingleChildScrollView(
         child : Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 28),
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 28),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -55,7 +55,7 @@ class _PermissionScreenState extends State<PermissionScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(necessaryDataTexts[i], style: TextStyle(color: Colors.black87, fontSize: 16)),
-                    SizedBox(height: 36, width: 40,
+                    const SizedBox(height: 36, width: 40,
                       child: Text('필수', style: TextStyle(color: Colors.deepPurple)))
                 ]),
               
@@ -72,7 +72,8 @@ class _PermissionScreenState extends State<PermissionScreen> {
                 ),
 
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [Text("— 텔레마케팅 동의",),
+                children: [
+                  const Text("— 텔레마케팅 동의",),
                   Switch(
                     value: isPermitUsers[4],
                     onChanged: (isPermitUsers[3])?(val){
@@ -87,7 +88,7 @@ class _PermissionScreenState extends State<PermissionScreen> {
 
               if(isPermitUsers[4])
                 Text("텔레마케팅 동의일자 : $tmDate", style: fontSmallGrey),
-              SizedBox(height: 8,),
+              const SizedBox(height: 8,),
 
               for (int i = 0; i < basciDataTexts.length; i++)
                 PermitSwitch(

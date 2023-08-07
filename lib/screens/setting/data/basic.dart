@@ -61,36 +61,35 @@ class _BasicDataScreenState extends State<BasicDataScreen> {
         body: SafeArea(
           child: SingleChildScrollView(
             child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 20, horizontal:24),
+              padding: const EdgeInsets.symmetric(vertical: 20, horizontal:24),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  DataPageHeader(
+                  const DataPageHeader(
                     title: "기본정보", 
                     description: "정보가 많을 수록 더 많은 리워드를 받을 수 있습니다.",
                     icon: Icons.info),
-                  SizedBox(height: 28,),
-                  Text("닉네임", style: fontSmallTitle),
-                  SizedBox(height: 6,),
+                  const SizedBox(height: 28,),
+                  const Text("닉네임", style: fontSmallTitle),
+                  const SizedBox(height: 6,),
                   TextFormField(
                     initialValue: userNickname, 
                     maxLength: 15,
                     decoration: inputDecoration,
                     onChanged: (value) => userNickname = value,
                   ),
-                  SizedBox(height: 20,),
-                  Text("이메일", style: fontSmallTitle),
-                  SizedBox(height: 6,),
+                  const SizedBox(height: 20,),
+                  const Text("이메일", style: fontSmallTitle),
+                  const SizedBox(height: 6,),
                   TextFormField(
                     initialValue: userEmail, 
                     decoration: inputDecoration,
                     onChanged: (value) => userEmail = value,
                   ),
                   
-                  SizedBox(height: 40,),
-                  Text('※ 아래 입력된 정보는 3개월간 수정 불가합니다.',
-                    style: TextStyle(color: Colors.deepPurple)),
-                  SizedBox(height: 40,),
+                  const SizedBox(height: 40,),
+                  const Text('※ 아래 입력된 정보는 3개월간 수정 불가합니다.', style: TextStyle(color: Colors.deepPurple)),
+                  const SizedBox(height: 40,),
                   
                   for (int i = 0; i < basicQuestions.length-2; i++)
                     QuestionDropDown(
@@ -127,10 +126,12 @@ class _BasicDataScreenState extends State<BasicDataScreen> {
                     }
                   ),
                   
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   ElevatedButton(
                     style: btnStyle,
                     onPressed: (){
+                      userData.setNickname(userNickname);
+                      userData.setEmail(userEmail);
                       userData.setData(selecteds);
                       if(isNewUser){
                         navPush(context, InterestScreen());
@@ -138,7 +139,7 @@ class _BasicDataScreenState extends State<BasicDataScreen> {
                         Navigator.pop(context);
                       }
                     }, 
-                    child: Text('확인 저장')
+                    child: const Text('확인 저장')
                   ),
                 ],
               ),

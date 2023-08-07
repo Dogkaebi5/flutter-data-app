@@ -21,29 +21,27 @@ class _SettingScreenState extends State<SettingScreen> {
   bool isMarketNotice = false;
   String mobile = "";
 
-  @override
-  void initState(){
-    super.initState();
-    setState(() {
-      isServiceNotice = context.read<SettingProvider>().isNotice[0];
-      isMarketNotice = context.read<SettingProvider>().isNotice[1];
-      mobile = context.read<SettingProvider>().mobile;
-    });
+  void changeServiceNoticePermit(){
+    setState(() => isServiceNotice = !isServiceNotice);
+    context.read<SettingProvider>().setNoticeService(isServiceNotice);
   }
-
-  moveToData(){
-    Navigator.push(
-      context,
+  void changeMarketingNoticePermit(){
+    setState(() => isMarketNotice = !isMarketNotice);
+    context.read<SettingProvider>().setNoticeMarket(isMarketNotice);
+  }
+  void moveToData(){
+    Navigator.push(context,
       MaterialPageRoute(builder: (context) => const DataScreen()),
     );
   }
-  moveToSetPassword(){
+  void moveToSetPassword(){
     nav() => Navigator.push(context,
       MaterialPageRoute(builder: (context) => const SetPasswordScreen()));
     passwordDialog(context, nav);
   }
-  moveToTextWebview(){navPush(context, Webview());}
-  setLinkCard(String title, navigator, String? infoText){
+  void moveToTextWebview(){navPush(context, Webview());}
+  
+  InkWell setLinkCard(String title, navigator, String? infoText){
     return InkWell(
       onTap: () => navigator(),
       child: Container(
@@ -72,31 +70,28 @@ class _SettingScreenState extends State<SettingScreen> {
           children: [
             InkWell(child: Text(title, style: fontSmallTitle),
               onTap: () => setState((){
-                isOn = !isOn;
-                callback();
+                isOn = !isOn; callback();
               }),
             ),
             Switch(
               value: isOn, 
               onChanged: (value) => setState((){
-                isOn = value;
-                callback();
+                isOn = value; callback();
               }),
             )
-          ],
-        );
-      }
-    );
+        ]);
+    });
   }
-  void changeServiceNoticePermit(){
-    setState(() => isServiceNotice = !isServiceNotice);
-    context.read<SettingProvider>().setNoticeService(isServiceNotice);
+  
+  @override
+  void initState(){
+    super.initState();
+    setState(() {
+      isServiceNotice = context.read<SettingProvider>().isNotice[0];
+      isMarketNotice = context.read<SettingProvider>().isNotice[1];
+      mobile = context.read<SettingProvider>().mobile;
+    });
   }
-  void changeMarketingNoticePermit(){
-    setState(() => isMarketNotice = !isMarketNotice);
-    context.read<SettingProvider>().setNoticeMarket(isMarketNotice);
-  }
-
 
   @override
   Widget build(BuildContext context) {
@@ -189,10 +184,10 @@ class _SettingScreenState extends State<SettingScreen> {
                 ],
               ),
             ),
-            SizedBox(height: 12,),
+            const SizedBox(height: 12,),
             Center(child: OutlinedButton(onPressed: (){
               deleteUserDialog(context);
-            }, child: Text('회원탈퇴')))
+            }, child: const Text('회원탈퇴')))
           ],
         ),
       ),

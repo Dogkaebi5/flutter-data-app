@@ -43,18 +43,18 @@ class _NotificationScreenState extends State<NotificationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 245, 245, 245),
-      appBar: AppBar(title: Text("알림")),
+      backgroundColor: const Color.fromARGB(255, 245, 245, 245),
+      appBar: AppBar(title: const Text("알림")),
       body: SingleChildScrollView(
         child: Column(
           children: [
             GestureDetector(
               onTap: () => setIsNotice(),
               child: AnimatedContainer(
-                duration: Duration(milliseconds: 300),
-                margin: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
+                duration: const Duration(milliseconds: 300),
+                margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 40),
                 padding: EdgeInsets.symmetric(horizontal: isNoticePermit? 20 : 40),
-                height: isNoticePermit ? 40 : 100,
+                height: isNoticePermit ? 60 : 100,
                 decoration: BoxDecoration(
                   color: Colors.deepPurple.shade50,
                   borderRadius: BorderRadius.circular(50),
@@ -67,7 +67,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                       size: 28,
                       color: isNoticePermit? Colors.deepPurple : Colors.grey,
                     ),
-                    SizedBox(width: 12),
+                    const SizedBox(width: 12),
                     Text("알림설정",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
@@ -75,7 +75,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                         color: isNoticePermit? Colors.black87 : Colors.black54
                       ),
                     ),
-                    Spacer(),
+                    const Spacer(),
                     Switch(
                       value: isNoticePermit, 
                       onChanged: (value) => setIsNotice()
@@ -87,7 +87,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
             if (notifications.isEmpty)
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-                child: Align(
+                child: const Align(
                   alignment: Alignment.topLeft,
                   child: Text("알림이 없습니다.")))
             else
@@ -109,8 +109,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
                       }else {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
-                            content: Text("상세내역을 찾지 못했습니다."),
-                            duration: Duration(seconds: 3), 
+                            content: const Text("상세내역을 찾지 못했습니다."),
+                            duration: const Duration(seconds: 3), 
                             action: SnackBarAction(
                               label: 'Close',
                               onPressed: (){},
@@ -121,29 +121,29 @@ class _NotificationScreenState extends State<NotificationScreen> {
                     }
                   },
                   child: Card(
-                    margin: EdgeInsets.all(1),
+                    margin: const EdgeInsets.all(1),
                     child: Stack(
                       children:[Container(
                         width: double.infinity,
-                        padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               notifications[i]['title'], 
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                              style: const  TextStyle(fontWeight: FontWeight.bold),
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.justify,
                               maxLines: 1,
                             ),
-                            SizedBox(height: 4,),
+                            const SizedBox(height: 4,),
                             Text(
                               notifications[i]['content'], 
                               overflow: TextOverflow.clip,
                               textAlign: TextAlign.justify,
                               maxLines: 2,
                             ),
-                            SizedBox(height: 4,),
+                            const SizedBox(height: 4,),
                             Text(
                               notifications[i]['date'],
                               style: fontSmallGrey,
@@ -181,60 +181,44 @@ class _NotificationScreenState extends State<NotificationScreen> {
       )));
     }else {
       context.read<SettingProvider>().countNewNotice(false);
-      return SizedBox.shrink();
+      return const SizedBox.shrink();
     }
   }
 
   notificationDialog(int i) {
+    Row setContent(String title, String content){
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [Text(title),Text(content)]
+      );
+    }
     showDialog(
       context: context,
       builder: (BuildContext context) => Dialog.fullscreen(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            IconButton(
-              onPressed: (){
-                Navigator.pop(context);
-              }, 
-              icon: Icon(Icons.close)
+          children: [
+            IconButton(icon: const Icon(Icons.close),
+              onPressed: () => Navigator.pop(context)
             ),
             Padding(
-              padding: EdgeInsets.all(20),
+              padding: const EdgeInsets.all(20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('텔레마케팅 데이터 판매', style: fontSmallTitle),
-                  SizedBox(height: 15),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('구매자'),
-                      Text(notifications[i]["tmdata"]["buyer"]),
-                    ],),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('연락처'),
-                      Text(notifications[i]["tmdata"]["cotact"]),
-                    ],),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('접수일시'),
-                      Text(notifications[i]["date"]),
-                    ],),
-                  SizedBox(height: 20,),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('상태'),
-                      Text(notifications[i]["tmdata"]["state"]),
-                    ],),
+                  const Text('텔레마케팅 데이터 판매', style: fontSmallTitle),
+                  const SizedBox(height: 15),
+                  setContent("구매자", notifications[i]["tmdata"]["buyer"]),
+                  setContent("연락처", notifications[i]["tmdata"]["cotact"]),
+                  setContent("접수일시", notifications[i]["date"]),
+                  const SizedBox(height: 20),
+                  setContent("상태", notifications[i]["tmdata"]["state"]),
                 ]),
             ),
           ]
         ),
       ),
     );
+    
   }
 }

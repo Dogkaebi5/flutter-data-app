@@ -1,3 +1,4 @@
+import 'package:data_project/app.dart';
 import 'package:data_project/firebase_options.dart';
 import 'package:data_project/provider/new_user_provider.dart';
 import 'package:data_project/provider/setting_provider.dart';
@@ -30,7 +31,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'DayPlus',
       theme: ThemeData(primarySwatch: Colors.deepPurple),
-      home: AuthRouter(),
+      home: App()
     );
   }
 }

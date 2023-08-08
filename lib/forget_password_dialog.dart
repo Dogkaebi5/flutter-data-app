@@ -13,26 +13,24 @@ forgetPasswordDialog(context) {
           children: [
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                IconButton(
-                  onPressed: (){Navigator.pop(context);}, 
-                  icon: Icon(Icons.close),
-                ),
-              ],
-            ),
-            SizedBox(height: 160,),
-            Text("비밀번호 찾기", style: fontSmallTitle),
-            SizedBox(height: 28,),
-            Text("본인인증으로 비밀번호를 다시 설정하세요"),
-            SizedBox(height: 120,),
+              children: [IconButton(
+                onPressed: (){Navigator.pop(context);}, 
+                icon: const Icon(Icons.close),
+              ),
+            ]),
+            const SizedBox(height: 160,),
+            const Text("비밀번호 찾기", style: fontSmallTitle),
+            const SizedBox(height: 28,),
+            const Text("본인인증으로 비밀번호를 다시 설정하세요"),
+            const SizedBox(height: 120,),
 
             Container(
-              margin: EdgeInsets.only(left: 60, right: 60),
+              margin: const EdgeInsets.only(left: 60, right: 60),
               width: double.infinity,
               height: 40, 
               child: ElevatedButton(
                 onPressed: () => navPush(context, SetPasswordScreen()),
-                child: Text('본인인증'), 
+                child: const Text('본인인증'), 
               )
             ),
           ],

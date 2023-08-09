@@ -14,6 +14,7 @@ class ProfileController extends GetxController{
       UserModel? userModel = await FirebaseUserRepository.findUserByUid(firebaseUser.uid);
       if (userModel != null){
         originalUserProfile = userModel;
+        FirebaseUserRepository.updateLastLoginDate(userModel.docId, DateTime.now());
       } else {
         originalUserProfile = UserModel(
           uid: firebaseUser.uid, 

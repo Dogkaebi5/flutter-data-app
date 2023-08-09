@@ -16,6 +16,10 @@ class FirebaseUserRepository {
     }else{
       return UserModel.fromJson(data.docs[0].data(), data.docs[0].id);
     }
-
+  }
+  
+  static void updateLastLoginDate(String? docId, DateTime time){
+    CollectionReference users = FirebaseFirestore.instance.collection("users");
+    users.doc(docId).update({"last_login_time": time});
   }
 }

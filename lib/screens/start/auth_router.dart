@@ -1,3 +1,4 @@
+import 'package:data_project/ctrl/profile_controller.dart';
 import 'package:data_project/provider/new_user_provider.dart';
 import 'package:data_project/screens/home/home.dart';
 import 'package:data_project/screens/start/terms.dart';
@@ -19,6 +20,7 @@ class _AuthRouterState extends State<AuthRouter> {
     return StreamBuilder(
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (context, snapshot) {
+        ProfileController().to.authStateChanges(snapshot.data);
         if(!snapshot.hasData){
           return AppStartScreen();
         }else if(context.read<NewUserProvider>().isNewUser){

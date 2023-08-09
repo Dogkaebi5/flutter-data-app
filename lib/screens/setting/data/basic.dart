@@ -6,6 +6,7 @@ import 'package:data_project/widgets/data_pages_header.dart';
 import 'package:data_project/widgets/question_dropdown.dart';
 import 'package:data_project/widgets/widget_style.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 class BasicDataScreen extends StatefulWidget {
@@ -29,6 +30,8 @@ class _BasicDataScreenState extends State<BasicDataScreen> {
   Map residenceMap = Questions().region;
   List residenceOptions = Questions().region.keys.toList();
   List<String?> areaOptions = List.empty(growable: true);
+
+  bool isBtnEnabled = true;
 
   UserBasicData userData = UserBasicData();
   
@@ -73,10 +76,17 @@ class _BasicDataScreenState extends State<BasicDataScreen> {
                   const Text("닉네임", style: fontSmallTitle),
                   const SizedBox(height: 6,),
                   TextFormField(
-                    initialValue: userNickname, 
+                    initialValue: userNickname,
                     maxLength: 15,
                     decoration: inputDecoration,
-                    onChanged: (value) => userNickname = value,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.deny(RegExp('[\\\\!@#%\\^\\*\\&()\\-\\+_=\$`~\\[\\]{};:\\\'",.<>/?\\s]'))],
+                    onChanged: (value) {
+                      setState(() {
+                        userNickname = value;
+                        isBtnEnabled = (value != "") ? true : false;
+                      });
+                    },
                   ),
                   const SizedBox(height: 20,),
                   const Text("이메일", style: fontSmallTitle),
@@ -84,7 +94,12 @@ class _BasicDataScreenState extends State<BasicDataScreen> {
                   TextFormField(
                     initialValue: userEmail, 
                     decoration: inputDecoration,
-                    onChanged: (value) => userEmail = value,
+                    onChanged: (value){
+                      setState(() {
+                        userEmail = value;
+                        isBtnEnabled = (value != "") ? true : false;
+                      });
+                    }
                   ),
                   
                   const SizedBox(height: 40,),
@@ -129,7 +144,7 @@ class _BasicDataScreenState extends State<BasicDataScreen> {
                   const SizedBox(height: 20),
                   ElevatedButton(
                     style: btnStyle,
-                    onPressed: (){
+                    onPressed: (isBtnEnabled)?(){
                       userData.setNickname(userNickname);
                       userData.setEmail(userEmail);
                       userData.setData(selecteds);
@@ -138,7 +153,7 @@ class _BasicDataScreenState extends State<BasicDataScreen> {
                       }else{
                         Navigator.pop(context);
                       }
-                    }, 
+                    }: null, 
                     child: const Text('확인 저장')
                   ),
                 ],

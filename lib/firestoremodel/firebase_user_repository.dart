@@ -1,4 +1,4 @@
-import 'package:data_project/ctrl/user_model.dart';
+import 'package:data_project/firestoremodel/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class FirebaseUserRepository {
@@ -21,5 +21,6 @@ class FirebaseUserRepository {
   static void updateLastLoginDate(String? docId, DateTime time){
     CollectionReference users = FirebaseFirestore.instance.collection("users");
     users.doc(docId).update({"last_login_time": time});
+    users.doc(docId).update({"login_log": FieldValue.arrayUnion([time])});
   }
 }

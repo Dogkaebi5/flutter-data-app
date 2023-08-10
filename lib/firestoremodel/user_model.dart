@@ -6,6 +6,7 @@ class UserModel {
   String email;
   final DateTime? createdTime;
   DateTime? lastLoginTime;
+  List? loginLog;
 
   UserModel({
     this.uid,
@@ -15,6 +16,7 @@ class UserModel {
     this.email = "example@example.com",
     this.createdTime,
     this.lastLoginTime,
+    this.loginLog
   });
 
   UserModel.clone(UserModel user)
@@ -26,25 +28,28 @@ class UserModel {
       email: user.email,
       createdTime: user.createdTime,
       lastLoginTime: user.lastLoginTime,
+      loginLog: user.loginLog
     );
 
-  UserModel.fromJson(json, String docId)
-    : uid = json["uid"] as String,
-      docId = docId,
-      name = json["name"] as String,
-      mobile = json["mobile"] as String,
-      email = json["email"] as String,
+  UserModel.fromJson(json, String doc)
+    : uid = json["uid"],
+      docId = doc,
+      name = json["name"],
+      mobile = json["mobile"],
+      email = json["email"],
       createdTime = json["created_time"].toDate(),
-      lastLoginTime = json["last_login_time"].toDate();
+      lastLoginTime = json["last_login_time"].toDate(),
+      loginLog = json["login_log"];
 
   Map <String, dynamic>toMap(){
     return {
-      "uid": this.uid, 
-      "name": this.name,
-      "email": this.email,
-      "mobile": this.mobile,
-      "created_time": this.createdTime,
-      "last_login_time": this.lastLoginTime,
+      "uid": uid, 
+      "name": name,
+      "email": email,
+      "mobile": mobile,
+      "created_time": createdTime,
+      "last_login_time": lastLoginTime,
+      "login_log": loginLog
     };
   }
 }

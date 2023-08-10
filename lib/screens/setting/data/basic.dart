@@ -1,3 +1,4 @@
+import 'package:data_project/firestoremodel/profile_controller.dart';
 import 'package:data_project/data/question.dart';
 import 'package:data_project/provider/new_user_provider.dart';
 import 'package:data_project/provider/user_basic_data_provider.dart';
@@ -7,6 +8,7 @@ import 'package:data_project/widgets/question_dropdown.dart';
 import 'package:data_project/widgets/widget_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 class BasicDataScreen extends StatefulWidget {
@@ -34,8 +36,9 @@ class _BasicDataScreenState extends State<BasicDataScreen> {
   bool isBtnEnabled = true;
 
   UserBasicData userData = UserBasicData();
-  
   setDataState(origin, newVal) => setState(()=> origin = newVal);
+
+  final ProfileController contorller = Get.put(ProfileController());
 
   @override
   void initState(){
@@ -43,8 +46,8 @@ class _BasicDataScreenState extends State<BasicDataScreen> {
     setState(() {
       userData = context.read<UserBasicData>();
       isNewUser = context.read<NewUserProvider>().isNewUser;
-      userNickname = userData.nickname;
-      userEmail = userData.email;
+      userNickname = userData.nickname ?? contorller.myProfile().name;
+      userEmail = userData.email ?? contorller.myProfile().email;
       selecteds = userData.selected;
       area = selecteds[6];
       dateList = userData.selectedDate;
@@ -57,7 +60,8 @@ class _BasicDataScreenState extends State<BasicDataScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
+    return 
+    WillPopScope(
       onWillPop: () => Future(() => true),
       // => Future(() => false), 
       child: Scaffold(

@@ -1,9 +1,8 @@
-import 'package:data_project/provider/setting_provider.dart';
 import 'package:flutter/material.dart';
 
 class UserBasicData extends ChangeNotifier {
-  String? _nickname = "";
-  String? _email = "example@example.com";
+  String? _nickname;
+  String? _email;
   
   String? _married, _childHas, _education, _occupation, _income, _residence, _area;
   String? _marriedDate, _childHasDate, _educationDate, _occupationDate, _incomeDate, _residenceDate, _areaDate;
@@ -16,8 +15,8 @@ class UserBasicData extends ChangeNotifier {
   bool _isResidencePermit = false;
   bool _isAreaPermit = false;
   
-  String get nickname => (_nickname == "")?SettingProvider().userName :_nickname;
-  String get email => _email?? "example@example.com";
+  String? get nickname => _nickname;
+  String? get email => _email;
   List get selected => [ _married, _childHas, _education, _occupation, _income, _residence, _area];
   List get selectedDate => [_marriedDate, _childHasDate, _educationDate, _occupationDate, _incomeDate, _residenceDate, _areaDate];
   List get basicPermissions => [_isMarriedPermit, _isChildHasPermit, _isEducationPermit, _isOccupationPermit, _isIncomePermit, _isResidencePermit, _isAreaPermit];

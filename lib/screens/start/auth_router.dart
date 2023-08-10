@@ -1,4 +1,4 @@
-import 'package:data_project/ctrl/profile_controller.dart';
+import 'package:data_project/firestoremodel/profile_controller.dart';
 import 'package:data_project/provider/new_user_provider.dart';
 import 'package:data_project/screens/home/home.dart';
 import 'package:data_project/screens/start/terms.dart';

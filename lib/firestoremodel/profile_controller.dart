@@ -73,21 +73,32 @@ class UserDataController extends GetxController{
   setNickname(String? nickname){
     if (nickname != null && nickname != ""){
       FirebaseUserRepository.updateNickname(originalUserProfile.docId, nickname);
+      originalUserProfile.nickname = nickname;
+      myProfile(UserModel.clone(originalUserProfile));
     }
   }
   setEmail(String? email){
     if (email != null && email != ""){
-      FirebaseUserRepository.updateNickname(originalUserProfile.docId, email);
+      FirebaseUserRepository.updateEmail(originalUserProfile.docId, email);
+      originalUserProfile.email = email;
+      myProfile(UserModel.clone(originalUserProfile));
     }
   }
 
 
-  setBasicData(List basicData)async{
-    for(int i = 0; i < basicData.length; i++) {
-      if(basicData[i] != null && basicData[i] != ""){
+  setBasicData(List basicData, List dates)async{
+    bool isUpdated = false;
+    for(int i = 0; i < basicData.length; i++){
+      if(basicData[i] != null && dates[i] == null){
         String question = basicQuestions[i];
         FirebaseUserRepository.updateBasicData(originalUserProfile.docId, question, basicData[i], DateTime.now());
+        isUpdated = true;
       }
+    }
+    if(isUpdated){
+      UserModel? userModel = await FirebaseUserRepository.findUserByUid(originalUserProfile.uid!);
+      originalUserProfile = userModel!;
+      myProfile(UserModel.clone(originalUserProfile));
     }
   }
 }

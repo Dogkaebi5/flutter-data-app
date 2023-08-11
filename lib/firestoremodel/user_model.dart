@@ -6,8 +6,8 @@ class BasicData{
     bool isPermit);
   BasicData.fromJson(json) : 
     selected = json["selected"],
-    selectedDate = json["selectedDate"].toDate(),
-    isPermit = json["isPermit"].toBoolean();
+    selectedDate = (json["selectedDate"] != null)? json["selectedDate"].toDate(): null,
+    isPermit = (json["isPermit"]== "true")?true:false;
   
   Map<String, dynamic> basicToMap(){
     return {

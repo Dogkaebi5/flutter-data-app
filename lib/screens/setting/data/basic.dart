@@ -29,8 +29,7 @@ class _BasicDataScreenState extends State<BasicDataScreen> {
   late bool isNewUser;
   String? userNickname, userEmail;
   BasicData? married, children, education, occupation, income, residence, area;
-  String? residenceSelected, areaSelected;
-  String? tempString;
+  String? residenceSelected;
   
   List<String?> selecteds = List.empty(growable: true);
   List dateList = List.empty(growable: true);
@@ -38,30 +37,32 @@ class _BasicDataScreenState extends State<BasicDataScreen> {
   bool isBtnEnabled = true;
   // UserBasicData userData = UserBasicData();
   setDataState(origin, newVal) => setState(()=> origin = newVal);
-  late UserModel userData;
+  // late UserModel userData;
 
   @override
   void initState(){
     super.initState();
     setState(() {
-      userData = contorller.myProfile();
+      print("test1: ${contorller.myProfile().nickname}");
+      print("test2: ${contorller.myProfile().email}");
+      print("test3: ${contorller.myProfile().married?.selected}");
+      // userData = contorller.myProfile();
       // userData = context.read<UserBasicData>();
-      isNewUser = (userData.password == null)? true: false;
-      userNickname = userData.nickname ?? userData.name;
-      userEmail = userData.email ?? userData.gmail;
-      married = userData.married;
-      children = userData.children;
-      education = userData.education;
-      occupation = userData.occupation;
-      income = userData.income;
-      residence = userData.residence;
-      area = userData.area;
+      isNewUser = (contorller.myProfile().password == null)? true: false;
+      userNickname = contorller.myProfile().nickname ?? contorller.myProfile().name;
+      userEmail = contorller.myProfile().email ?? contorller.myProfile().gmail;
+      married = contorller.myProfile().married;
+      children = contorller.myProfile().children;
+      education = contorller.myProfile().education;
+      occupation = contorller.myProfile().occupation;
+      income = contorller.myProfile().income;
+      residence = contorller.myProfile().residence;
+      area = contorller.myProfile().area;
       
       selecteds = [married?.selected, children?.selected, education?.selected, occupation?.selected, income?.selected, residence?.selected, area?.selected];
       dateList = [married?.selectedDate, children?.selectedDate, education?.selectedDate, occupation?.selectedDate, income?.selectedDate, residence?.selectedDate, area?.selectedDate];
 
-      areaSelected = userData.area?.selected;
-      residenceSelected = userData.residence?.selected;
+      residenceSelected = contorller.myProfile().residence?.selected;
       // dateList = userData.selectedDate;
       if(residenceSelected != null){
         areaOptions = residenceMap[residenceSelected];
@@ -142,9 +143,6 @@ class _BasicDataScreenState extends State<BasicDataScreen> {
                         residenceSelected = value;
                         selecteds[6] = null;
                         areaOptions = residenceMap[residenceSelected];
-                        print("test1: $value");
-                        print("test2: ${selecteds[6]}");
-                        print("test3: $areaOptions");
                     });}
                   ),
 
@@ -166,7 +164,7 @@ class _BasicDataScreenState extends State<BasicDataScreen> {
                     onPressed: (isBtnEnabled)?(){
                       contorller.setNickname(userNickname);
                       contorller.setEmail(userEmail);
-                      contorller.setBasicData(selecteds);
+                      contorller.setBasicData(selecteds, dateList);
                       if(isNewUser){
                         navPush(context, InterestScreen());
                       }else{

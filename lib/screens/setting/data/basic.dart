@@ -1,7 +1,8 @@
 import 'package:data_project/firestoremodel/profile_controller.dart';
 import 'package:data_project/data/question.dart';
-import 'package:data_project/provider/new_user_provider.dart';
-import 'package:data_project/provider/user_basic_data_provider.dart';
+import 'package:data_project/firestoremodel/user_model.dart';
+// import 'package:data_project/provider/new_user_provider.dart';
+// import 'package:data_project/provider/user_basic_data_provider.dart';
 import 'package:data_project/screens/setting/data/interest.dart';
 import 'package:data_project/widgets/data_pages_header.dart';
 import 'package:data_project/widgets/question_dropdown.dart';
@@ -9,7 +10,7 @@ import 'package:data_project/widgets/widget_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
+// import 'package:provider/provider.dart';
 
 class BasicDataScreen extends StatefulWidget {
   const BasicDataScreen({super.key});
@@ -19,40 +20,51 @@ class BasicDataScreen extends StatefulWidget {
 }
 
 class _BasicDataScreenState extends State<BasicDataScreen> {
-  late bool isNewUser;
-  String? userNickname, userEmail;
-  String? residence;
-  String? area;
-  String? tempString;
-  
-  List selecteds = List.empty(growable: true);
-  List dateList = List.empty(growable: true);
-
+  final UserDataController contorller = Get.put(UserDataController());
   List basicQuestions = Questions().basicInfo;
   Map residenceMap = Questions().region;
   List residenceOptions = Questions().region.keys.toList();
   List<String?> areaOptions = List.empty(growable: true);
 
+  late bool isNewUser;
+  String? userNickname, userEmail;
+  BasicData? married, children, education, occupation, income, residence, area;
+  String? residenceSelected, areaSelected;
+  String? tempString;
+  
+  List<String?> selecteds = List.empty(growable: true);
+  List dateList = List.empty(growable: true);
+  
   bool isBtnEnabled = true;
-
-  UserBasicData userData = UserBasicData();
+  // UserBasicData userData = UserBasicData();
   setDataState(origin, newVal) => setState(()=> origin = newVal);
-
-  final ProfileController contorller = Get.put(ProfileController());
+  late UserModel userData;
 
   @override
   void initState(){
     super.initState();
     setState(() {
-      userData = context.read<UserBasicData>();
-      isNewUser = context.read<NewUserProvider>().isNewUser;
-      userNickname = userData.nickname ?? contorller.myProfile().name;
-      userEmail = userData.email ?? contorller.myProfile().email;
-      selecteds = userData.selected;
-      area = selecteds[6];
-      dateList = userData.selectedDate;
-      if(selecteds[5] != null){
-        areaOptions = residenceMap[selecteds[5]];
+      userData = contorller.myProfile();
+      // userData = context.read<UserBasicData>();
+      isNewUser = (userData.password == null)? true: false;
+      userNickname = userData.nickname ?? userData.name;
+      userEmail = userData.email ?? userData.gmail;
+      married = userData.married;
+      children = userData.children;
+      education = userData.education;
+      occupation = userData.occupation;
+      income = userData.income;
+      residence = userData.residence;
+      area = userData.area;
+      
+      selecteds = [married?.selected, children?.selected, education?.selected, occupation?.selected, income?.selected, residence?.selected, area?.selected];
+      dateList = [married?.selectedDate, children?.selectedDate, education?.selectedDate, occupation?.selectedDate, income?.selectedDate, residence?.selectedDate, area?.selectedDate];
+
+      areaSelected = userData.area?.selected;
+      residenceSelected = userData.residence?.selected;
+      // dateList = userData.selectedDate;
+      if(residenceSelected != null){
+        areaOptions = residenceMap[residenceSelected];
       }
       //temporary reader
     });
@@ -127,9 +139,12 @@ class _BasicDataScreenState extends State<BasicDataScreen> {
                     onChanged: (value){
                       setState((){
                         selecteds[5] = value as String?;
-                        residence = value;
-                        areaOptions = residenceMap[residence];
+                        residenceSelected = value;
                         selecteds[6] = null;
+                        areaOptions = residenceMap[residenceSelected];
+                        print("test1: $value");
+                        print("test2: ${selecteds[6]}");
+                        print("test3: $areaOptions");
                     });}
                   ),
 
@@ -149,9 +164,9 @@ class _BasicDataScreenState extends State<BasicDataScreen> {
                   ElevatedButton(
                     style: btnStyle,
                     onPressed: (isBtnEnabled)?(){
-                      userData.setNickname(userNickname);
-                      userData.setEmail(userEmail);
-                      userData.setData(selecteds);
+                      contorller.setNickname(userNickname);
+                      contorller.setEmail(userEmail);
+                      contorller.setBasicData(selecteds);
                       if(isNewUser){
                         navPush(context, InterestScreen());
                       }else{

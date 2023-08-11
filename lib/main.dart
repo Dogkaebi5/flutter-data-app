@@ -1,5 +1,5 @@
 import 'package:data_project/app.dart';
-import 'package:data_project/ctrl/profile_controller.dart';
+import 'package:data_project/firestoremodel/profile_controller.dart';
 import 'package:data_project/firebase_options.dart';
 import 'package:data_project/provider/new_user_provider.dart';
 import 'package:data_project/provider/setting_provider.dart';
@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
       title: 'DayPlus',
       theme: ThemeData(primarySwatch: Colors.deepPurple),
       initialBinding: BindingsBuilder(() {
-        Get.lazyPut(() => ProfileController());
+        Get.lazyPut(() => UserDataController());
       }),
       home: App()
     );

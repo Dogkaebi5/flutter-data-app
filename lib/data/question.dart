@@ -1,17 +1,54 @@
+String? tempString;
+
+
+
 class Questions {
+  static Map basicDataTitles = {
+    "married": "결혼여부",
+    "children": "자녀유무",
+    "education": "최종학력",
+    "occupation": "직종",
+    "income": "소득수준",
+    "residence": "거주지역(도/시)",
+    "area": "거주지역(시/군/구)"
+  };
+  Map get getBasicDataTitles => basicDataTitles;
+
+  static Map interestsDataTitles = {
+    "insurance": "보험설계",
+    "loan": "대출",
+    "deposit": "예금/적금",
+    "immovables": "부동산",
+    "stock": "주식",
+    "cryto": "가상자산",
+    "golf": "골프",
+    "tennis": "테니스",
+    "fitness": "피트니스",
+    "yoga": "요가",
+    "dietary": "건강식품",
+    "educate": "교육",
+    "parental": "육아용품",
+    "automobile": "자동차",
+    "localTrip": "국내여행",
+    "overseatrip": "해외여행",
+    "camp": "캠핑",
+    "fishing": "낚시",
+    "pet": "반려동물"
+  };
+
   List<Map> basicInfo = [
-    {"title": "결혼여부",
+    {"title": basicDataTitles["married"],
     "option" : ["미혼", "기혼"]},
-    {"title": "자녀유무",
+    {"title": basicDataTitles["children"],
     "option" : ["없음", "있음"]},
-    {"title": "최종학력",
+    {"title": basicDataTitles["education"],
     "option" : ["고졸 및 이하", "전문대", "대학", "대학원"]},
-    {"title": "직종",
+    {"title": basicDataTitles["occupation"],
     "option" : ["관리직", "사무직", "학생", "무직"]},
-    {"title": "소득수준",
+    {"title": basicDataTitles["income"],
     "option" : ["3000만 이하","3000만~5000만","5000만~1억", "1억 이상"]},
-    {"title": "거주지역(도/시)"},
-    {"title": "거주지역(시/구/군)"}
+    {"title": basicDataTitles["residence"]},
+    {"title": basicDataTitles["area"]}
   ];
 
   Map region = {

@@ -23,4 +23,27 @@ class FirebaseUserRepository {
     users.doc(docId).update({"last_login_time": time});
     users.doc(docId).update({"login_log": FieldValue.arrayUnion([time])});
   }
+
+  static void updatePassword(String? docId, String? password){
+    CollectionReference users = FirebaseFirestore.instance.collection("users");
+    users.doc(docId).update({"password": password});
+  }
+
+  static void updateNickname(String? docId, String? nickname){
+    CollectionReference users = FirebaseFirestore.instance.collection("users");
+    users.doc(docId).update({"nickname": nickname});
+  }
+  static void updateEmail(String? docId, String? email){
+    CollectionReference users = FirebaseFirestore.instance.collection("users");
+    users.doc(docId).update({"email": email});
+  }
+
+  static void updateBasicData(String? docId, String question, String selected, DateTime selectedDate){
+    CollectionReference users = FirebaseFirestore.instance.collection("users");
+    users.doc(docId).update({question : 
+      {"selected" : selected,
+      "selectedDate" : selectedDate,
+      "isPermit" : true}
+    });
+  }
 }

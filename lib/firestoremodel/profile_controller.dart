@@ -88,7 +88,11 @@ class UserDataController extends GetxController{
       FirebaseUserRepository.updateIsNoticeMarketing(originalUserProfile.docId, originalUserProfile.isNoticeMarketing!);
     }
   }
-
+  setNewPassword(String pw){
+    if (pw.length == 4){
+      FirebaseUserRepository.updatePassword(originalUserProfile.docId, pw);
+    }
+  }
 
 
   setNickname(String? nickname){

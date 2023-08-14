@@ -1,4 +1,3 @@
-import 'package:data_project/data/password_setter.dart';
 import 'package:data_project/firestoremodel/profile_controller.dart';
 import 'package:data_project/provider/new_user_provider.dart';
 import 'package:data_project/screens/home/home.dart';
@@ -25,7 +24,6 @@ class _SetPasswordScreen extends State<SetPasswordScreen> {
 
   void setNewPassword(String newPassword) => setState(() => _newPassword = newPassword);
   void setCheckNewPassword(String checkNewPassword) => setState(() => _checkNewPassword = checkNewPassword);
-  void checkPassword() => setState(() => isCorrectPassword = (_newPassword == _checkNewPassword) ? true : false);
   final PageController _pageViewController = PageController();
   final UserDataController controller = Get.put(UserDataController());
 
@@ -101,7 +99,7 @@ class _SetPasswordScreen extends State<SetPasswordScreen> {
                   onChanged: (value)=> setState(()=> _checkNewPassword = value),
                   onCompleted: (value){
                     if(_newPassword == _checkNewPassword){
-                      PasswordStorage().writePassword(_newPassword);
+                      controller.setNewPassword(_newPassword);
                       if (context.read<NewUserProvider>().isNewUser) {
                         navPush(context, BasicDataScreen());
                       }else {
@@ -116,7 +114,7 @@ class _SetPasswordScreen extends State<SetPasswordScreen> {
                   }
                 ),
                 const SizedBox(height: 20,),
-                if (isCorrectPassword != null && isCorrectPassword == false)
+                if (isCorrectPassword != null || isCorrectPassword == false)
                   const Text("비밀번호가 일치하지 않습니다", style: TextStyle(color: Colors.red)),
             ],)
         ],),

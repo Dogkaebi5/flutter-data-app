@@ -25,11 +25,19 @@ class FirebaseUserRepository {
       (doc) => data = doc.data() as Map<String, dynamic>,
       onError: (e) => {print("Error: $e")}
     );
-    if(data["password"] != null){
-      return true;
-    }else{
-      return false;
-    }
+    if(data["password"] != null){ return true;
+    }else{ return false; }
+  }
+
+  static bool checkIsNewUser(String? docId){
+    CollectionReference users = FirebaseFirestore.instance.collection("users");
+    Map<String, dynamic> data = {};
+    users.doc(docId).get().then(
+      (doc) => data = doc.data() as Map<String, dynamic>,
+      onError: (e) => {print("Error: $e")}
+    );
+    if(data["nickname"] == null){ return true;
+    }else{ return false; }
   }
 
   static void updateLastLoginDate(String? docId, DateTime time){

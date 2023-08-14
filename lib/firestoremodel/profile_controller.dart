@@ -72,6 +72,9 @@ class UserDataController extends GetxController{
   bool checkHasPassword(){
     return FirebaseUserRepository.checkPassword(originalUserProfile.docId);
   }
+  bool checkIsNewUser(){
+    return FirebaseUserRepository.checkIsNewUser(originalUserProfile.docId);
+  }
 
   changePermitTeleMarketing(bool isPermit){
     originalUserProfile.isPermitTelemarketing = isPermit;

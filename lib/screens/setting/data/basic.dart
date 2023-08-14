@@ -26,10 +26,20 @@ class _BasicDataScreenState extends State<BasicDataScreen> {
   List residenceOptions = Questions().region.keys.toList();
   List<String?> areaOptions = List.empty(growable: true);
 
-  late bool isNewUser;
   String? userNickname, userEmail;
   BasicData? married, children, education, occupation, income, residence, area;
   String? residenceSelected;
+  
+  String? 
+  originUserNicknameSelected, 
+  originUserEmailSelected, 
+  originMarriedSelected, 
+  originChildrenSelected, 
+  originEducationSelected, 
+  originOccupationSelected, 
+  originIncomeSelected, 
+  originResidenceSelected, 
+  originAreaSelected;
   
   List<String?> selecteds = List.empty(growable: true);
   List dateList = List.empty(growable: true);
@@ -42,7 +52,6 @@ class _BasicDataScreenState extends State<BasicDataScreen> {
   void initState(){
     super.initState();
     setState(() {
-      isNewUser = (controller.myProfile().password == null)? true: false;
       userNickname = controller.myProfile().nickname ?? controller.myProfile().name;
       userEmail = controller.myProfile().email ?? controller.myProfile().gmail;
       married = controller.myProfile().married;
@@ -52,7 +61,17 @@ class _BasicDataScreenState extends State<BasicDataScreen> {
       income = controller.myProfile().income;
       residence = controller.myProfile().residence;
       area = controller.myProfile().area;
-      
+      originUserNicknameSelected = userNickname;
+      originUserEmailSelected = userEmail;
+      originMarriedSelected = married?.selected;
+      originChildrenSelected = children?.selected;
+      originEducationSelected = education?.selected;
+      originOccupationSelected = occupation?.selected;
+      originIncomeSelected = income?.selected;
+      originResidenceSelected = residence?.selected;
+      originAreaSelected = area?.selected;
+
+
       selecteds = [married?.selected, children?.selected, education?.selected, occupation?.selected, income?.selected, residence?.selected, area?.selected];
       dateList = [married?.selectedDate, children?.selectedDate, education?.selectedDate, occupation?.selectedDate, income?.selectedDate, residence?.selectedDate, area?.selectedDate];
 
@@ -154,10 +173,19 @@ class _BasicDataScreenState extends State<BasicDataScreen> {
                   ElevatedButton(
                     style: btnStyle,
                     onPressed: (isBtnEnabled)?(){
-                      controller.setNickname(userNickname);
-                      controller.setEmail(userEmail);
-                      controller.setBasicData(selecteds, dateList);
-                      if(isNewUser){
+                      if(originUserNicknameSelected != userNickname){controller.setNickname(userNickname);}
+                      if(originUserEmailSelected != userEmail){controller.setEmail(userEmail);}
+                      if(originMarriedSelected != selecteds[0] ||
+                      originChildrenSelected != selecteds[1] ||
+                      originEducationSelected != selecteds[2] ||
+                      originOccupationSelected != selecteds[3] ||
+                      originIncomeSelected != selecteds[4] ||
+                      originResidenceSelected != selecteds[5] ||
+                      originAreaSelected != selecteds[6]){
+                        controller.setBasicData(selecteds, dateList);
+                      }
+                      
+                      if(true){
                         navPush(context, InterestScreen());
                       }else{
                         Navigator.pop(context);

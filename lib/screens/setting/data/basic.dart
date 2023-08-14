@@ -20,7 +20,7 @@ class BasicDataScreen extends StatefulWidget {
 }
 
 class _BasicDataScreenState extends State<BasicDataScreen> {
-  final UserDataController contorller = Get.put(UserDataController());
+  final UserDataController controller = Get.put(UserDataController());
   List basicQuestions = Questions().basicInfo;
   Map residenceMap = Questions().region;
   List residenceOptions = Questions().region.keys.toList();
@@ -35,39 +35,31 @@ class _BasicDataScreenState extends State<BasicDataScreen> {
   List dateList = List.empty(growable: true);
   
   bool isBtnEnabled = true;
-  // UserBasicData userData = UserBasicData();
   setDataState(origin, newVal) => setState(()=> origin = newVal);
-  // late UserModel userData;
+
 
   @override
   void initState(){
     super.initState();
     setState(() {
-      print("test1: ${contorller.myProfile().nickname}");
-      print("test2: ${contorller.myProfile().email}");
-      print("test3: ${contorller.myProfile().married?.selected}");
-      // userData = contorller.myProfile();
-      // userData = context.read<UserBasicData>();
-      isNewUser = (contorller.myProfile().password == null)? true: false;
-      userNickname = contorller.myProfile().nickname ?? contorller.myProfile().name;
-      userEmail = contorller.myProfile().email ?? contorller.myProfile().gmail;
-      married = contorller.myProfile().married;
-      children = contorller.myProfile().children;
-      education = contorller.myProfile().education;
-      occupation = contorller.myProfile().occupation;
-      income = contorller.myProfile().income;
-      residence = contorller.myProfile().residence;
-      area = contorller.myProfile().area;
+      isNewUser = (controller.myProfile().password == null)? true: false;
+      userNickname = controller.myProfile().nickname ?? controller.myProfile().name;
+      userEmail = controller.myProfile().email ?? controller.myProfile().gmail;
+      married = controller.myProfile().married;
+      children = controller.myProfile().children;
+      education = controller.myProfile().education;
+      occupation = controller.myProfile().occupation;
+      income = controller.myProfile().income;
+      residence = controller.myProfile().residence;
+      area = controller.myProfile().area;
       
       selecteds = [married?.selected, children?.selected, education?.selected, occupation?.selected, income?.selected, residence?.selected, area?.selected];
       dateList = [married?.selectedDate, children?.selectedDate, education?.selectedDate, occupation?.selectedDate, income?.selectedDate, residence?.selectedDate, area?.selectedDate];
 
-      residenceSelected = contorller.myProfile().residence?.selected;
-      // dateList = userData.selectedDate;
+      residenceSelected = controller.myProfile().residence?.selected;
       if(residenceSelected != null){
         areaOptions = residenceMap[residenceSelected];
       }
-      //temporary reader
     });
   }
 
@@ -162,9 +154,9 @@ class _BasicDataScreenState extends State<BasicDataScreen> {
                   ElevatedButton(
                     style: btnStyle,
                     onPressed: (isBtnEnabled)?(){
-                      contorller.setNickname(userNickname);
-                      contorller.setEmail(userEmail);
-                      contorller.setBasicData(selecteds, dateList);
+                      controller.setNickname(userNickname);
+                      controller.setEmail(userEmail);
+                      controller.setBasicData(selecteds, dateList);
                       if(isNewUser){
                         navPush(context, InterestScreen());
                       }else{

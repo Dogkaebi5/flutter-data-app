@@ -9,9 +9,6 @@ class UserDataController extends GetxController{
   UserModel originalUserProfile = UserModel();
   Rx<UserModel> myProfile = UserModel().obs;
 
-  List basicQuestions = Questions().getBasicDataTitles.keys.toList();
-  BasicData newBasic = BasicData(null, null, false);
-
   authStateChanges(User? firebaseUser) async {
     if(firebaseUser != null){
       UserModel? userModel = await FirebaseUserRepository.findUserByUid(firebaseUser.uid);
@@ -29,13 +26,13 @@ class UserDataController extends GetxController{
           loginLog: [DateTime.now()],
           nickname: null,
           email: null,
-          married: newBasic,
-          children: newBasic,
-          education: newBasic,
-          occupation: newBasic,
-          income: newBasic,
-          residence: newBasic,
-          area: newBasic,
+          married: BasicData(null, null, false),
+          children: BasicData(null, null, false),
+          education: BasicData(null, null, false),
+          occupation: BasicData(null, null, false),
+          income: BasicData(null, null, false),
+          residence: BasicData(null, null, false),
+          area: BasicData(null, null, false),
           insurance: null,
           loan: null,
           deposit: null,
@@ -61,7 +58,8 @@ class UserDataController extends GetxController{
           point: 0,
           isNoticeService: false,
           isNoticeMarketing: false,
-          isPermitTeleMarketing: false,
+          isPermitTelemarketing: false,
+          permitTelemarketingDate: null,
         );
         String docId = await FirebaseUserRepository.signup(originalUserProfile);
         originalUserProfile.docId = docId;
@@ -69,7 +67,30 @@ class UserDataController extends GetxController{
     }
     myProfile(UserModel.clone(originalUserProfile));
   }
-  
+  changePermitTeleMarketing(bool isPermit){
+    originalUserProfile.isPermitTelemarketing = isPermit;
+    originalUserProfile.permitTelemarketingDate = (isPermit) ? DateTime.now() : null;
+    FirebaseUserRepository.updateIsPermitTeleMarketing(
+      originalUserProfile.docId, 
+      originalUserProfile.isPermitTelemarketing!,
+      originalUserProfile.permitTelemarketingDate
+    );
+  }
+  changeNoticeService(){
+    if(originalUserProfile.isNoticeService != null){
+      originalUserProfile.isNoticeService = !originalUserProfile.isNoticeService!;
+      FirebaseUserRepository.updateIsNoticeService(originalUserProfile.docId, originalUserProfile.isNoticeService!);
+    }
+  }
+  changeNoticeMarketing(){
+    if(originalUserProfile.isNoticeMarketing != null){
+      originalUserProfile.isNoticeMarketing = !originalUserProfile.isNoticeMarketing!;
+      FirebaseUserRepository.updateIsNoticeMarketing(originalUserProfile.docId, originalUserProfile.isNoticeMarketing!);
+    }
+  }
+
+
+
   setNickname(String? nickname){
     if (nickname != null && nickname != ""){
       FirebaseUserRepository.updateNickname(originalUserProfile.docId, nickname);
@@ -85,9 +106,9 @@ class UserDataController extends GetxController{
     }
   }
 
-
   setBasicData(List basicData, List dates)async{
     bool isUpdated = false;
+    List basicQuestions = Questions().getBasicDataTitles.keys.toList();
     for(int i = 0; i < basicData.length; i++){
       if(basicData[i] != null && dates[i] == null){
         String question = basicQuestions[i];
@@ -99,6 +120,7 @@ class UserDataController extends GetxController{
       UserModel? userModel = await FirebaseUserRepository.findUserByUid(originalUserProfile.uid!);
       originalUserProfile = userModel!;
       myProfile(UserModel.clone(originalUserProfile));
+      isUpdated = false;
     }
   }
 }

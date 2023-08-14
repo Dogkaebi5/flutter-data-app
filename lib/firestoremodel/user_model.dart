@@ -36,7 +36,8 @@ class UserModel{
   int? point;
   bool? isNoticeService;
   bool? isNoticeMarketing;
-  bool? isPermitTeleMarketing;
+  bool? isPermitTelemarketing;
+  DateTime? permitTelemarketingDate;
 
 
   UserModel({
@@ -82,7 +83,8 @@ class UserModel{
     this.point,
     this.isNoticeService,
     this.isNoticeMarketing,
-    this.isPermitTeleMarketing,
+    this.isPermitTelemarketing,
+    this.permitTelemarketingDate
   });
 
   UserModel.clone(UserModel user)
@@ -129,7 +131,8 @@ class UserModel{
       point: user.point,
       isNoticeService: user.isNoticeService,
       isNoticeMarketing: user.isNoticeMarketing,
-      isPermitTeleMarketing: user.isPermitTeleMarketing,
+      isPermitTelemarketing: user.isPermitTelemarketing,
+      permitTelemarketingDate: user.permitTelemarketingDate,
     );
 
   UserModel.fromJson(json, String doc)
@@ -170,12 +173,15 @@ class UserModel{
       fishing = json["fishing"],
       pet = json["pet"],
       password = json["password"],
-      bankName = json["bankName"],
-      bankAccount = json["bankAccount"],
+      bankName = json["bank_name"],
+      bankAccount = json["bank_account"],
       point = json["point"],
-      isNoticeService = json["isNoticeService"],
-      isNoticeMarketing = json["isNoticeMarketing"],
-      isPermitTeleMarketing = json["isPermitTeleMarketing"];
+      isNoticeService = json["is_notice_service"],
+      isNoticeMarketing = json["is_notice_marketing"],
+      isPermitTelemarketing = json["is_permit_telemarketing"],
+      permitTelemarketingDate = (json["permit_telemarketing_date"]!=null)?
+        DateTime.fromMicrosecondsSinceEpoch(json["permit_telemarketing_date"].microsecondsSinceEpoch)
+        :null;
 
   Map<String, dynamic> toMap(){
     return {
@@ -215,12 +221,13 @@ class UserModel{
       "fishing": fishing,
       "pet": pet,
       "password": password,
-      "bankName": bankName,
-      "bankAccount": bankAccount,
+      "bank_name": bankName,
+      "bank_account": bankAccount,
       "point": point,
-      "isNoticeService": isNoticeService,
-      "isNoticeMarketing": isNoticeMarketing,
-      "isPermitTeleMarketing": isPermitTeleMarketing,
+      "is_notice_service": isNoticeService,
+      "is_notice_marketing": isNoticeMarketing,
+      "is_permit_telemarketing": isPermitTelemarketing,
+      "permit_telemarketing_date": permitTelemarketingDate
     };
   }
 }

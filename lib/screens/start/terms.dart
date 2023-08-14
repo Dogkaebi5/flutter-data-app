@@ -1,9 +1,9 @@
-import 'package:data_project/provider/setting_provider.dart';
+import 'package:data_project/firestoremodel/profile_controller.dart';
 import 'package:data_project/screens/setting/set_password.dart';
 import 'package:data_project/widgets/term_checkbox.dart';
 import 'package:data_project/widgets/widget_style.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:get/get.dart';
 
 class TermsScreen extends StatefulWidget{
   const TermsScreen({super.key});
@@ -14,6 +14,7 @@ class TermsScreen extends StatefulWidget{
 
 class _TermsScreen extends State<TermsScreen>{
   List<bool> checklist = List.filled(5, false);
+  final UserDataController controller = Get.put(UserDataController());
 
   void allCheck(){
     setState(() {
@@ -79,12 +80,13 @@ class _TermsScreen extends State<TermsScreen>{
                   allCheckControl();
                 }),
 
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               ElevatedButton(
                 style: btnStyle,
                 onPressed:(checklist[1] && checklist[2] && checklist[4])
                   ?(){
-                    context.read<SettingProvider>().setTmPermission(checklist[3]);
+                    bool isPermit = checklist[3]; 
+                    controller.changePermitTeleMarketing(isPermit);
                     navPush(context, SetPasswordScreen());
                   } : null,
                 child: const Text("다음"),

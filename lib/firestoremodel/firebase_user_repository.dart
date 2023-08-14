@@ -17,7 +17,7 @@ class FirebaseUserRepository {
       return UserModel.fromJson(data.docs[0].data(), data.docs[0].id);
     }
   }
-  
+
   static void updateLastLoginDate(String? docId, DateTime time){
     CollectionReference users = FirebaseFirestore.instance.collection("users");
     users.doc(docId).update({"last_login_time": time});
@@ -27,6 +27,22 @@ class FirebaseUserRepository {
   static void updatePassword(String? docId, String? password){
     CollectionReference users = FirebaseFirestore.instance.collection("users");
     users.doc(docId).update({"password": password});
+  }
+  
+  static void updateIsPermitTeleMarketing (String? docId, bool isPermit, DateTime? date){
+    CollectionReference users = FirebaseFirestore.instance.collection("users");
+    users.doc(docId).update({
+      "is_permit_telemarketing": isPermit,
+      "permit_telemarketing_date": date
+    });
+  }
+  static void updateIsNoticeService (String? docId,bool isPermit){
+    CollectionReference users = FirebaseFirestore.instance.collection("users");
+    users.doc(docId).update({"is_notice_service": isPermit});
+  }
+  static void updateIsNoticeMarketing (String? docId,bool isPermit){
+    CollectionReference users = FirebaseFirestore.instance.collection("users");
+    users.doc(docId).update({"is_notice_marketing": isPermit});
   }
 
   static void updateNickname(String? docId, String? nickname){

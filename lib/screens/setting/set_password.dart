@@ -1,9 +1,11 @@
 import 'package:data_project/data/password_setter.dart';
+import 'package:data_project/firestoremodel/profile_controller.dart';
 import 'package:data_project/provider/new_user_provider.dart';
 import 'package:data_project/screens/home/home.dart';
 import 'package:data_project/screens/setting/data/basic.dart';
 import 'package:data_project/widgets/widget_style.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:pinput/pinput.dart';
 import 'package:provider/provider.dart';
 
@@ -17,23 +19,15 @@ class SetPasswordScreen extends StatefulWidget {
 class _SetPasswordScreen extends State<SetPasswordScreen> {
   bool _isVisibilityNew = false;
   bool _isVisibilityCheck = false;
-
-  bool? isCorrectPassword;
   String _newPassword = "";
   String _checkNewPassword = "";
+  bool? isCorrectPassword;
 
-  void setNewPassword(String newPassword){
-    setState(() => _newPassword = newPassword);
-  }
-  void setCheckNewPassword(String checkNewPassword){
-    setState(() => _checkNewPassword = checkNewPassword);
-  }
-  void checkPassword(){
-    (_newPassword == _checkNewPassword)
-      ?setState(() => isCorrectPassword = true)
-      :setState(() => isCorrectPassword = false);
-  }
+  void setNewPassword(String newPassword) => setState(() => _newPassword = newPassword);
+  void setCheckNewPassword(String checkNewPassword) => setState(() => _checkNewPassword = checkNewPassword);
+  void checkPassword() => setState(() => isCorrectPassword = (_newPassword == _checkNewPassword) ? true : false);
   final PageController _pageViewController = PageController();
+  final UserDataController controller = Get.put(UserDataController());
 
   @override
   Widget build(BuildContext context) {

@@ -1,8 +1,6 @@
 import 'package:data_project/firestoremodel/profile_controller.dart';
 import 'package:data_project/data/question.dart';
 import 'package:data_project/firestoremodel/user_model.dart';
-// import 'package:data_project/provider/new_user_provider.dart';
-// import 'package:data_project/provider/user_basic_data_provider.dart';
 import 'package:data_project/screens/setting/data/interest.dart';
 import 'package:data_project/widgets/data_pages_header.dart';
 import 'package:data_project/widgets/question_dropdown.dart';
@@ -10,7 +8,6 @@ import 'package:data_project/widgets/widget_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-// import 'package:provider/provider.dart';
 
 class BasicDataScreen extends StatefulWidget {
   const BasicDataScreen({super.key});
@@ -31,8 +28,8 @@ class _BasicDataScreenState extends State<BasicDataScreen> {
   String? residenceSelected;
   
   String? 
-  originUserNicknameSelected, 
-  originUserEmailSelected, 
+  originUserNickname, 
+  originUserEmail, 
   originMarriedSelected, 
   originChildrenSelected, 
   originEducationSelected, 
@@ -52,8 +49,8 @@ class _BasicDataScreenState extends State<BasicDataScreen> {
   void initState(){
     super.initState();
     setState(() {
-      userNickname = controller.myProfile().nickname ?? controller.myProfile().name;
-      userEmail = controller.myProfile().email ?? controller.myProfile().gmail;
+      userNickname = controller.myProfile().nickname;
+      userEmail = controller.myProfile().email;
       married = controller.myProfile().married;
       children = controller.myProfile().children;
       education = controller.myProfile().education;
@@ -61,8 +58,8 @@ class _BasicDataScreenState extends State<BasicDataScreen> {
       income = controller.myProfile().income;
       residence = controller.myProfile().residence;
       area = controller.myProfile().area;
-      originUserNicknameSelected = userNickname;
-      originUserEmailSelected = userEmail;
+      originUserNickname = userNickname;
+      originUserEmail = userEmail;
       originMarriedSelected = married?.selected;
       originChildrenSelected = children?.selected;
       originEducationSelected = education?.selected;
@@ -104,7 +101,7 @@ class _BasicDataScreenState extends State<BasicDataScreen> {
                   const Text("닉네임", style: fontSmallTitle),
                   const SizedBox(height: 6,),
                   TextFormField(
-                    initialValue: userNickname,
+                    initialValue: userNickname??controller.myProfile().name,
                     maxLength: 15,
                     decoration: inputDecoration,
                     inputFormatters: [
@@ -120,7 +117,7 @@ class _BasicDataScreenState extends State<BasicDataScreen> {
                   const Text("이메일", style: fontSmallTitle),
                   const SizedBox(height: 6,),
                   TextFormField(
-                    initialValue: userEmail, 
+                    initialValue: userEmail??controller.myProfile().gmail, 
                     decoration: inputDecoration,
                     onChanged: (value){
                       setState(() {
@@ -173,8 +170,8 @@ class _BasicDataScreenState extends State<BasicDataScreen> {
                   ElevatedButton(
                     style: btnStyle,
                     onPressed: (isBtnEnabled)?(){
-                      if(originUserNicknameSelected != userNickname){controller.setNickname(userNickname);}
-                      if(originUserEmailSelected != userEmail){controller.setEmail(userEmail);}
+                      if(originUserNickname != userNickname){controller.setNickname(userNickname);}
+                      if(originUserEmail != userEmail){controller.setEmail(userEmail);}
                       if(originMarriedSelected != selecteds[0] ||
                       originChildrenSelected != selecteds[1] ||
                       originEducationSelected != selecteds[2] ||
@@ -184,8 +181,8 @@ class _BasicDataScreenState extends State<BasicDataScreen> {
                       originAreaSelected != selecteds[6]){
                         controller.setBasicData(selecteds, dateList);
                       }
-                      
-                      if(true){
+                      print(originUserNickname);
+                      if(originUserNickname == null){
                         navPush(context, InterestScreen());
                       }else{
                         Navigator.pop(context);

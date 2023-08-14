@@ -18,10 +18,13 @@ class BasicData{
   }
 }
 
-class InterestData{ String? title; bool? isSelecteds = false; DateTime? selectedDate; List? selecteds; bool? isPermit = false;}
-
-
-
+class InterestData{ 
+  String? title; 
+  bool? isSelecteds = false; 
+  DateTime? selectedDate; 
+  List? selecteds; 
+  bool? isPermit = false;
+}
 
 class UserModel{
   String? uid, docId, name, mobile, gmail;
@@ -30,6 +33,7 @@ class UserModel{
   String? nickname, email;
   BasicData? married, children, education, occupation, income, residence, area;
   InterestData? insurance, loan, deposit, immovables, stock, cryto, golf, tennis, fitness, yoga, dietary, educate, parental, automobile, localTrip, overseatrip, camp, fishing, pet;
+  List? interests;
   String? password;
   String? bankName;
   String? bankAccount;
@@ -58,6 +62,7 @@ class UserModel{
     this.income, 
     this.residence, 
     this.area,
+    this.interests,
     this.insurance, 
     this.loan, 
     this.deposit, 
@@ -106,6 +111,7 @@ class UserModel{
       income: user.income,
       residence: user.residence,
       area: user.area,
+      interests: user.interests,
       insurance: user.insurance,
       loan: user.loan,
       deposit: user.deposit,
@@ -153,6 +159,7 @@ class UserModel{
       income = BasicData.fromJson(json["income"]),
       residence = BasicData.fromJson(json["residence"]),
       area = BasicData.fromJson(json["area"]),
+      interests = json["interests"],
       insurance = json["insurance"],
       loan = json["loan"],
       deposit = json["deposit"],
@@ -201,6 +208,7 @@ class UserModel{
       "income": income?.basicToMap(),
       "residence": residence?.basicToMap(),
       "area": area?.basicToMap(),
+      "interests": interests,
       "insurance": insurance,
       "loan": loan,
       "deposit": deposit,
@@ -220,7 +228,7 @@ class UserModel{
       "camp": camp,
       "fishing": fishing,
       "pet": pet,
-      "password": password,
+      "password": password,//del
       "bank_name": bankName,
       "bank_account": bankAccount,
       "point": point,

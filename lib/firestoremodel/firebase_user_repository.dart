@@ -18,6 +18,20 @@ class FirebaseUserRepository {
     }
   }
 
+  static bool checkPassword(String? docId){
+    CollectionReference users = FirebaseFirestore.instance.collection("users");
+    Map<String, dynamic> data = {};
+    users.doc(docId).get().then(
+      (doc) => data = doc.data() as Map<String, dynamic>,
+      onError: (e) => {print("Error: $e")}
+    );
+    if(data["password"] != null){
+      return true;
+    }else{
+      return false;
+    }
+  }
+
   static void updateLastLoginDate(String? docId, DateTime time){
     CollectionReference users = FirebaseFirestore.instance.collection("users");
     users.doc(docId).update({"last_login_time": time});

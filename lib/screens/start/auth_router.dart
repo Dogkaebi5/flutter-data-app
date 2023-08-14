@@ -23,7 +23,7 @@ class _AuthRouterState extends State<AuthRouter> {
         UserDataController().to.authStateChanges(snapshot.data);
         if(!snapshot.hasData){
           return AppStartScreen();
-        }else if(controller.myProfile().password == null){
+        }else if(controller.checkHasPassword()){
           return TermsScreen();
         }else {
           return HomeScreen();

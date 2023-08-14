@@ -9,6 +9,7 @@ class UserDataController extends GetxController{
   UserModel originalUserProfile = UserModel();
   Rx<UserModel> myProfile = UserModel().obs;
 
+
   authStateChanges(User? firebaseUser) async {
     if(firebaseUser != null){
       UserModel? userModel = await FirebaseUserRepository.findUserByUid(firebaseUser.uid);
@@ -67,6 +68,11 @@ class UserDataController extends GetxController{
     }
     myProfile(UserModel.clone(originalUserProfile));
   }
+
+  bool checkHasPassword(){
+    return FirebaseUserRepository.checkPassword(originalUserProfile.docId);
+  }
+
   changePermitTeleMarketing(bool isPermit){
     originalUserProfile.isPermitTelemarketing = isPermit;
     originalUserProfile.permitTelemarketingDate = (isPermit) ? DateTime.now() : null;

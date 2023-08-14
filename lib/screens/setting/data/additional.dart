@@ -28,7 +28,7 @@ class _AdditionalScreenState extends State<AdditionalScreen> {
   List<bool> toggleSelects = List.empty(growable: true);
   int nowToggleIndex = 0;
 
-  Map questions = Questions().interests;
+  Map questions = Questions().interestQuestions;
   List nowSelectedQuestions = List.empty(growable: true);
   Map additionalSeleteds = {};
   Map originSelecteds = {};

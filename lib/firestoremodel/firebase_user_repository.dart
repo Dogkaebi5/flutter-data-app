@@ -84,4 +84,16 @@ class FirebaseUserRepository {
       "isPermit" : true}
     });
   }
+
+  static void updateUserInterests(String? docId, List interests, List date){
+    CollectionReference users = FirebaseFirestore.instance.collection("users");
+    for (int i = 0; i < interests.length; i++){
+      users.doc(docId).update({interests[i] : {
+          "isSelecteds": true,
+          "selectedDate": date[i],
+          "isPermit": true 
+        }
+      });
+    }
+  }
 }

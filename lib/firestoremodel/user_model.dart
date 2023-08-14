@@ -1,14 +1,15 @@
 class BasicData{
-  String? selected; DateTime? selectedDate; bool isPermit = false;
+  String? selected; 
+  DateTime? selectedDate; 
+  bool isPermit = false;
   BasicData(
-    String? selected, 
-    DateTime? selectedDate, 
-    bool isPermit);
+    selected, 
+    selectedDate, 
+    isPermit);
   BasicData.fromJson(json) : 
     selected = json["selected"],
-    selectedDate = (json["selectedDate"] != null)? json["selectedDate"].toDate(): null,
-    isPermit = (json["isPermit"]== "true")?true:false;
-  
+    selectedDate = (json["selected_date"] != null)? json["selected_date"].toDate(): null,
+    isPermit = (json["is_permit"]== "true")?true:false;
   Map<String, dynamic> basicToMap(){
     return {
       "selected" : selected, 
@@ -20,20 +21,43 @@ class BasicData{
 
 class InterestData{ 
   String? title; 
-  bool? isSelecteds = false; 
+  bool isSelected = false; 
   DateTime? selectedDate; 
-  List? selecteds; 
-  bool? isPermit = false;
+  List? answers; 
+  bool isPermit = false;
+  InterestData(
+    this.title,
+    this.isSelected,
+    this.selectedDate,
+    this.answers,
+    this.isPermit
+  );
+  InterestData.fromJson(json) :
+    title = json["title"],
+    isSelected = json["is_selected"],
+    selectedDate = (json["selected_date"] != null)? json["selected_date"].toDate(): null,
+    answers = json["answers"],
+    isPermit = json["is_permit"];
+  Map<String, dynamic> interestToMap(){
+    return {
+      "title": title,
+      "is_selected": isSelected,
+      "selected_date": selectedDate,
+      "answers": answers,
+      "is_permit": isPermit
+    };
+  }
 }
 
 class UserModel{
+  bool? isNewUser;
   String? uid, docId, name, mobile, gmail;
   DateTime? createdTime, lastLoginTime;
   List? loginLog;
   String? nickname, email;
   BasicData? married, children, education, occupation, income, residence, area;
   InterestData? insurance, loan, deposit, immovables, stock, cryto, golf, tennis, fitness, yoga, dietary, educate, parental, automobile, localTrip, overseatrip, camp, fishing, pet;
-  List? interests;
+  List<String?>? userInterests;
   String? password;
   String? bankName;
   String? bankAccount;
@@ -45,6 +69,7 @@ class UserModel{
 
 
   UserModel({
+    this.isNewUser,
     this.uid,
     this.docId,
     this.name,
@@ -62,7 +87,7 @@ class UserModel{
     this.income, 
     this.residence, 
     this.area,
-    this.interests,
+    this.userInterests,
     this.insurance, 
     this.loan, 
     this.deposit, 
@@ -94,6 +119,7 @@ class UserModel{
 
   UserModel.clone(UserModel user)
     : this(
+      isNewUser: user.isNewUser,
       uid: user.uid,
       docId: user.docId,
       name: user.name,
@@ -111,7 +137,7 @@ class UserModel{
       income: user.income,
       residence: user.residence,
       area: user.area,
-      interests: user.interests,
+      userInterests: user.userInterests,
       insurance: user.insurance,
       loan: user.loan,
       deposit: user.deposit,
@@ -142,7 +168,8 @@ class UserModel{
     );
 
   UserModel.fromJson(json, String doc)
-    : uid = json["uid"],
+    : isNewUser = json["is_new_user"],
+      uid = json["uid"],
       docId = doc,
       name = json["name"],
       mobile = json["mobile"],
@@ -159,26 +186,26 @@ class UserModel{
       income = BasicData.fromJson(json["income"]),
       residence = BasicData.fromJson(json["residence"]),
       area = BasicData.fromJson(json["area"]),
-      interests = json["interests"],
-      insurance = json["insurance"],
-      loan = json["loan"],
-      deposit = json["deposit"],
-      immovables = json["immovables"],
-      stock = json["stock"],
-      cryto = json["cryto"],
-      golf = json["golf"],
-      tennis = json["tennis"],
-      fitness = json["fitness"],
-      yoga = json["yoga"],
-      dietary = json["dietary"],
-      educate = json["educate"],
-      parental = json["parental"],
-      automobile = json["automobile"],
-      localTrip = json["localTrip"],
-      overseatrip = json["overseatrip"],
-      camp = json["camp"],
-      fishing = json["fishing"],
-      pet = json["pet"],
+      userInterests = json["user_interests"],
+      insurance = InterestData.fromJson(json["insurance"]),
+      loan = InterestData.fromJson(json["loan"]),
+      deposit = InterestData.fromJson(json["deposit"]),
+      immovables = InterestData.fromJson(json["immovables"]),
+      stock = InterestData.fromJson(json["stock"]),
+      cryto = InterestData.fromJson(json["cryto"]),
+      golf = InterestData.fromJson(json["golf"]),
+      tennis = InterestData.fromJson(json["tennis"]),
+      fitness = InterestData.fromJson(json["fitness"]),
+      yoga = InterestData.fromJson(json["yoga"]),
+      dietary = InterestData.fromJson(json["dietary"]),
+      educate = InterestData.fromJson(json["educate"]),
+      parental = InterestData.fromJson(json["parental"]),
+      automobile = InterestData.fromJson(json["automobile"]),
+      localTrip = InterestData.fromJson(json["localTrip"]),
+      overseatrip = InterestData.fromJson(json["overseatrip"]),
+      camp = InterestData.fromJson(json["camp"]),
+      fishing = InterestData.fromJson(json["fishing"]),
+      pet = InterestData.fromJson(json["pet"]),
       password = json["password"],
       bankName = json["bank_name"],
       bankAccount = json["bank_account"],
@@ -192,6 +219,7 @@ class UserModel{
 
   Map<String, dynamic> toMap(){
     return {
+      "is_new_user": isNewUser,
       "uid": uid, 
       "name": name,
       "gmail": gmail,
@@ -208,26 +236,26 @@ class UserModel{
       "income": income?.basicToMap(),
       "residence": residence?.basicToMap(),
       "area": area?.basicToMap(),
-      "interests": interests,
-      "insurance": insurance,
-      "loan": loan,
-      "deposit": deposit,
-      "immovables": immovables,
-      "stock": stock,
-      "cryto": cryto,
-      "golf": golf,
-      "tennis": tennis,
-      "fitness": fitness,
-      "yoga": yoga,
-      "dietary": dietary,
-      "educate": educate,
-      "parental": parental,
-      "automobile": automobile,
-      "localTrip": localTrip,
-      "overseatrip": overseatrip,
-      "camp": camp,
-      "fishing": fishing,
-      "pet": pet,
+      "user_interests": userInterests,
+      "insurance": insurance?.interestToMap(),
+      "loan": loan?.interestToMap(),
+      "deposit": deposit?.interestToMap(),
+      "immovables": immovables?.interestToMap(),
+      "stock": stock?.interestToMap(),
+      "cryto": cryto?.interestToMap(),
+      "golf": golf?.interestToMap(),
+      "tennis": tennis?.interestToMap(),
+      "fitness": fitness?.interestToMap(),
+      "yoga": yoga?.interestToMap(),
+      "dietary": dietary?.interestToMap(),
+      "educate": educate?.interestToMap(),
+      "parental": parental?.interestToMap(),
+      "automobile": automobile?.interestToMap(),
+      "localTrip": localTrip?.interestToMap(),
+      "overseatrip": overseatrip?.interestToMap(),
+      "camp": camp?.interestToMap(),
+      "fishing": fishing?.interestToMap(),
+      "pet": pet?.interestToMap(),
       "password": password,//del
       "bank_name": bankName,
       "bank_account": bankAccount,

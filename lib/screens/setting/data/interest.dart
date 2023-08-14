@@ -1,11 +1,11 @@
 import 'package:data_project/data/question.dart';
-import 'package:data_project/provider/new_user_provider.dart';
-import 'package:data_project/provider/user_interest_data_provider.dart';
+import 'package:data_project/firestoremodel/profile_controller.dart';
+import 'package:data_project/firestoremodel/user_model.dart';
 import 'package:data_project/screens/setting/data/additional.dart';
 import 'package:data_project/widgets/data_pages_header.dart';
 import 'package:data_project/widgets/widget_style.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:get/get.dart';
 
 class InterestScreen extends StatefulWidget {
   const InterestScreen({super.key});
@@ -14,27 +14,52 @@ class InterestScreen extends StatefulWidget {
 }
 
 class _InterestScreenState extends State<InterestScreen> {
-  bool isNewUser = false;
-  UserInterestData userData = UserInterestData();
-  List<String> interestOptions = Questions().interests.keys.toList();
-  List newSelecteds = List.empty(growable: true);
-  List originSelecteds = List.empty(growable: true);
-  List isSelecteds = List.empty(growable: true);
-  List selectedDates = List.empty(growable: true);
-  List permissions = List.empty(growable: true);
+  UserDataController controller = Get.put(UserDataController());  
+  List<String> interestOptions = Questions().interestQuestions.keys.toList();
+  late List<String> originSelecteds = List.empty(growable: true);
+  List<String> newSelecteds = List.empty(growable: true);
+  List<bool> isSelecteds = List.empty(growable: true);
+  List<DateTime?> durationDates = List.empty(growable: true);
   int selectedCount = 0;
   
+  bool checkChanged(){
+    bool tf = true;
+    if(originSelecteds.length != selectedCount){
+      tf = true;
+    }else{for(int i = 0; i < selectedCount; i++){
+      if(originSelecteds[i] == newSelecteds[i]){
+        tf = false;
+        break;
+    }}}
+    return tf;
+  }
+
+
   @override
   void initState(){
     super.initState();
     setState(() {
-      isNewUser = context.read<NewUserProvider>().isNewUser;
-      userData = context.read<UserInterestData>();
-      isSelecteds = userData.isSelecteds;
-      originSelecteds = List.from(userData.selecteds);
-      newSelecteds = List.from(userData.selecteds);
-      selectedDates = userData.selectedDates;
-      permissions = userData.permissions;
+      UserModel user = controller.myProfile();
+      isSelecteds = [
+        user.insurance!.isSelected, user.loan!.isSelected, user.deposit!.isSelected, 
+        user.immovables!.isSelected, user.stock!.isSelected, user.cryto!.isSelected, 
+        user.golf!.isSelected, user.tennis!.isSelected, user.fitness!.isSelected, 
+        user.yoga!.isSelected, user.dietary!.isSelected, user.educate!.isSelected, 
+        user.parental!.isSelected, user.automobile!.isSelected, user.localTrip!.isSelected, 
+        user.overseatrip!.isSelected, user.camp!.isSelected, user.fishing!.isSelected, 
+        user.pet!.isSelected];
+      durationDates = [
+        user.insurance?.selectedDate, user.loan?.selectedDate, user.deposit?.selectedDate, 
+        user.immovables?.selectedDate, user.stock?.selectedDate, user.cryto?.selectedDate, 
+        user.golf?.selectedDate, user.tennis?.selectedDate, user.fitness?.selectedDate, 
+        user.yoga?.selectedDate, user.dietary?.selectedDate, user.educate?.selectedDate, 
+        user.parental?.selectedDate, user.automobile?.selectedDate, user.localTrip?.selectedDate, 
+        user.overseatrip?.selectedDate, user.camp?.selectedDate, user.fishing?.selectedDate, 
+        user.pet?.selectedDate];
+      
+      originSelecteds = List.from(user.userInterests??[]);
+      
+      newSelecteds = List.from(user.userInterests??[]);
       selectedCount = originSelecteds.length;
     });
   }
@@ -79,10 +104,11 @@ class _InterestScreenState extends State<InterestScreen> {
                   ElevatedButton(
                     style: btnStyle,
                     onPressed: (){
-                      userData.setSeleceds(newSelecteds);
-                      if(isNewUser){
+                      if(controller.myProfile().isNewUser!){
+                        if(checkChanged()){controller.setInterests(newSelecteds, durationDates);}
                         navPush(context, AdditionalScreen());
                       }else{
+                        if(checkChanged()){controller.setInterests(newSelecteds, durationDates);}
                         Navigator.pop(context);
                       }
                     }, 
@@ -97,25 +123,7 @@ class _InterestScreenState extends State<InterestScreen> {
     );
   }
 
-  createInterestListText(){
-    if(selectedCount>0) {
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          for(var i = 0; i < selectedCount; i++)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(2.0),
-                  child: Text(newSelecteds[i], style: const TextStyle(color: Colors.deepPurple, fontSize: 16)),
-                ),
-                Text('저장 유지기간 : ~ ${selectedDates[i]}',),
-            ],),
-        ],
-      );
-    }
-  }
+
   createInterstCard(i){
     return InkWell(
       onTap: (originSelecteds.contains(interestOptions[i]))
@@ -124,21 +132,17 @@ class _InterestScreenState extends State<InterestScreen> {
         setState(() {
           if(newSelecteds.contains(interestOptions[i])){
             isSelecteds[i] = false;
-            selectedDates.removeAt(newSelecteds.indexOf(interestOptions[i]));
-            permissions.removeAt(newSelecteds.indexOf(interestOptions[i]));
+            durationDates[i] = null;
             newSelecteds.remove(interestOptions[i]);
             selectedCount --;
           }else if(selectedCount < 3){
-            String after30days = DateTime.now().add(Duration(days: 30)).toString().split(" ")[0];
+            DateTime after30days = DateTime.now().add(Duration(days: 30));
             isSelecteds[i] = true;
             newSelecteds.add(interestOptions[i]);
-            selectedDates.add(after30days);
-            permissions.add(true);
+            durationDates[i]= after30days;
             selectedCount ++;
           }
         });
-        print("origin : $originSelecteds");
-        print("new : $newSelecteds");
       },
       child: SizedBox(
         height: 60,
@@ -171,5 +175,26 @@ class _InterestScreenState extends State<InterestScreen> {
         ),
       )
     );
+  }
+  
+  createInterestListText(){
+    if(selectedCount>0) {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          for(var i = 0; i < isSelecteds.length; i++)
+            if(isSelecteds[i])
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(2.0),
+                    child: Text(interestOptions[i], style: const TextStyle(color: Colors.deepPurple, fontSize: 16)),
+                  ),
+                  Text('저장 유지기간 : ~ ${durationDates[i].toString().split(" ")[0]}',),
+              ],),
+        ],
+      );
+    }
   }
 }

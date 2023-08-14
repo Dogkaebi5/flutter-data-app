@@ -18,6 +18,7 @@ class BasicDataScreen extends StatefulWidget {
 
 class _BasicDataScreenState extends State<BasicDataScreen> {
   final UserDataController controller = Get.put(UserDataController());
+  
   List basicQuestions = Questions().basicInfo;
   Map residenceMap = Questions().region;
   List residenceOptions = Questions().region.keys.toList();
@@ -49,8 +50,8 @@ class _BasicDataScreenState extends State<BasicDataScreen> {
   void initState(){
     super.initState();
     setState(() {
-      userNickname = controller.myProfile().nickname;
-      userEmail = controller.myProfile().email;
+      userNickname = controller.myProfile().nickname??controller.myProfile().name;
+      userEmail = controller.myProfile().email??controller.myProfile().gmail;
       married = controller.myProfile().married;
       children = controller.myProfile().children;
       education = controller.myProfile().education;
@@ -58,8 +59,8 @@ class _BasicDataScreenState extends State<BasicDataScreen> {
       income = controller.myProfile().income;
       residence = controller.myProfile().residence;
       area = controller.myProfile().area;
-      originUserNickname = userNickname;
-      originUserEmail = userEmail;
+      originUserNickname = controller.myProfile().nickname;
+      originUserEmail = controller.myProfile().email;
       originMarriedSelected = married?.selected;
       originChildrenSelected = children?.selected;
       originEducationSelected = education?.selected;
@@ -101,7 +102,7 @@ class _BasicDataScreenState extends State<BasicDataScreen> {
                   const Text("닉네임", style: fontSmallTitle),
                   const SizedBox(height: 6,),
                   TextFormField(
-                    initialValue: userNickname??controller.myProfile().name,
+                    initialValue: userNickname,
                     maxLength: 15,
                     decoration: inputDecoration,
                     inputFormatters: [
@@ -117,7 +118,7 @@ class _BasicDataScreenState extends State<BasicDataScreen> {
                   const Text("이메일", style: fontSmallTitle),
                   const SizedBox(height: 6,),
                   TextFormField(
-                    initialValue: userEmail??controller.myProfile().gmail, 
+                    initialValue: userEmail,
                     decoration: inputDecoration,
                     onChanged: (value){
                       setState(() {
@@ -181,7 +182,6 @@ class _BasicDataScreenState extends State<BasicDataScreen> {
                       originAreaSelected != selecteds[6]){
                         controller.setBasicData(selecteds, dateList);
                       }
-                      print(originUserNickname);
                       if(originUserNickname == null){
                         navPush(context, InterestScreen());
                       }else{

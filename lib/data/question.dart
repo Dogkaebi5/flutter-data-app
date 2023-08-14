@@ -3,7 +3,7 @@ String? tempString;
 
 
 class Questions {
-  static Map basicDataTitles = {
+  static Map<String, String> basicDataTitles = {
     "married": "결혼여부",
     "children": "자녀유무",
     "education": "최종학력",
@@ -12,9 +12,9 @@ class Questions {
     "residence": "거주지역(도/시)",
     "area": "거주지역(시/군/구)"
   };
-  Map get getBasicDataTitles => basicDataTitles;
+  Map<String, String> get getBasicTitles => basicDataTitles;
 
-  static Map interestsDataTitles = {
+  static Map<String,String> interestsDataTitles = {
     "insurance": "보험설계",
     "loan": "대출",
     "deposit": "예금/적금",
@@ -70,8 +70,8 @@ class Questions {
     "경상남도": ["거제시", "거창군", "고성군", "김해시", "남해군", "밀양시", "사천시", "산청군", "양산시", "의령군", "진주시", "창녕군", "창원시 마산합포구", "창원시 마산회원구", "창원시 성산구", "창원시 의창구", "창원시 진해구", "통영시", "하동군", "함안군", "함양군", "합천군"], 
     "제주특별자치도": ["서귀포시", "제주시"]
   };
-
-  Map<String, List<Map>> interests = {
+  Map<String, List> get interestQuestions => interests;
+  static Map<String, List> interests = {
     "보험설계": [
       {"title": "가입한 보험이 있으신가요?",
       "option": ["10개 이상", "6~10개", "3~5개", "1~2개", "없음"]},

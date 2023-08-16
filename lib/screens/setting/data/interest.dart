@@ -15,50 +15,34 @@ class InterestScreen extends StatefulWidget {
 
 class _InterestScreenState extends State<InterestScreen> {
   UserDataController controller = Get.put(UserDataController());  
-  List<String> interestOptions = Questions().interestQuestions.keys.toList();
-  late List<String> originSelecteds = List.empty(growable: true);
+  List<String> interestOptions = Questions.interests.keys.toList();
+  List<String> originSelecteds = List.empty(growable: true);
   List<String> newSelecteds = List.empty(growable: true);
   List<bool> isSelecteds = List.empty(growable: true);
   List<DateTime?> durationDates = List.empty(growable: true);
   int selectedCount = 0;
   
-  bool checkChanged(){
-    bool tf = true;
+  setInterestsToFirestore(){
     if(originSelecteds.length != selectedCount){
-      tf = true;
-    }else{for(int i = 0; i < selectedCount; i++){
-      if(originSelecteds[i] == newSelecteds[i]){
-        tf = false;
-        break;
-    }}}
-    return tf;
+      controller.setInterests(newSelecteds);
+    }else{
+      for(int i = 0; i < selectedCount; i++){
+        if(originSelecteds[i] != newSelecteds[i]){
+          controller.setInterests(newSelecteds);
+          break;
+        }
+    }}
   }
-
+  
 
   @override
   void initState(){
     super.initState();
     setState(() {
       UserModel user = controller.myProfile();
-      isSelecteds = [
-        user.insurance!.isSelected, user.loan!.isSelected, user.deposit!.isSelected, 
-        user.immovables!.isSelected, user.stock!.isSelected, user.cryto!.isSelected, 
-        user.golf!.isSelected, user.tennis!.isSelected, user.fitness!.isSelected, 
-        user.yoga!.isSelected, user.dietary!.isSelected, user.educate!.isSelected, 
-        user.parental!.isSelected, user.automobile!.isSelected, user.localTrip!.isSelected, 
-        user.overseatrip!.isSelected, user.camp!.isSelected, user.fishing!.isSelected, 
-        user.pet!.isSelected];
-      durationDates = [
-        user.insurance?.selectedDate, user.loan?.selectedDate, user.deposit?.selectedDate, 
-        user.immovables?.selectedDate, user.stock?.selectedDate, user.cryto?.selectedDate, 
-        user.golf?.selectedDate, user.tennis?.selectedDate, user.fitness?.selectedDate, 
-        user.yoga?.selectedDate, user.dietary?.selectedDate, user.educate?.selectedDate, 
-        user.parental?.selectedDate, user.automobile?.selectedDate, user.localTrip?.selectedDate, 
-        user.overseatrip?.selectedDate, user.camp?.selectedDate, user.fishing?.selectedDate, 
-        user.pet?.selectedDate];
-      
+      isSelecteds = controller.getSelectedsList();
+      durationDates = controller.getInterestDates();
       originSelecteds = List.from(user.userInterests??[]);
-      
       newSelecteds = List.from(user.userInterests??[]);
       selectedCount = originSelecteds.length;
     });
@@ -104,11 +88,11 @@ class _InterestScreenState extends State<InterestScreen> {
                   ElevatedButton(
                     style: btnStyle,
                     onPressed: (){
-                      if(controller.myProfile().isNewUser!){
-                        if(checkChanged()){controller.setInterests(newSelecteds, durationDates);}
+                      if(controller.myProfile().isNewUser){
+                        setInterestsToFirestore();
                         navPush(context, AdditionalScreen());
                       }else{
-                        if(checkChanged()){controller.setInterests(newSelecteds, durationDates);}
+                        setInterestsToFirestore();
                         Navigator.pop(context);
                       }
                     }, 
@@ -123,27 +107,32 @@ class _InterestScreenState extends State<InterestScreen> {
     );
   }
 
+  canChange(i){
+    if (originSelecteds.contains(interestOptions[i])){
+      return (durationDates[i]!.microsecond > DateTime.now().microsecond) ? false : true;
+    }else {
+      return true;
+    }
+  }
 
   createInterstCard(i){
     return InkWell(
-      onTap: (originSelecteds.contains(interestOptions[i]))
-        ? (){}
-        : (){
-        setState(() {
-          if(newSelecteds.contains(interestOptions[i])){
-            isSelecteds[i] = false;
-            durationDates[i] = null;
-            newSelecteds.remove(interestOptions[i]);
-            selectedCount --;
-          }else if(selectedCount < 3){
-            DateTime after30days = DateTime.now().add(Duration(days: 30));
-            isSelecteds[i] = true;
-            newSelecteds.add(interestOptions[i]);
-            durationDates[i]= after30days;
-            selectedCount ++;
-          }
-        });
-      },
+      onTap: (canChange(i))
+          ? (){
+          setState(() {
+            if(newSelecteds.contains(interestOptions[i])){
+              isSelecteds[i] = false;
+              durationDates[i] = null;
+              newSelecteds.remove(interestOptions[i]);
+              selectedCount --;
+            }else if(selectedCount < 3){
+              isSelecteds[i] = true;
+              newSelecteds.add(interestOptions[i]);
+              durationDates[i]= controller.durationDate();
+              selectedCount ++;
+            }
+          });
+        } : (){},
       child: SizedBox(
         height: 60,
         width: (MediaQuery.of(context).size.width > 360)
@@ -151,9 +140,9 @@ class _InterestScreenState extends State<InterestScreen> {
           :MediaQuery.of(context).size.width/2 - 26,
         child: 
         Card(
-          color: (originSelecteds.contains(interestOptions[i]))
-            ?Colors.deepPurple.shade200
-            : isSelecteds[i]? Colors.deepPurple : Colors.white,
+          color: (canChange(i))
+              ? isSelecteds[i] ? Colors.deepPurple : Colors.white 
+              :Colors.deepPurple.shade200 ,
           child: Center(
             child:
               isSelecteds[i] ? 

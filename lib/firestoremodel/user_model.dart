@@ -2,10 +2,9 @@ class BasicData{
   String? selected; 
   DateTime? selectedDate; 
   bool isPermit = false;
-  BasicData(
-    selected, 
-    selectedDate, 
-    isPermit);
+  BasicData(this.selected, this.selectedDate, isPermit){
+    this.isPermit = false;
+  }
   BasicData.fromJson(json) : 
     selected = json["selected"],
     selectedDate = (json["selected_date"] != null)? json["selected_date"].toDate(): null,
@@ -25,19 +24,16 @@ class InterestData{
   DateTime? selectedDate; 
   List? answers; 
   bool isPermit = false;
-  InterestData(
-    this.title,
-    this.isSelected,
-    this.selectedDate,
-    this.answers,
-    this.isPermit
-  );
+  InterestData(this.title, isSelected, this.selectedDate, this.answers, isPermit){
+    this.isSelected = false;
+    this.isPermit = false;
+  }
   InterestData.fromJson(json) :
     title = json["title"],
-    isSelected = json["is_selected"],
+    isSelected = json["is_selected"] ?? false,
     selectedDate = (json["selected_date"] != null)? json["selected_date"].toDate(): null,
     answers = json["answers"],
-    isPermit = json["is_permit"];
+    isPermit = json["is_permit"] ?? false;
   Map<String, dynamic> interestToMap(){
     return {
       "title": title,
@@ -50,14 +46,14 @@ class InterestData{
 }
 
 class UserModel{
-  bool? isNewUser;
+  bool isNewUser;
   String? uid, docId, name, mobile, gmail;
   DateTime? createdTime, lastLoginTime;
   List? loginLog;
   String? nickname, email;
   BasicData? married, children, education, occupation, income, residence, area;
   InterestData? insurance, loan, deposit, immovables, stock, cryto, golf, tennis, fitness, yoga, dietary, educate, parental, automobile, localTrip, overseatrip, camp, fishing, pet;
-  List<String?>? userInterests;
+  List? userInterests;
   String? password;
   String? bankName;
   String? bankAccount;
@@ -69,7 +65,7 @@ class UserModel{
 
 
   UserModel({
-    this.isNewUser,
+    this.isNewUser = true,
     this.uid,
     this.docId,
     this.name,

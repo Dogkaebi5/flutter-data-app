@@ -8,8 +8,7 @@ class UserDataController extends GetxController{
   UserDataController get to => Get.find();
   UserModel originalUserProfile = UserModel();
   Rx<UserModel> myProfile = UserModel().obs;
-  List<String> interestTitles = Questions.interests.keys.toList();
-
+  
   authStateChanges(User? firebaseUser) async {
     if(firebaseUser != null){
       UserModel? userModel = await FirebaseUserRepository.findUserByUid(firebaseUser.uid);
@@ -17,6 +16,7 @@ class UserDataController extends GetxController{
         originalUserProfile = userModel;
         FirebaseUserRepository.updateLastLoginDate(userModel.docId, DateTime.now());
       } else {
+        List<String> interestTitles = Questions.interests.keys.toList();
         originalUserProfile = UserModel(
           isNewUser: true,
           uid: firebaseUser.uid, 
@@ -35,6 +35,7 @@ class UserDataController extends GetxController{
           income: BasicData(null, null, false),
           residence: BasicData(null, null, false),
           area: BasicData(null, null, false),
+          userInterests: null,
           insurance: InterestData(interestTitles[0], false, null, List.filled(Questions.interests[interestTitles[0]]!.length, null) , false),
           loan: InterestData(interestTitles[1], false, null, List.filled(Questions.interests[interestTitles[1]]!.length, null) , false),
           deposit: InterestData(interestTitles[2], false, null, List.filled(Questions.interests[interestTitles[2]]!.length, null) , false),
@@ -119,7 +120,7 @@ class UserDataController extends GetxController{
   }
   setBasicData(List basicData, List dates)async{
     bool isUpdated = false;
-    List basicQuestions = Questions().getBasicTitles.keys.toList();
+    List basicQuestions = Questions.basicDataTitles.keys.toList();
     for(int i = 0; i < basicData.length; i++){
       if(basicData[i] != null && dates[i] == null){
         String question = basicQuestions[i];
@@ -134,9 +135,101 @@ class UserDataController extends GetxController{
       isUpdated = false;
     }
   }
-  setInterests(List interest, List dates) async{
-    if(interest.isNotEmpty){
-      FirebaseUserRepository.updateUserInterests(originalUserProfile.docId, interest, dates);
+
+  List<bool> getSelectedsList(){
+    return [
+      originalUserProfile.insurance!.isSelected, 
+      originalUserProfile.loan!.isSelected, 
+      originalUserProfile.deposit!.isSelected, 
+      originalUserProfile.immovables!.isSelected, 
+      originalUserProfile.stock!.isSelected, 
+      originalUserProfile.cryto!.isSelected, 
+      originalUserProfile.golf!.isSelected, 
+      originalUserProfile.tennis!.isSelected, 
+      originalUserProfile.fitness!.isSelected, 
+      originalUserProfile.yoga!.isSelected, 
+      originalUserProfile.dietary!.isSelected, 
+      originalUserProfile.educate!.isSelected, 
+      originalUserProfile.parental!.isSelected, 
+      originalUserProfile.automobile!.isSelected, 
+      originalUserProfile.localTrip!.isSelected, 
+      originalUserProfile.overseatrip!.isSelected, 
+      originalUserProfile.camp!.isSelected, 
+      originalUserProfile.fishing!.isSelected, 
+      originalUserProfile.pet!.isSelected
+    ];
+  }
+  Map<String,List?> getAdditionalAnswersMap(){
+    List<String> interestTitles = Questions.interestsDataTitles.values.toList();
+    return {
+      interestTitles[0]: originalUserProfile.insurance?.answers,
+      interestTitles[1]: originalUserProfile.loan?.answers,
+      interestTitles[2]: originalUserProfile.deposit?.answers,
+      interestTitles[3]: originalUserProfile.immovables?.answers,
+      interestTitles[4]: originalUserProfile.stock?.answers,
+      interestTitles[5]: originalUserProfile.cryto?.answers,
+      interestTitles[6]: originalUserProfile.golf?.answers,
+      interestTitles[7]: originalUserProfile.tennis?.answers,
+      interestTitles[8]: originalUserProfile.fitness?.answers,
+      interestTitles[9]: originalUserProfile.yoga?.answers,
+      interestTitles[10]: originalUserProfile.dietary?.answers,
+      interestTitles[11]: originalUserProfile.educate?.answers,
+      interestTitles[12]: originalUserProfile.parental?.answers,
+      interestTitles[13]: originalUserProfile.automobile?.answers,
+      interestTitles[14]: originalUserProfile.localTrip?.answers,
+      interestTitles[15]: originalUserProfile.overseatrip?.answers,
+      interestTitles[16]: originalUserProfile.camp?.answers,
+      interestTitles[17]: originalUserProfile.fishing?.answers,
+      interestTitles[18]: originalUserProfile.pet?.answers,
+    };
+  }
+  
+  List<DateTime?> getInterestDates(){
+    return [
+      originalUserProfile.insurance?.selectedDate,
+      originalUserProfile.loan?.selectedDate,
+      originalUserProfile.deposit?.selectedDate,
+      originalUserProfile.immovables?.selectedDate,
+      originalUserProfile.stock?.selectedDate,
+      originalUserProfile.cryto?.selectedDate,
+      originalUserProfile.golf?.selectedDate,
+      originalUserProfile.tennis?.selectedDate,
+      originalUserProfile.fitness?.selectedDate,
+      originalUserProfile.yoga?.selectedDate,
+      originalUserProfile.dietary?.selectedDate,
+      originalUserProfile.educate?.selectedDate,
+      originalUserProfile.parental?.selectedDate,
+      originalUserProfile.automobile?.selectedDate,
+      originalUserProfile.localTrip?.selectedDate,
+      originalUserProfile.overseatrip?.selectedDate,
+      originalUserProfile.camp?.selectedDate,
+      originalUserProfile.fishing?.selectedDate,
+      originalUserProfile.pet?.selectedDate];
+  }
+  
+  List<String> createInterestKeysList(List interests){
+    List<String> list = [];
+    for (int i = 0; i < interests.length; i++) {
+      String key = Questions.interestsDataTitles.keys.firstWhere((k) => 
+        Questions.interestsDataTitles[k] == interests[i]);
+        list.add(key);
+    }
+    return list;
+  }
+  
+  DateTime durationDate() =>  DateTime.now().add(Duration(days: 1));
+
+  void setInterests(List<String> values) async{
+    List<String> keys = createInterestKeysList(values);
+    Map answersMap = getAdditionalAnswersMap();
+    List<List> answers = [];
+    List<DateTime?> dates = [];
+    for (int i = 0; i < values.length; i++) {
+      answers.add(answersMap[values[i]]);
+      dates.add(durationDate());
+    }
+    if(values.isNotEmpty){
+      FirebaseUserRepository.updateUserInterests(originalUserProfile.docId, keys, values, dates, answers);
       UserModel? userModel = await FirebaseUserRepository.findUserByUid(originalUserProfile.uid!);
       originalUserProfile = userModel!;
       myProfile(UserModel.clone(originalUserProfile));

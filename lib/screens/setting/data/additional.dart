@@ -1,13 +1,12 @@
-import 'dart:convert';
-
 import 'package:data_project/data/question.dart';
+import 'package:data_project/firestoremodel/profile_controller.dart';
 import 'package:data_project/provider/new_user_provider.dart';
-import 'package:data_project/provider/user_interest_data_provider.dart';
 import 'package:data_project/screens/home/home.dart';
 import 'package:data_project/widgets/data_pages_header.dart';
 import 'package:data_project/widgets/question_dropdown.dart';
 import 'package:data_project/widgets/widget_style.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 class AdditionalScreen extends StatefulWidget {
@@ -18,25 +17,22 @@ class AdditionalScreen extends StatefulWidget {
 }
 
 class _AdditionalScreenState extends State<AdditionalScreen> {
-  bool isNewUser = false;
-  String? tempString;
+  UserDataController controller = Get.put(UserDataController());
 
-  List interstSelecteds = List.empty(growable: true);
-  List interestDates = List.empty(growable: true);
+  List? interstSelecteds;
+  List<DateTime?> interestDates = [];
   int interestCount = 0;
+
+  // Map questions = Questions.interests;
+  Map originalAnswers = {};
+  Map newAnswers = {};
+  List? nowSelectedQuestions;
 
   List<bool> toggleSelects = List.empty(growable: true);
   int nowToggleIndex = 0;
 
-  Map questions = Questions().interestQuestions;
-  List nowSelectedQuestions = List.empty(growable: true);
-  Map additionalSeleteds = {};
-  Map originSelecteds = {};
-  
-  List quests = List.empty(growable: true);
-
   router(){
-    if(isNewUser){
+    if(controller.myProfile().isNewUser){
       Navigator.pushAndRemoveUntil(
         context, 
         MaterialPageRoute(builder: (context) => HomeScreen()), 
@@ -62,20 +58,19 @@ class _AdditionalScreenState extends State<AdditionalScreen> {
   void initState() {
     super.initState();
     setState(() {
-      isNewUser = context.read<NewUserProvider>().isNewUser;
-      interstSelecteds = context.read<UserInterestData>().selecteds;
-      interestDates = context.read<UserInterestData>().selectedDates;
-      interestCount = interstSelecteds.length;
+      interstSelecteds = controller.myProfile().userInterests;
+      interestDates = controller.getInterestDates();
+      interestCount = (interstSelecteds != null)? interstSelecteds!.length : 0;
       if (interestCount > 0) {
-        nowSelectedQuestions = questions[interstSelecteds[0]];
+        nowSelectedQuestions = Questions.interests[interstSelecteds![0]];
       }
       switch(interestCount){
         case 1 : toggleSelects = [true]; break;
         case 2 : toggleSelects = [true, false]; break;
         case 3 : toggleSelects = [true, false, false]; break;
       }
-      additionalSeleteds = context.read<UserInterestData>().additionalData;
-      originSelecteds = json.decode(json.encode(context.read<UserInterestData>().additionalData));
+      newAnswers = controller.getAdditionalAnswersMap();
+      originalAnswers = controller.getAdditionalAnswersMap();
     });
   }
 
@@ -97,7 +92,6 @@ class _AdditionalScreenState extends State<AdditionalScreen> {
                     description: "정보가 많을 수록 판매될 확률이 높아집니다.\n입력된 정보는 3개월간 수정 불가합니다.", 
                     icon: Icons.library_add),
                   const SizedBox(height: 32,),
-
                   (interestCount > 0)
                   ?Column(
                     children: [
@@ -108,17 +102,17 @@ class _AdditionalScreenState extends State<AdditionalScreen> {
                               toggleSelects = List.filled(toggleSelects.length, false);
                               toggleSelects[index] = true;
                               nowToggleIndex = index;
-                              nowSelectedQuestions = questions[interstSelecteds[index]];
+                              nowSelectedQuestions = Questions.interests[interstSelecteds![index]];
                             });
                           }
                         },
                         isSelected: toggleSelects,
                         children: [
-                          for (int i = 0; i < interstSelecteds.length; i++)
+                          for (int i = 0; i < interstSelecteds!.length; i++)
                             Container(
                               width: 100,
                               padding: const EdgeInsets.all(2),
-                              child: Text(interstSelecteds[i], 
+                              child: Text(interstSelecteds![i], 
                                 textAlign: TextAlign.center,
                                 style: fontSmallTitle,
                             )),
@@ -126,18 +120,18 @@ class _AdditionalScreenState extends State<AdditionalScreen> {
                       const SizedBox(height: 12,),
                       createInterestDateText(),
                       const SizedBox(height: 40,),
-
-                      for (int i = 0; i < nowSelectedQuestions.length; i++)
-                        QuestionDropDown(
-                          isEnabled: (originSelecteds[interstSelecteds[nowToggleIndex]][i] == null), 
-                          question: nowSelectedQuestions[i]["title"], 
-                          options: nowSelectedQuestions[i]["option"], 
-                          selected: additionalSeleteds[interstSelecteds[nowToggleIndex]][i], 
-                          onChanged: (value) {
-                            setState((){
-                              additionalSeleteds[interstSelecteds[nowToggleIndex]][i] = value;
-                            });}
-                          ),
+                      if(nowSelectedQuestions != null)
+                        for (int i = 0; i < nowSelectedQuestions!.length; i++)
+                          QuestionDropDown(
+                            isEnabled: (originalAnswers[interstSelecteds![nowToggleIndex]][i] == null), 
+                            question: nowSelectedQuestions![i]["title"], 
+                            options: nowSelectedQuestions![i]["option"], 
+                            selected: newAnswers[interstSelecteds![nowToggleIndex]][i], 
+                            onChanged: (value) {
+                              setState((){
+                                newAnswers[interstSelecteds![nowToggleIndex]][i] = value;
+                              });}
+                            ),
 
                   ])
                   : Column(
@@ -156,7 +150,7 @@ class _AdditionalScreenState extends State<AdditionalScreen> {
                             setState((){
                               nowToggleIndex++;
                               toggleSelects = [false, true];
-                              nowSelectedQuestions = questions[interstSelecteds[nowToggleIndex]];
+                              nowSelectedQuestions = Questions.interests[interstSelecteds![nowToggleIndex]];
                             });
                           }else{setData(); router(); break;}
                         case 3 : 
@@ -164,13 +158,13 @@ class _AdditionalScreenState extends State<AdditionalScreen> {
                             setState((){
                               nowToggleIndex++;
                               toggleSelects = [false, true, false];
-                              nowSelectedQuestions = questions[interstSelecteds[nowToggleIndex]];
+                              nowSelectedQuestions = Questions.interests[interstSelecteds![nowToggleIndex]];
                             });
                           }else if (toggleSelects[1]){
                             setState((){
                               nowToggleIndex++;
                               toggleSelects = [false, false, true];
-                              nowSelectedQuestions = questions[interstSelecteds[nowToggleIndex]];
+                              nowSelectedQuestions = Questions.interests[interstSelecteds![nowToggleIndex]];
                             });
                           }else {setData(); router(); break;}
                         default: setData(); router(); break;

@@ -19,9 +19,9 @@ class BasicDataScreen extends StatefulWidget {
 class _BasicDataScreenState extends State<BasicDataScreen> {
   final UserDataController controller = Get.put(UserDataController());
   
-  List basicQuestions = Questions().basicInfo;
-  Map residenceMap = Questions().region;
-  List residenceOptions = Questions().region.keys.toList();
+  List basicQuestions = Questions.basicInfo;
+  Map residenceMap = Questions.region;
+  List residenceOptions = Questions.region.keys.toList();
   List<String?> areaOptions = List.empty(growable: true);
 
   String? userNickname, userEmail;
@@ -182,7 +182,7 @@ class _BasicDataScreenState extends State<BasicDataScreen> {
                       originAreaSelected != selecteds[6]){
                         controller.setBasicData(selecteds, dateList);
                       }
-                      if(originUserNickname == null){
+                      if(controller.originalUserProfile.isNewUser){
                         navPush(context, InterestScreen());
                       }else{
                         Navigator.pop(context);

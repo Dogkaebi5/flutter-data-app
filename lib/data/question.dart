@@ -3,7 +3,7 @@ String? tempString;
 
 
 class Questions {
-  static Map<String, String> basicDataTitles = {
+  static const Map<String, String> basicDataTitles = {
     "married": "결혼여부",
     "children": "자녀유무",
     "education": "최종학력",
@@ -12,9 +12,8 @@ class Questions {
     "residence": "거주지역(도/시)",
     "area": "거주지역(시/군/구)"
   };
-  Map<String, String> get getBasicTitles => basicDataTitles;
 
-  static Map<String,String> interestsDataTitles = {
+  static const Map<String,String> interestsDataTitles = {
     "insurance": "보험설계",
     "loan": "대출",
     "deposit": "예금/적금",
@@ -36,7 +35,7 @@ class Questions {
     "pet": "반려동물"
   };
 
-  List<Map> basicInfo = [
+  static List<Map> basicInfo = [
     {"title": basicDataTitles["married"],
     "option" : ["미혼", "기혼"]},
     {"title": basicDataTitles["children"],
@@ -51,7 +50,7 @@ class Questions {
     {"title": basicDataTitles["area"]}
   ];
 
-  Map region = {
+  static Map region = {
     "서울특별시": ["강남구", "강동구", "강북구", "강서구", "관악구", "광진구", "구로구", "금천구", "노원구", "도봉구", "동대문구", "동작구", "마포구", "서대문구", "서초구", "성동구", "성북구", "송파구", "양천구", "영등포구", "용산구", "은평구", "종로구", "중구", "중랑구"], 
     "부산광역시": ["강서구", "금정구", "기장군", "남구", "동구", "동래구", "부산진구", "북구", "사상구", "사하구", "서구", "수영구", "연제구", "영도구", "중구", "해운대구"], 
     "대구광역시": ["군위군", "남구", "달서구", "달성군", "동구", "북구", "서구", "수성구", "중구"], 
@@ -70,7 +69,7 @@ class Questions {
     "경상남도": ["거제시", "거창군", "고성군", "김해시", "남해군", "밀양시", "사천시", "산청군", "양산시", "의령군", "진주시", "창녕군", "창원시 마산합포구", "창원시 마산회원구", "창원시 성산구", "창원시 의창구", "창원시 진해구", "통영시", "하동군", "함안군", "함양군", "합천군"], 
     "제주특별자치도": ["서귀포시", "제주시"]
   };
-  Map<String, List> get interestQuestions => interests;
+
   static Map<String, List> interests = {
     "보험설계": [
       {"title": "가입한 보험이 있으신가요?",

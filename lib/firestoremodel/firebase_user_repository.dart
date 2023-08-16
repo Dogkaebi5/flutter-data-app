@@ -85,15 +85,19 @@ class FirebaseUserRepository {
     });
   }
 
-  static void updateUserInterests(String? docId, List interests, List date){
+  static void updateUserInterests(String? docId, List<String> keys, List<String> values, List<DateTime?> date, List<List> answers){
     CollectionReference users = FirebaseFirestore.instance.collection("users");
-    for (int i = 0; i < interests.length; i++){
-      users.doc(docId).update({interests[i] : {
-          "isSelecteds": true,
-          "selectedDate": date[i],
-          "isPermit": true 
+    for (int i = 0; i < values.length; i++){
+      users.doc(docId).update({
+        keys[i] : {
+          "title" : values[i],
+          "is_selecteds": true,
+          "selected_date": date[i],
+          "is_permit": true,
+          "answers": answers[i]
         }
       });
     }
+    users.doc(docId).update({"user_interests" : values});
   }
 }

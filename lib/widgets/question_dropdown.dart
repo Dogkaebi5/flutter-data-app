@@ -45,7 +45,7 @@ class _QuestionDropDownState extends State<QuestionDropDown> {
               isExpanded: true,
               value: widget.selected,
               items: widget.options.map((e) => DropdownMenuItem(
-                enabled: (widget.isEnabled)?true:false,
+                enabled: widget.isEnabled,
                 value: e,
                 child: Text(e))).toList(), 
               onChanged: (value) {

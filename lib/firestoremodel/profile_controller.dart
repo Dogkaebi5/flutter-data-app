@@ -78,7 +78,7 @@ class UserDataController extends GetxController{
     return FirebaseUserRepository.checkIsNewUser(originalUserProfile.docId);
   }
 
-  changePermitTeleMarketing(bool isPermit){
+  void changePermitTeleMarketing(bool isPermit){
     originalUserProfile.isPermitTelemarketing = isPermit;
     originalUserProfile.permitTelemarketingDate = (isPermit) ? DateTime.now() : null;
     FirebaseUserRepository.updateIsPermitTeleMarketing(
@@ -153,7 +153,6 @@ class UserDataController extends GetxController{
   List<String?> getBasicSelecteds(){
     return [
       originalUserProfile.married!.selected,
-      originalUserProfile.married!.selected,
       originalUserProfile.children!.selected,
       originalUserProfile.education!.selected,
       originalUserProfile.occupation!.selected,
@@ -220,6 +219,11 @@ class UserDataController extends GetxController{
       originalUserProfile.fishing?.selectedDate,
       originalUserProfile.pet?.selectedDate];
   }
+  List<DateTime?> getInterestDatesWithoutNull(){
+    List<DateTime?> interestDates = getInterestDates();
+    interestDates.removeWhere((item) => (item == null));
+    return interestDates;
+  }
   Map<String,List?> getAdditionalAnswersMap(){
     List<String> interestTitles = Questions.interestsDataTitles.values.toList();
     return {
@@ -244,6 +248,7 @@ class UserDataController extends GetxController{
       interestTitles[18]: originalUserProfile.pet?.answers,
     };
   }
+
 
   DateTime durationDate() =>  DateTime.now().add(Duration(days: 1));
 

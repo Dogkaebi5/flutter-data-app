@@ -30,16 +30,15 @@ class _AdditionalScreenState extends State<AdditionalScreen> {
 
   List<bool> toggleSelects = List.empty(growable: true);
   int nowToggleIndex = 0;
-
   
   @override
   void initState() {
     super.initState();
     setState(() {
       userInterests = controller.myProfile().userInterests;
-      List interestDates = List.from(controller.getInterestDates());
-      interestDates.removeWhere((item) => (item == null));
-      print("test: $userInterests");
+      interestDates = controller.getInterestDatesWithoutNull();
+      originalAnswers = controller.getAdditionalAnswersMap();
+      newAnswers = controller.getAdditionalAnswersMap();
       interestCount = (userInterests != null)? userInterests!.length : 0;
       if (interestCount > 0) {
         nowSelectedQuestions = Questions.interests[userInterests![0]];
@@ -49,12 +48,9 @@ class _AdditionalScreenState extends State<AdditionalScreen> {
         case 2 : toggleSelects = [true, false]; break;
         case 3 : toggleSelects = [true, false, false]; break;
       }
-      newAnswers = controller.getAdditionalAnswersMap();
-      originalAnswers = controller.getAdditionalAnswersMap();
     });
   }
-
-  router(){
+  void router(){
     if(controller.myProfile().isNewUser){
       Navigator.pushAndRemoveUntil(
         context, 
@@ -63,14 +59,14 @@ class _AdditionalScreenState extends State<AdditionalScreen> {
       );
     }else{ Navigator.pop(context); }
   }
-  setData(){ context.read<NewUserProvider>().notNewUser(); }
+  void setData(){ context.read<NewUserProvider>().notNewUser(); }
 
-  createInterestDateText(){
+  Center createInterestDateText(){
     if (toggleSelects.isEmpty){return Center(child: Text(""),);
     }else if (toggleSelects[0]){return Center(child: Text("내용유지 : ~ ${interestDates[0].toString().split(" ")[0]}"));
     }else if (toggleSelects[1]){return Center(child: Text("내용유지 : ~ ${interestDates[1].toString().split(" ")[0]}}"));
     }else if (toggleSelects[2]){return Center(child: Text("내용유지 : ~ ${interestDates[2].toString().split(" ")[0]}}"));
-    }else {return const Text("예상하지 못한 에러");}
+    }else {return const Center(child: Text("예상하지 못한 에러"));}
   }
 
   @override
@@ -117,7 +113,7 @@ class _AdditionalScreenState extends State<AdditionalScreen> {
                             )),
                       ]),
                       const SizedBox(height: 12,),
-                      // createInterestDateText(),
+                      createInterestDateText(),
                       const SizedBox(height: 40,),
                       if(nowSelectedQuestions != null)
                         for (int i = 0; i < nowSelectedQuestions!.length; i++)

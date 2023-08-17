@@ -35,7 +35,7 @@ class _BasicDataScreenState extends State<BasicDataScreen> {
   bool canChange(i){
     if (dateList[i] == null){
       return true;
-    } else if (dateList[i]!.microsecondsSinceEpoch < DateTime.now().microsecondsSinceEpoch){
+    } else if (dateList[i]!.microsecondsSinceEpoch > DateTime.now().microsecondsSinceEpoch){
       return true;
     }
     return false;

@@ -6,18 +6,18 @@ import 'package:get/get.dart';
 
 class UserDataController extends GetxController{
   UserDataController get to => Get.find();
-  UserModel originalUserProfile = UserModel();
+  UserModel originData = UserModel();
   Rx<UserModel> myProfile = UserModel().obs;
   
   authStateChanges(User? firebaseUser) async {
     if(firebaseUser != null){
       UserModel? userModel = await FirebaseUserRepository.findUserByUid(firebaseUser.uid);
       if (userModel != null){
-        originalUserProfile = userModel;
+        originData = userModel;
         FirebaseUserRepository.updateLastLoginDate(userModel.docId, DateTime.now());
       } else {
         List<String> interestTitles = Questions.interests.keys.toList();
-        originalUserProfile = UserModel(
+        originData = UserModel(
           isNewUser: true,
           uid: firebaseUser.uid, 
           name: firebaseUser.displayName?? "홍길동",
@@ -64,72 +64,72 @@ class UserDataController extends GetxController{
           isPermitTelemarketing: false,
           permitTelemarketingDate: null,
         );
-        String docId = await FirebaseUserRepository.signup(originalUserProfile);
-        originalUserProfile.docId = docId;
+        String docId = await FirebaseUserRepository.signup(originData);
+        originData.docId = docId;
       }
     }
-    myProfile(UserModel.clone(originalUserProfile));
+    myProfile(UserModel.clone(originData));
   }
 
   bool checkHasPassword(){
-    return FirebaseUserRepository.checkPassword(originalUserProfile.docId);
+    return FirebaseUserRepository.checkPassword(originData.docId);
   }
   bool checkIsNewUser(){
-    return FirebaseUserRepository.checkIsNewUser(originalUserProfile.docId);
+    return FirebaseUserRepository.checkIsNewUser(originData.docId);
   }
 
   void changePermitTeleMarketing(bool isPermit){
-    originalUserProfile.isPermitTelemarketing = isPermit;
-    originalUserProfile.permitTelemarketingDate = (isPermit) ? DateTime.now() : null;
+    originData.isPermitTelemarketing = isPermit;
+    originData.permitTelemarketingDate = (isPermit) ? DateTime.now() : null;
     FirebaseUserRepository.updateIsPermitTeleMarketing(
-      originalUserProfile.docId, 
-      originalUserProfile.isPermitTelemarketing!,
-      originalUserProfile.permitTelemarketingDate
+      originData.docId, 
+      originData.isPermitTelemarketing!,
+      originData.permitTelemarketingDate
     );
   }
   void changeNoticeService(){
-    if(originalUserProfile.isNoticeService != null){
-      originalUserProfile.isNoticeService = !originalUserProfile.isNoticeService!;
-      FirebaseUserRepository.updateIsNoticeService(originalUserProfile.docId, originalUserProfile.isNoticeService!);
+    if(originData.isNoticeService != null){
+      originData.isNoticeService = !originData.isNoticeService!;
+      FirebaseUserRepository.updateIsNoticeService(originData.docId, originData.isNoticeService!);
     }
   }
   void changeNoticeMarketing(){
-    if(originalUserProfile.isNoticeMarketing != null){
-      originalUserProfile.isNoticeMarketing = !originalUserProfile.isNoticeMarketing!;
-      FirebaseUserRepository.updateIsNoticeMarketing(originalUserProfile.docId, originalUserProfile.isNoticeMarketing!);
+    if(originData.isNoticeMarketing != null){
+      originData.isNoticeMarketing = !originData.isNoticeMarketing!;
+      FirebaseUserRepository.updateIsNoticeMarketing(originData.docId, originData.isNoticeMarketing!);
     }
   }
   void setNewPassword(String pw){
     if (pw.length == 4){
-      FirebaseUserRepository.updatePassword(originalUserProfile.docId, pw);
+      FirebaseUserRepository.updatePassword(originData.docId, pw);
     }
   }
   void setBasic(nickname, email, selecteds){
-    if(originalUserProfile.nickname != nickname){setNickname(nickname);}
-    if(originalUserProfile.email != email){setEmail(email);}
+    if(originData.nickname != nickname){setNickname(nickname);}
+    if(originData.email != email){setEmail(email);}
     if(
-      originalUserProfile.married!.selected != selecteds[0] ||
-      originalUserProfile.children!.selected != selecteds[1] ||
-      originalUserProfile.education!.selected != selecteds[2] ||
-      originalUserProfile.occupation!.selected != selecteds[3] ||
-      originalUserProfile.income!.selected != selecteds[4] ||
-      originalUserProfile.residence!.selected != selecteds[5] ||
-      originalUserProfile.area!.selected != selecteds[6]){
+      originData.married!.selected != selecteds[0] ||
+      originData.children!.selected != selecteds[1] ||
+      originData.education!.selected != selecteds[2] ||
+      originData.occupation!.selected != selecteds[3] ||
+      originData.income!.selected != selecteds[4] ||
+      originData.residence!.selected != selecteds[5] ||
+      originData.area!.selected != selecteds[6]){
         setBasicData(selecteds);
       }
   }
   void setNickname(String? nickname){
     if (nickname != null && nickname != ""){
-      FirebaseUserRepository.updateNickname(originalUserProfile.docId, nickname);
-      originalUserProfile.nickname = nickname;
-      myProfile(UserModel.clone(originalUserProfile));
+      FirebaseUserRepository.updateNickname(originData.docId, nickname);
+      originData.nickname = nickname;
+      myProfile(UserModel.clone(originData));
     }
   }
   void setEmail(String? email){
     if (email != null && email != ""){
-      FirebaseUserRepository.updateEmail(originalUserProfile.docId, email);
-      originalUserProfile.email = email;
-      myProfile(UserModel.clone(originalUserProfile));
+      FirebaseUserRepository.updateEmail(originData.docId, email);
+      originData.email = email;
+      myProfile(UserModel.clone(originData));
     }
   }
   void setBasicData(List basicData)async{
@@ -139,119 +139,137 @@ class UserDataController extends GetxController{
     for(int i = 0; i < basicData.length; i++){
       if(basicData[i] != null && dates[i] == null){
         FirebaseUserRepository.updateBasicData(
-          originalUserProfile.docId, basicQuestions[i], basicData[i], DateTime.now());
+          originData.docId, basicQuestions[i], basicData[i], DateTime.now());
         isUpdated = true;
       }
     }
     if(isUpdated){
-      UserModel? userModel = await FirebaseUserRepository.findUserByUid(originalUserProfile.uid!);
-      originalUserProfile = userModel!;
-      myProfile(UserModel.clone(originalUserProfile));
+      UserModel? userModel = await FirebaseUserRepository.findUserByUid(originData.uid!);
+      originData = userModel!;
+      myProfile(UserModel.clone(originData));
       isUpdated = false;
     }
   }
   List<String?> getBasicSelecteds(){
     return [
-      originalUserProfile.married!.selected,
-      originalUserProfile.children!.selected,
-      originalUserProfile.education!.selected,
-      originalUserProfile.occupation!.selected,
-      originalUserProfile.income!.selected,
-      originalUserProfile.residence!.selected,
-      originalUserProfile.area!.selected
+      originData.married!.selected,
+      originData.children!.selected,
+      originData.education!.selected,
+      originData.occupation!.selected,
+      originData.income!.selected,
+      originData.residence!.selected,
+      originData.area!.selected
     ];
   }
   List<DateTime?> getBasicDateTimes(){
     return [
-      originalUserProfile.married!.selectedDate,
-      originalUserProfile.married!.selectedDate,
-      originalUserProfile.children!.selectedDate,
-      originalUserProfile.education!.selectedDate,
-      originalUserProfile.occupation!.selectedDate,
-      originalUserProfile.income!.selectedDate,
-      originalUserProfile.residence!.selectedDate,
-      originalUserProfile.area!.selectedDate
+      originData.married!.selectedDate,
+      originData.children!.selectedDate,
+      originData.education!.selectedDate,
+      originData.occupation!.selectedDate,
+      originData.income!.selectedDate,
+      originData.residence!.selectedDate,
+      originData.area!.selectedDate
     ];
   }
-
   List<bool> getIsSelecteds(){
     return [
-      originalUserProfile.insurance!.isSelected, 
-      originalUserProfile.loan!.isSelected, 
-      originalUserProfile.deposit!.isSelected, 
-      originalUserProfile.immovables!.isSelected, 
-      originalUserProfile.stock!.isSelected, 
-      originalUserProfile.cryto!.isSelected, 
-      originalUserProfile.golf!.isSelected, 
-      originalUserProfile.tennis!.isSelected, 
-      originalUserProfile.fitness!.isSelected, 
-      originalUserProfile.yoga!.isSelected, 
-      originalUserProfile.dietary!.isSelected, 
-      originalUserProfile.educate!.isSelected, 
-      originalUserProfile.parental!.isSelected, 
-      originalUserProfile.automobile!.isSelected, 
-      originalUserProfile.localTrip!.isSelected, 
-      originalUserProfile.overseatrip!.isSelected, 
-      originalUserProfile.camp!.isSelected, 
-      originalUserProfile.fishing!.isSelected, 
-      originalUserProfile.pet!.isSelected
+      originData.insurance!.isSelected, 
+      originData.loan!.isSelected, 
+      originData.deposit!.isSelected, 
+      originData.immovables!.isSelected, 
+      originData.stock!.isSelected, 
+      originData.cryto!.isSelected, 
+      originData.golf!.isSelected, 
+      originData.tennis!.isSelected, 
+      originData.fitness!.isSelected, 
+      originData.yoga!.isSelected, 
+      originData.dietary!.isSelected, 
+      originData.educate!.isSelected, 
+      originData.parental!.isSelected, 
+      originData.automobile!.isSelected, 
+      originData.localTrip!.isSelected, 
+      originData.overseatrip!.isSelected, 
+      originData.camp!.isSelected, 
+      originData.fishing!.isSelected, 
+      originData.pet!.isSelected
     ];
   }
   List<DateTime?> getInterestDates(){
     return [
-      originalUserProfile.insurance?.selectedDate,
-      originalUserProfile.loan?.selectedDate,
-      originalUserProfile.deposit?.selectedDate,
-      originalUserProfile.immovables?.selectedDate,
-      originalUserProfile.stock?.selectedDate,
-      originalUserProfile.cryto?.selectedDate,
-      originalUserProfile.golf?.selectedDate,
-      originalUserProfile.tennis?.selectedDate,
-      originalUserProfile.fitness?.selectedDate,
-      originalUserProfile.yoga?.selectedDate,
-      originalUserProfile.dietary?.selectedDate,
-      originalUserProfile.educate?.selectedDate,
-      originalUserProfile.parental?.selectedDate,
-      originalUserProfile.automobile?.selectedDate,
-      originalUserProfile.localTrip?.selectedDate,
-      originalUserProfile.overseatrip?.selectedDate,
-      originalUserProfile.camp?.selectedDate,
-      originalUserProfile.fishing?.selectedDate,
-      originalUserProfile.pet?.selectedDate];
+      originData.insurance?.selectedDate,
+      originData.loan?.selectedDate,
+      originData.deposit?.selectedDate,
+      originData.immovables?.selectedDate,
+      originData.stock?.selectedDate,
+      originData.cryto?.selectedDate,
+      originData.golf?.selectedDate,
+      originData.tennis?.selectedDate,
+      originData.fitness?.selectedDate,
+      originData.yoga?.selectedDate,
+      originData.dietary?.selectedDate,
+      originData.educate?.selectedDate,
+      originData.parental?.selectedDate,
+      originData.automobile?.selectedDate,
+      originData.localTrip?.selectedDate,
+      originData.overseatrip?.selectedDate,
+      originData.camp?.selectedDate,
+      originData.fishing?.selectedDate,
+      originData.pet?.selectedDate];
   }
   List<DateTime?> getInterestDatesWithoutNull(){
     List<DateTime?> interestDates = getInterestDates();
     interestDates.removeWhere((item) => (item == null));
     return interestDates;
   }
+  List<List?> getAdditionalAnswersList(){
+    return [
+      originData.insurance?.answers,
+      originData.loan?.answers,
+      originData.deposit?.answers,
+      originData.immovables?.answers,
+      originData.stock?.answers,
+      originData.cryto?.answers,
+      originData.golf?.answers,
+      originData.tennis?.answers,
+      originData.fitness?.answers,
+      originData.yoga?.answers,
+      originData.dietary?.answers,
+      originData.educate?.answers,
+      originData.parental?.answers,
+      originData.automobile?.answers,
+      originData.localTrip?.answers,
+      originData.overseatrip?.answers,
+      originData.camp?.answers,
+      originData.fishing?.answers,
+      originData.pet?.answers,
+    ];
+  }
   Map<String,List?> getAdditionalAnswersMap(){
     List<String> interestTitles = Questions.interestsDataTitles.values.toList();
     return {
-      interestTitles[0]: originalUserProfile.insurance?.answers,
-      interestTitles[1]: originalUserProfile.loan?.answers,
-      interestTitles[2]: originalUserProfile.deposit?.answers,
-      interestTitles[3]: originalUserProfile.immovables?.answers,
-      interestTitles[4]: originalUserProfile.stock?.answers,
-      interestTitles[5]: originalUserProfile.cryto?.answers,
-      interestTitles[6]: originalUserProfile.golf?.answers,
-      interestTitles[7]: originalUserProfile.tennis?.answers,
-      interestTitles[8]: originalUserProfile.fitness?.answers,
-      interestTitles[9]: originalUserProfile.yoga?.answers,
-      interestTitles[10]: originalUserProfile.dietary?.answers,
-      interestTitles[11]: originalUserProfile.educate?.answers,
-      interestTitles[12]: originalUserProfile.parental?.answers,
-      interestTitles[13]: originalUserProfile.automobile?.answers,
-      interestTitles[14]: originalUserProfile.localTrip?.answers,
-      interestTitles[15]: originalUserProfile.overseatrip?.answers,
-      interestTitles[16]: originalUserProfile.camp?.answers,
-      interestTitles[17]: originalUserProfile.fishing?.answers,
-      interestTitles[18]: originalUserProfile.pet?.answers,
+      interestTitles[0]: originData.insurance?.answers,
+      interestTitles[1]: originData.loan?.answers,
+      interestTitles[2]: originData.deposit?.answers,
+      interestTitles[3]: originData.immovables?.answers,
+      interestTitles[4]: originData.stock?.answers,
+      interestTitles[5]: originData.cryto?.answers,
+      interestTitles[6]: originData.golf?.answers,
+      interestTitles[7]: originData.tennis?.answers,
+      interestTitles[8]: originData.fitness?.answers,
+      interestTitles[9]: originData.yoga?.answers,
+      interestTitles[10]: originData.dietary?.answers,
+      interestTitles[11]: originData.educate?.answers,
+      interestTitles[12]: originData.parental?.answers,
+      interestTitles[13]: originData.automobile?.answers,
+      interestTitles[14]: originData.localTrip?.answers,
+      interestTitles[15]: originData.overseatrip?.answers,
+      interestTitles[16]: originData.camp?.answers,
+      interestTitles[17]: originData.fishing?.answers,
+      interestTitles[18]: originData.pet?.answers,
     };
   }
-
-
   DateTime durationDate() =>  DateTime.now().add(Duration(days: 1));
-
   void setInterests(isSelecteds) async{
     List<String> newSelecteds = createNewInterestSelecteds(isSelecteds);
     if(checkInterestHasUpdate(newSelecteds)){
@@ -259,11 +277,12 @@ class UserDataController extends GetxController{
       Map answersMap = getAdditionalAnswersMap();
       List<List> answers = [];
       List<DateTime?> dates = [];
-      List? userInterests = originalUserProfile.userInterests;
+      List? userInterests = originData.userInterests;
       List checkList = [];
-      if (userInterests != null){
+      if(userInterests  == null){
+        checkList = [null, null, null];
+      }else{
         switch (userInterests.length) {
-          case 0 : checkList = [null, null, null];break;
           case 1 : checkList = [userInterests[0], null, null];break;
           case 2 : checkList = [userInterests[0], userInterests[1], null];break;
           case 3 : checkList = [userInterests[0], userInterests[1], userInterests[2]];break;
@@ -275,45 +294,78 @@ class UserDataController extends GetxController{
           dates.add(durationDate());
         }
       }
-      FirebaseUserRepository.updateUserInterests(originalUserProfile.docId, keys, newSelecteds, dates, answers);
-      originalUserProfile.userInterests = newSelecteds;
-      myProfile(UserModel.clone(originalUserProfile));
+      FirebaseUserRepository.updateUserInterests(originData.docId, keys, newSelecteds, dates, answers);
+      originData.userInterests = newSelecteds;
+      UserModel? userModel = await FirebaseUserRepository.findUserByUid(originData.uid!);
+      originData = userModel!;
+      myProfile(UserModel.clone(originData));
     }
   }
 
   List<String> createInterestKeysList(List interests){
-    List<String> list = [];
+    List<String> result = [];
     for (int i = 0; i < interests.length; i++) {
       String key = Questions.interestsDataTitles.keys.firstWhere((k) => 
         Questions.interestsDataTitles[k] == interests[i]);
-        list.add(key);
+        result.add(key);
     }
-    return list;
+    return result;
   }
 
   bool checkInterestHasUpdate(List newSelecteds){
-    bool hasUpdate = false;
-    if(originalUserProfile.userInterests?.length != newSelecteds.length){
-      hasUpdate = true;
+    bool result = false;
+    if(originData.userInterests?.length != newSelecteds.length){
+      result = true;
     }else{ for(int i = 0; i < newSelecteds.length; i++){
-      if(originalUserProfile.userInterests![i] != newSelecteds[i]){
-        hasUpdate = true;
+      if(originData.userInterests![i] != newSelecteds[i]){
+        result = true;
         break;
       }
     }}
-    return hasUpdate;
+    return result;
   }
 
   List<String> createNewInterestSelecteds(isSelecteds){
     List<String> interestTitles = Questions.interestsDataTitles.values.toList();
-    List<String> selecteds = [];
+    List<String> result = [];
     Map indexMap = isSelecteds.asMap();
     indexMap.forEach((key, value) { 
       if(value){
-        selecteds.add(interestTitles[key]);
+        result.add(interestTitles[key]);
       }
     });
-    return selecteds;
+    return result;
+  }
+
+  void setAdditionals(Map<String, List?> answersMap){
+    List answersList = createAnwersList(answersMap);
+    if(checkAnswerUpdate(answersList)){
+    List interests = originData.userInterests!;
+    List<String> keys = createInterestKeysList(interests);
+    List dates = getInterestDatesWithoutNull();
+    FirebaseUserRepository.updateUserAnswers(
+      originData.docId, keys, interests, dates, answersList);
+    }
+  }
+
+  List createAnwersList(Map answersMap){
+    List<List> result = [];
+    for (int i = 0; i < originData.userInterests!.length; i++){
+      result.add(answersMap[originData.userInterests![i]]);
+    }
+    return result;
+  }
+  
+  bool checkAnswerUpdate(List answers){
+    List originalAnswer = getAdditionalAnswersList();
+    bool result = false;
+    for (int i = 0; i < answers.length; i++) {
+      for (int j = 0; j < answers[i].length; j++) {
+        if (originalAnswer[i][j] != answers[i][j]){
+          result = true; break;
+        }
+      }
+    }
+    return result;
   }
 }
-

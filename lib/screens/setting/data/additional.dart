@@ -1,13 +1,11 @@
 import 'package:data_project/data/question.dart';
 import 'package:data_project/firestoremodel/profile_controller.dart';
-import 'package:data_project/provider/new_user_provider.dart';
 import 'package:data_project/screens/home/home.dart';
 import 'package:data_project/widgets/data_pages_header.dart';
 import 'package:data_project/widgets/question_dropdown.dart';
 import 'package:data_project/widgets/widget_style.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
 
 class AdditionalScreen extends StatefulWidget {
   const AdditionalScreen({super.key});
@@ -24,8 +22,8 @@ class _AdditionalScreenState extends State<AdditionalScreen> {
   int interestCount = 0;
 
   // Map questions = Questions.interests;
-  Map originalAnswers = {};
-  Map newAnswers = {};
+  List originalAnswersList = [];
+  Map<String, List?> newAnswersMap = {};
   List? nowSelectedQuestions;
 
   List<bool> toggleSelects = List.empty(growable: true);
@@ -37,8 +35,8 @@ class _AdditionalScreenState extends State<AdditionalScreen> {
     setState(() {
       userInterests = controller.myProfile().userInterests;
       interestDates = controller.getInterestDatesWithoutNull();
-      originalAnswers = controller.getAdditionalAnswersMap();
-      newAnswers = controller.getAdditionalAnswersMap();
+      originalAnswersList = controller.getAdditionalAnswersList();
+      newAnswersMap = controller.getAdditionalAnswersMap();
       interestCount = (userInterests != null)? userInterests!.length : 0;
       if (interestCount > 0) {
         nowSelectedQuestions = Questions.interests[userInterests![0]];
@@ -59,7 +57,16 @@ class _AdditionalScreenState extends State<AdditionalScreen> {
       );
     }else{ Navigator.pop(context); }
   }
-  void setData(){ context.read<NewUserProvider>().notNewUser(); }
+
+  bool canChange(i){
+    if (originalAnswersList[nowToggleIndex][i] == null){
+      return true;
+    }else if (interestDates[nowToggleIndex]!.microsecondsSinceEpoch < DateTime.now().microsecondsSinceEpoch){
+      return true;
+    }else {
+      return false;
+    }
+  }
 
   Center createInterestDateText(){
     if (toggleSelects.isEmpty){return Center(child: Text(""),);
@@ -92,6 +99,8 @@ class _AdditionalScreenState extends State<AdditionalScreen> {
                     children: [
                       ToggleButtons(
                         onPressed:  (index) {
+                          print("test: ${userInterests![index]}");
+                          print("test: ${originalAnswersList[index]}");
                           if (index != nowToggleIndex){
                             setState(() {
                               toggleSelects = List.filled(toggleSelects.length, false);
@@ -118,13 +127,13 @@ class _AdditionalScreenState extends State<AdditionalScreen> {
                       if(nowSelectedQuestions != null)
                         for (int i = 0; i < nowSelectedQuestions!.length; i++)
                           QuestionDropDown(
-                            isEnabled: (originalAnswers[userInterests![nowToggleIndex]][i] == null), 
+                            isEnabled: canChange(i), 
                             question: nowSelectedQuestions![i]["title"], 
                             options: nowSelectedQuestions![i]["option"], 
-                            selected: newAnswers[userInterests![nowToggleIndex]][i], 
+                            selected: newAnswersMap[userInterests![nowToggleIndex]]?[i], 
                             onChanged: (value) {
                               setState((){
-                                newAnswers[userInterests![nowToggleIndex]][i] = value;
+                                newAnswersMap[userInterests![nowToggleIndex]]?[i] = value;
                               });}
                             ),
 
@@ -139,7 +148,7 @@ class _AdditionalScreenState extends State<AdditionalScreen> {
                     style: btnStyle,
                     onPressed: (){
                       switch (interestCount) {
-                        case 1 : setData(); router(); break;
+                        case 1 : controller.setAdditionals(newAnswersMap); router(); break;
                         case 2 : 
                           if(toggleSelects[0]){
                             setState((){
@@ -147,7 +156,7 @@ class _AdditionalScreenState extends State<AdditionalScreen> {
                               toggleSelects = [false, true];
                               nowSelectedQuestions = Questions.interests[userInterests![nowToggleIndex]];
                             });
-                          }else{setData(); router(); break;}
+                          }else{controller.setAdditionals(newAnswersMap); router(); break;}
                         case 3 : 
                           if(toggleSelects[0]){
                             setState((){
@@ -161,8 +170,8 @@ class _AdditionalScreenState extends State<AdditionalScreen> {
                               toggleSelects = [false, false, true];
                               nowSelectedQuestions = Questions.interests[userInterests![nowToggleIndex]];
                             });
-                          }else {setData(); router(); break;}
-                        default: setData(); router(); break;
+                          }else {controller.setAdditionals(newAnswersMap); router(); break;}
+                        default: router(); break;
                       }
                     }, 
                     child: const Text('확인 저장')

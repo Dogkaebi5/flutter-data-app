@@ -101,4 +101,19 @@ class FirebaseUserRepository {
     }
     await users.doc(docId).update({"user_interests" : values});
   }
+
+  static void updateUserAnswers(String? docId, List<String> keys, List values, List date, List answers){
+    CollectionReference users = FirebaseFirestore.instance.collection("users");
+    for (int i = 0; i < values.length; i++){
+      users.doc(docId).update({
+        keys[i] : {
+          "title" : values[i],
+          "is_selected": true,
+          "selected_date": date[i],
+          "is_permit": true,
+          "answers": answers[i]
+        }
+      });
+    }
+  }
 }

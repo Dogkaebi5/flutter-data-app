@@ -19,7 +19,7 @@ class AdditionalScreen extends StatefulWidget {
 class _AdditionalScreenState extends State<AdditionalScreen> {
   UserDataController controller = Get.put(UserDataController());
 
-  List? interstSelecteds;
+  List? userInterests;
   List<DateTime?> interestDates = [];
   int interestCount = 0;
 
@@ -31,38 +31,18 @@ class _AdditionalScreenState extends State<AdditionalScreen> {
   List<bool> toggleSelects = List.empty(growable: true);
   int nowToggleIndex = 0;
 
-  router(){
-    if(controller.myProfile().isNewUser){
-      Navigator.pushAndRemoveUntil(
-        context, 
-        MaterialPageRoute(builder: (context) => HomeScreen()), 
-        ModalRoute.withName('/'),
-      );
-    }else{
-      Navigator.pop(context);
-    }
-  }
-  setData(){
-    context.read<NewUserProvider>().notNewUser();
-  }
-
-  createInterestDateText(){
-    if (toggleSelects.isEmpty){return Center(child: Text(""),);
-    }else if (toggleSelects[0]){return Center(child: Text("내용유지 : ~ ${interestDates[0]}"));
-    }else if (toggleSelects[1]){return Center(child: Text("내용유지 : ~ ${interestDates[1]}"));
-    }else if (toggleSelects[2]){return Center(child: Text("내용유지 : ~ ${interestDates[2]}"));
-    }else {return const Text("예상하지 못한 에러");}
-  }
   
   @override
   void initState() {
     super.initState();
     setState(() {
-      interstSelecteds = controller.myProfile().userInterests;
-      interestDates = controller.getInterestDates();
-      interestCount = (interstSelecteds != null)? interstSelecteds!.length : 0;
+      userInterests = controller.myProfile().userInterests;
+      List interestDates = List.from(controller.getInterestDates());
+      interestDates.removeWhere((item) => (item == null));
+      print("test: $userInterests");
+      interestCount = (userInterests != null)? userInterests!.length : 0;
       if (interestCount > 0) {
-        nowSelectedQuestions = Questions.interests[interstSelecteds![0]];
+        nowSelectedQuestions = Questions.interests[userInterests![0]];
       }
       switch(interestCount){
         case 1 : toggleSelects = [true]; break;
@@ -72,6 +52,25 @@ class _AdditionalScreenState extends State<AdditionalScreen> {
       newAnswers = controller.getAdditionalAnswersMap();
       originalAnswers = controller.getAdditionalAnswersMap();
     });
+  }
+
+  router(){
+    if(controller.myProfile().isNewUser){
+      Navigator.pushAndRemoveUntil(
+        context, 
+        MaterialPageRoute(builder: (context) => HomeScreen()), 
+        ModalRoute.withName('/'),
+      );
+    }else{ Navigator.pop(context); }
+  }
+  setData(){ context.read<NewUserProvider>().notNewUser(); }
+
+  createInterestDateText(){
+    if (toggleSelects.isEmpty){return Center(child: Text(""),);
+    }else if (toggleSelects[0]){return Center(child: Text("내용유지 : ~ ${interestDates[0].toString().split(" ")[0]}"));
+    }else if (toggleSelects[1]){return Center(child: Text("내용유지 : ~ ${interestDates[1].toString().split(" ")[0]}}"));
+    }else if (toggleSelects[2]){return Center(child: Text("내용유지 : ~ ${interestDates[2].toString().split(" ")[0]}}"));
+    }else {return const Text("예상하지 못한 에러");}
   }
 
   @override
@@ -102,34 +101,34 @@ class _AdditionalScreenState extends State<AdditionalScreen> {
                               toggleSelects = List.filled(toggleSelects.length, false);
                               toggleSelects[index] = true;
                               nowToggleIndex = index;
-                              nowSelectedQuestions = Questions.interests[interstSelecteds![index]];
+                              nowSelectedQuestions = Questions.interests[userInterests![index]];
                             });
                           }
                         },
                         isSelected: toggleSelects,
                         children: [
-                          for (int i = 0; i < interstSelecteds!.length; i++)
+                          for (int i = 0; i < userInterests!.length; i++)
                             Container(
                               width: 100,
                               padding: const EdgeInsets.all(2),
-                              child: Text(interstSelecteds![i], 
+                              child: Text(userInterests![i], 
                                 textAlign: TextAlign.center,
                                 style: fontSmallTitle,
                             )),
                       ]),
                       const SizedBox(height: 12,),
-                      createInterestDateText(),
+                      // createInterestDateText(),
                       const SizedBox(height: 40,),
                       if(nowSelectedQuestions != null)
                         for (int i = 0; i < nowSelectedQuestions!.length; i++)
                           QuestionDropDown(
-                            isEnabled: (originalAnswers[interstSelecteds![nowToggleIndex]][i] == null), 
+                            isEnabled: (originalAnswers[userInterests![nowToggleIndex]][i] == null), 
                             question: nowSelectedQuestions![i]["title"], 
                             options: nowSelectedQuestions![i]["option"], 
-                            selected: newAnswers[interstSelecteds![nowToggleIndex]][i], 
+                            selected: newAnswers[userInterests![nowToggleIndex]][i], 
                             onChanged: (value) {
                               setState((){
-                                newAnswers[interstSelecteds![nowToggleIndex]][i] = value;
+                                newAnswers[userInterests![nowToggleIndex]][i] = value;
                               });}
                             ),
 
@@ -150,7 +149,7 @@ class _AdditionalScreenState extends State<AdditionalScreen> {
                             setState((){
                               nowToggleIndex++;
                               toggleSelects = [false, true];
-                              nowSelectedQuestions = Questions.interests[interstSelecteds![nowToggleIndex]];
+                              nowSelectedQuestions = Questions.interests[userInterests![nowToggleIndex]];
                             });
                           }else{setData(); router(); break;}
                         case 3 : 
@@ -158,13 +157,13 @@ class _AdditionalScreenState extends State<AdditionalScreen> {
                             setState((){
                               nowToggleIndex++;
                               toggleSelects = [false, true, false];
-                              nowSelectedQuestions = Questions.interests[interstSelecteds![nowToggleIndex]];
+                              nowSelectedQuestions = Questions.interests[userInterests![nowToggleIndex]];
                             });
                           }else if (toggleSelects[1]){
                             setState((){
                               nowToggleIndex++;
                               toggleSelects = [false, false, true];
-                              nowSelectedQuestions = Questions.interests[interstSelecteds![nowToggleIndex]];
+                              nowSelectedQuestions = Questions.interests[userInterests![nowToggleIndex]];
                             });
                           }else {setData(); router(); break;}
                         default: setData(); router(); break;

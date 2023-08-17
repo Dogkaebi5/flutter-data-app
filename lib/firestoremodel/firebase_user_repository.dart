@@ -40,64 +40,65 @@ class FirebaseUserRepository {
     }else{ return false; }
   }
 
-  static void updateLastLoginDate(String? docId, DateTime time){
+  static void updateLastLoginDate(String? docId, DateTime time) async{
     CollectionReference users = FirebaseFirestore.instance.collection("users");
-    users.doc(docId).update({"last_login_time": time});
-    users.doc(docId).update({"login_log": FieldValue.arrayUnion([time])});
+    await users.doc(docId).update({
+      "last_login_time": time,
+      "login_log": FieldValue.arrayUnion([time])});
   }
 
-  static void updatePassword(String? docId, String? password){
+  static void updatePassword(String? docId, String? password) async{
     CollectionReference users = FirebaseFirestore.instance.collection("users");
-    users.doc(docId).update({"password": password});
+    await users.doc(docId).update({"password": password});
   }
   
-  static void updateIsPermitTeleMarketing (String? docId, bool isPermit, DateTime? date){
+  static void updateIsPermitTeleMarketing (String? docId, bool isPermit, DateTime? date) async{
     CollectionReference users = FirebaseFirestore.instance.collection("users");
-    users.doc(docId).update({
+    await users.doc(docId).update({
       "is_permit_telemarketing": isPermit,
       "permit_telemarketing_date": date
     });
   }
-  static void updateIsNoticeService (String? docId,bool isPermit){
+  static void updateIsNoticeService (String? docId,bool isPermit) async{
     CollectionReference users = FirebaseFirestore.instance.collection("users");
-    users.doc(docId).update({"is_notice_service": isPermit});
+    await users.doc(docId).update({"is_notice_service": isPermit});
   }
-  static void updateIsNoticeMarketing (String? docId,bool isPermit){
+  static void updateIsNoticeMarketing (String? docId,bool isPermit) async{
     CollectionReference users = FirebaseFirestore.instance.collection("users");
-    users.doc(docId).update({"is_notice_marketing": isPermit});
-  }
-
-  static void updateNickname(String? docId, String? nickname){
-    CollectionReference users = FirebaseFirestore.instance.collection("users");
-    users.doc(docId).update({"nickname": nickname});
-  }
-  static void updateEmail(String? docId, String? email){
-    CollectionReference users = FirebaseFirestore.instance.collection("users");
-    users.doc(docId).update({"email": email});
+    await users.doc(docId).update({"is_notice_marketing": isPermit});
   }
 
-  static void updateBasicData(String? docId, String question, String selected, DateTime selectedDate){
+  static void updateNickname(String? docId, String? nickname) async{
     CollectionReference users = FirebaseFirestore.instance.collection("users");
-    users.doc(docId).update({question : 
+    await users.doc(docId).update({"nickname": nickname});
+  }
+  static void updateEmail(String? docId, String? email) async{
+    CollectionReference users = FirebaseFirestore.instance.collection("users");
+    await users.doc(docId).update({"email": email});
+  }
+
+  static void updateBasicData(String? docId, String question, String selected, DateTime selectedDate)async{
+    CollectionReference users = FirebaseFirestore.instance.collection("users");
+    await users.doc(docId).update({question : 
       {"selected" : selected,
-      "selectedDate" : selectedDate,
-      "isPermit" : true}
+      "selected_date" : selectedDate,
+      "is_permit" : true}
     });
   }
 
-  static void updateUserInterests(String? docId, List<String> keys, List<String> values, List<DateTime?> date, List<List> answers){
+  static void updateUserInterests(String? docId, List<String> keys, List<String> values, List<DateTime?> date, List<List> answers) async{
     CollectionReference users = FirebaseFirestore.instance.collection("users");
     for (int i = 0; i < values.length; i++){
       users.doc(docId).update({
         keys[i] : {
           "title" : values[i],
-          "is_selecteds": true,
+          "is_selected": true,
           "selected_date": date[i],
           "is_permit": true,
           "answers": answers[i]
         }
       });
     }
-    users.doc(docId).update({"user_interests" : values});
+    await users.doc(docId).update({"user_interests" : values});
   }
 }

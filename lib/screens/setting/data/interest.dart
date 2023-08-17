@@ -1,6 +1,5 @@
 import 'package:data_project/data/question.dart';
 import 'package:data_project/firestoremodel/profile_controller.dart';
-import 'package:data_project/firestoremodel/user_model.dart';
 import 'package:data_project/screens/setting/data/additional.dart';
 import 'package:data_project/widgets/data_pages_header.dart';
 import 'package:data_project/widgets/widget_style.dart';
@@ -22,7 +21,45 @@ class _InterestScreenState extends State<InterestScreen> {
   List<DateTime?> durationDates = List.empty(growable: true);
   int selectedCount = 0;
   
+  @override
+  void initState(){
+    super.initState();
+    setState(() {
+      isSelecteds = List.from(controller.getIsSelecteds());
+      durationDates = List.from(controller.getInterestDates());
+      originSelecteds = List.from(controller.myProfile().userInterests??[]);
+      newSelecteds = List.from(controller.myProfile().userInterests??[]);
+      selectedCount = originSelecteds.length;
+    });
+  }
+
+  bool canChange(i){
+    if (!originSelecteds.contains(interestOptions[i])){
+      return true;
+    }else if(durationDates[i] == null){
+      return true;
+    }else if(durationDates[i]!.microsecond < DateTime.now().microsecond){
+      return true;
+    }else{
+      return false;
+    }
+  }
+  
+  List<String> setSelectedList(){
+    List<String> selecteds = [];
+    Map indexMap = isSelecteds.asMap();
+    print(indexMap);
+    indexMap.forEach((key, value) { 
+      if(value){
+        selecteds.add(interestOptions[key]);
+      }
+    });
+    print(selecteds);
+    return selecteds;
+  }
+
   setInterestsToFirestore(){
+    newSelecteds = setSelectedList();
     if(originSelecteds.length != selectedCount){
       controller.setInterests(newSelecteds);
     }else{
@@ -33,21 +70,7 @@ class _InterestScreenState extends State<InterestScreen> {
         }
     }}
   }
-  
 
-  @override
-  void initState(){
-    super.initState();
-    setState(() {
-      UserModel user = controller.myProfile();
-      isSelecteds = controller.getSelectedsList();
-      durationDates = controller.getInterestDates();
-      originSelecteds = List.from(user.userInterests??[]);
-      newSelecteds = List.from(user.userInterests??[]);
-      selectedCount = originSelecteds.length;
-    });
-  }
-  
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -87,7 +110,7 @@ class _InterestScreenState extends State<InterestScreen> {
                   ),
                   ElevatedButton(
                     style: btnStyle,
-                    onPressed: (){
+                    onPressed: () async{
                       if(controller.myProfile().isNewUser){
                         setInterestsToFirestore();
                         navPush(context, AdditionalScreen());
@@ -98,8 +121,7 @@ class _InterestScreenState extends State<InterestScreen> {
                     }, 
                     child: const Text('확인 저장')
                   ),
-                ],
-              ),
+              ]),
             ),
           ),
         ),
@@ -107,18 +129,11 @@ class _InterestScreenState extends State<InterestScreen> {
     );
   }
 
-  canChange(i){
-    if (originSelecteds.contains(interestOptions[i])){
-      return (durationDates[i]!.microsecond > DateTime.now().microsecond) ? false : true;
-    }else {
-      return true;
-    }
-  }
-
   createInterstCard(i){
     return InkWell(
-      onTap: (canChange(i))
-          ? (){
+      onTap: (!canChange(i))
+        ? (){}
+        : (){
           setState(() {
             if(newSelecteds.contains(interestOptions[i])){
               isSelecteds[i] = false;
@@ -129,10 +144,12 @@ class _InterestScreenState extends State<InterestScreen> {
               isSelecteds[i] = true;
               newSelecteds.add(interestOptions[i]);
               durationDates[i]= controller.durationDate();
+              print(originSelecteds);
+              print(newSelecteds);
               selectedCount ++;
             }
           });
-        } : (){},
+        },
       child: SizedBox(
         height: 60,
         width: (MediaQuery.of(context).size.width > 360)
@@ -140,26 +157,26 @@ class _InterestScreenState extends State<InterestScreen> {
           :MediaQuery.of(context).size.width/2 - 26,
         child: 
         Card(
-          color: (canChange(i))
-              ? isSelecteds[i] ? Colors.deepPurple : Colors.white 
-              :Colors.deepPurple.shade200 ,
+          color: (!canChange(i))
+              ? Colors.deepPurple.shade200
+              : isSelecteds[i] ? Colors.deepPurple : Colors.white,
           child: Center(
             child:
-              isSelecteds[i] ? 
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Text((interestOptions[i]), 
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white)),
-                  if(!originSelecteds.contains(interestOptions[i]))
-                    Icon(Icons.close, color: Colors.white, size: 16,),
+              isSelecteds[i] 
+                ? Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Text((interestOptions[i]), 
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white)),
+                    if(canChange(i))
+                      Icon(Icons.close, color: Colors.white, size: 16,),
                 ])
-              : Text(
-              interestOptions[i],
-              textAlign: TextAlign.center,
-            ),
+                : Text(
+                interestOptions[i],
+                textAlign: TextAlign.center,
+                ),
           ),
         ),
       )
@@ -167,14 +184,12 @@ class _InterestScreenState extends State<InterestScreen> {
   }
   
   createInterestListText(){
-    if(selectedCount>0) {
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.start,
+    if(selectedCount > 0){
+      return Column(mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          for(var i = 0; i < isSelecteds.length; i++)
+          for(var i = 0; i < interestOptions.length; i++)
             if(isSelecteds[i])
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(2.0),

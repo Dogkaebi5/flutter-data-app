@@ -123,8 +123,8 @@ class UserDataController extends GetxController{
     List basicQuestions = Questions.basicDataTitles.keys.toList();
     for(int i = 0; i < basicData.length; i++){
       if(basicData[i] != null && dates[i] == null){
-        String question = basicQuestions[i];
-        FirebaseUserRepository.updateBasicData(originalUserProfile.docId, question, basicData[i], DateTime.now());
+        FirebaseUserRepository.updateBasicData(
+          originalUserProfile.docId, basicQuestions[i], basicData[i], DateTime.now());
         isUpdated = true;
       }
     }
@@ -136,7 +136,7 @@ class UserDataController extends GetxController{
     }
   }
 
-  List<bool> getSelectedsList(){
+  List<bool> getIsSelecteds(){
     return [
       originalUserProfile.insurance!.isSelected, 
       originalUserProfile.loan!.isSelected, 
@@ -158,6 +158,28 @@ class UserDataController extends GetxController{
       originalUserProfile.fishing!.isSelected, 
       originalUserProfile.pet!.isSelected
     ];
+  }
+  List<DateTime?> getInterestDates(){
+    return [
+      originalUserProfile.insurance?.selectedDate,
+      originalUserProfile.loan?.selectedDate,
+      originalUserProfile.deposit?.selectedDate,
+      originalUserProfile.immovables?.selectedDate,
+      originalUserProfile.stock?.selectedDate,
+      originalUserProfile.cryto?.selectedDate,
+      originalUserProfile.golf?.selectedDate,
+      originalUserProfile.tennis?.selectedDate,
+      originalUserProfile.fitness?.selectedDate,
+      originalUserProfile.yoga?.selectedDate,
+      originalUserProfile.dietary?.selectedDate,
+      originalUserProfile.educate?.selectedDate,
+      originalUserProfile.parental?.selectedDate,
+      originalUserProfile.automobile?.selectedDate,
+      originalUserProfile.localTrip?.selectedDate,
+      originalUserProfile.overseatrip?.selectedDate,
+      originalUserProfile.camp?.selectedDate,
+      originalUserProfile.fishing?.selectedDate,
+      originalUserProfile.pet?.selectedDate];
   }
   Map<String,List?> getAdditionalAnswersMap(){
     List<String> interestTitles = Questions.interestsDataTitles.values.toList();
@@ -183,30 +205,6 @@ class UserDataController extends GetxController{
       interestTitles[18]: originalUserProfile.pet?.answers,
     };
   }
-  
-  List<DateTime?> getInterestDates(){
-    return [
-      originalUserProfile.insurance?.selectedDate,
-      originalUserProfile.loan?.selectedDate,
-      originalUserProfile.deposit?.selectedDate,
-      originalUserProfile.immovables?.selectedDate,
-      originalUserProfile.stock?.selectedDate,
-      originalUserProfile.cryto?.selectedDate,
-      originalUserProfile.golf?.selectedDate,
-      originalUserProfile.tennis?.selectedDate,
-      originalUserProfile.fitness?.selectedDate,
-      originalUserProfile.yoga?.selectedDate,
-      originalUserProfile.dietary?.selectedDate,
-      originalUserProfile.educate?.selectedDate,
-      originalUserProfile.parental?.selectedDate,
-      originalUserProfile.automobile?.selectedDate,
-      originalUserProfile.localTrip?.selectedDate,
-      originalUserProfile.overseatrip?.selectedDate,
-      originalUserProfile.camp?.selectedDate,
-      originalUserProfile.fishing?.selectedDate,
-      originalUserProfile.pet?.selectedDate];
-  }
-  
   List<String> createInterestKeysList(List interests){
     List<String> list = [];
     for (int i = 0; i < interests.length; i++) {
@@ -220,20 +218,21 @@ class UserDataController extends GetxController{
   DateTime durationDate() =>  DateTime.now().add(Duration(days: 1));
 
   void setInterests(List<String> values) async{
-    List<String> keys = createInterestKeysList(values);
-    Map answersMap = getAdditionalAnswersMap();
-    List<List> answers = [];
-    List<DateTime?> dates = [];
-    for (int i = 0; i < values.length; i++) {
-      answers.add(answersMap[values[i]]);
-      dates.add(durationDate());
-    }
     if(values.isNotEmpty){
+      List<String> keys = createInterestKeysList(values);
+      Map answersMap = getAdditionalAnswersMap();
+      List<List> answers = [];
+      List<DateTime?> dates = [];
+      for (int i = 0; i < values.length; i++) {
+        answers.add(answersMap[values[i]]);
+        dates.add(durationDate());
+      }
       FirebaseUserRepository.updateUserInterests(originalUserProfile.docId, keys, values, dates, answers);
-      UserModel? userModel = await FirebaseUserRepository.findUserByUid(originalUserProfile.uid!);
-      originalUserProfile = userModel!;
-      myProfile(UserModel.clone(originalUserProfile));
     }
+    UserModel? userModel = await FirebaseUserRepository.findUserByUid(originalUserProfile.uid!);
+    originalUserProfile.userInterests = values;
+    originalUserProfile = userModel!;
+    myProfile(UserModel.clone(originalUserProfile));
   }
 }
 

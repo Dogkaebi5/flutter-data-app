@@ -2,9 +2,7 @@ class BasicData{
   String? selected; 
   DateTime? selectedDate; 
   bool isPermit = false;
-  BasicData(this.selected, this.selectedDate, isPermit){
-    this.isPermit = false;
-  }
+  BasicData(this.selected, this.selectedDate, this.isPermit);
   BasicData.fromJson(json) : 
     selected = json["selected"],
     selectedDate = (json["selected_date"] != null)? json["selected_date"].toDate(): null,
@@ -12,8 +10,8 @@ class BasicData{
   Map<String, dynamic> basicToMap(){
     return {
       "selected" : selected, 
-      "selectedDate" : selectedDate, 
-      "isPermit" : isPermit
+      "selected_date" : selectedDate, 
+      "is_permit" : isPermit
     };
   }
 }
@@ -24,10 +22,7 @@ class InterestData{
   DateTime? selectedDate; 
   List? answers; 
   bool isPermit = false;
-  InterestData(this.title, isSelected, this.selectedDate, this.answers, isPermit){
-    this.isSelected = false;
-    this.isPermit = false;
-  }
+  InterestData(this.title, this.isSelected, this.selectedDate, this.answers, this.isPermit);
   InterestData.fromJson(json) :
     title = json["title"],
     isSelected = json["is_selected"] ?? false,
@@ -62,7 +57,6 @@ class UserModel{
   bool? isNoticeMarketing;
   bool? isPermitTelemarketing;
   DateTime? permitTelemarketingDate;
-
 
   UserModel({
     this.isNewUser = true,

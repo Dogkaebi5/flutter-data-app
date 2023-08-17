@@ -1,6 +1,5 @@
 import 'package:data_project/firestoremodel/profile_controller.dart';
 import 'package:data_project/data/question.dart';
-import 'package:data_project/firestoremodel/user_model.dart';
 import 'package:data_project/screens/setting/data/interest.dart';
 import 'package:data_project/widgets/data_pages_header.dart';
 import 'package:data_project/widgets/question_dropdown.dart';
@@ -25,26 +24,22 @@ class _BasicDataScreenState extends State<BasicDataScreen> {
   List<String?> areaOptions = List.empty(growable: true);
 
   String? userNickname, userEmail;
-  BasicData? married, children, education, occupation, income, residence, area;
+  
   String? residenceSelected;
   
-  String? 
-  originUserNickname, 
-  originUserEmail, 
-  originMarriedSelected, 
-  originChildrenSelected, 
-  originEducationSelected, 
-  originOccupationSelected, 
-  originIncomeSelected, 
-  originResidenceSelected, 
-  originAreaSelected;
-  
   List<String?> selecteds = List.empty(growable: true);
-  List dateList = List.empty(growable: true);
+  List<DateTime?> dateList = List.empty(growable: true);
   
   bool isBtnEnabled = true;
-  setDataState(origin, newVal) => setState(()=> origin = newVal);
 
+  bool canChange(i){
+    if (dateList[i] == null){
+      return true;
+    } else if (dateList[i]!.microsecondsSinceEpoch < DateTime.now().microsecondsSinceEpoch){
+      return true;
+    }
+    return false;
+  }
 
   @override
   void initState(){
@@ -52,27 +47,8 @@ class _BasicDataScreenState extends State<BasicDataScreen> {
     setState(() {
       userNickname = controller.myProfile().nickname??controller.myProfile().name;
       userEmail = controller.myProfile().email??controller.myProfile().gmail;
-      married = controller.myProfile().married;
-      children = controller.myProfile().children;
-      education = controller.myProfile().education;
-      occupation = controller.myProfile().occupation;
-      income = controller.myProfile().income;
-      residence = controller.myProfile().residence;
-      area = controller.myProfile().area;
-      originUserNickname = controller.myProfile().nickname;
-      originUserEmail = controller.myProfile().email;
-      originMarriedSelected = married?.selected;
-      originChildrenSelected = children?.selected;
-      originEducationSelected = education?.selected;
-      originOccupationSelected = occupation?.selected;
-      originIncomeSelected = income?.selected;
-      originResidenceSelected = residence?.selected;
-      originAreaSelected = area?.selected;
-
-
-      selecteds = [married?.selected, children?.selected, education?.selected, occupation?.selected, income?.selected, residence?.selected, area?.selected];
-      dateList = [married?.selectedDate, children?.selectedDate, education?.selectedDate, occupation?.selectedDate, income?.selectedDate, residence?.selectedDate, area?.selectedDate];
-
+      selecteds = controller.getBasicSelecteds();
+      dateList = controller.getBasicDateTimes();
       residenceSelected = controller.myProfile().residence?.selected;
       if(residenceSelected != null){
         areaOptions = residenceMap[residenceSelected];
@@ -134,7 +110,7 @@ class _BasicDataScreenState extends State<BasicDataScreen> {
                   
                   for (int i = 0; i < basicQuestions.length-2; i++)
                     QuestionDropDown(
-                      isEnabled: dateList[i] == null, 
+                      isEnabled: canChange(i), 
                       question: basicQuestions[i]["title"], 
                       options: basicQuestions[i]["option"], 
                       selected: selecteds[i],
@@ -142,7 +118,7 @@ class _BasicDataScreenState extends State<BasicDataScreen> {
                     ),
                   
                   QuestionDropDown(
-                    isEnabled: dateList[5] == null, 
+                    isEnabled: canChange(5), 
                     question: basicQuestions[5]["title"], 
                     options: residenceOptions, 
                     selected: selecteds[5], 
@@ -156,7 +132,7 @@ class _BasicDataScreenState extends State<BasicDataScreen> {
                   ),
 
                   QuestionDropDown(
-                    isEnabled: dateList[6] == null, 
+                    isEnabled: canChange(6), 
                     question: basicQuestions[6]["title"], 
                     options: areaOptions, 
                     selected: selecteds[6], 
@@ -170,24 +146,15 @@ class _BasicDataScreenState extends State<BasicDataScreen> {
                   const SizedBox(height: 20),
                   ElevatedButton(
                     style: btnStyle,
-                    onPressed: (isBtnEnabled)?(){
-                      if(originUserNickname != userNickname){controller.setNickname(userNickname);}
-                      if(originUserEmail != userEmail){controller.setEmail(userEmail);}
-                      if(originMarriedSelected != selecteds[0] ||
-                      originChildrenSelected != selecteds[1] ||
-                      originEducationSelected != selecteds[2] ||
-                      originOccupationSelected != selecteds[3] ||
-                      originIncomeSelected != selecteds[4] ||
-                      originResidenceSelected != selecteds[5] ||
-                      originAreaSelected != selecteds[6]){
-                        controller.setBasicData(selecteds, dateList);
-                      }
-                      if(controller.originalUserProfile.isNewUser){
-                        navPush(context, InterestScreen());
-                      }else{
-                        Navigator.pop(context);
-                      }
-                    }: null, 
+                    onPressed: (isBtnEnabled)
+                      ?(){
+                        controller.setBasic(userNickname, userEmail, selecteds);
+                        if(controller.originalUserProfile.isNewUser){
+                          navPush(context, InterestScreen());
+                        }else{
+                          Navigator.pop(context);
+                        }
+                      }: null, 
                     child: const Text('확인 저장')
                   ),
                 ],

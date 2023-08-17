@@ -87,40 +87,55 @@ class UserDataController extends GetxController{
       originalUserProfile.permitTelemarketingDate
     );
   }
-  changeNoticeService(){
+  void changeNoticeService(){
     if(originalUserProfile.isNoticeService != null){
       originalUserProfile.isNoticeService = !originalUserProfile.isNoticeService!;
       FirebaseUserRepository.updateIsNoticeService(originalUserProfile.docId, originalUserProfile.isNoticeService!);
     }
   }
-  changeNoticeMarketing(){
+  void changeNoticeMarketing(){
     if(originalUserProfile.isNoticeMarketing != null){
       originalUserProfile.isNoticeMarketing = !originalUserProfile.isNoticeMarketing!;
       FirebaseUserRepository.updateIsNoticeMarketing(originalUserProfile.docId, originalUserProfile.isNoticeMarketing!);
     }
   }
-  setNewPassword(String pw){
+  void setNewPassword(String pw){
     if (pw.length == 4){
       FirebaseUserRepository.updatePassword(originalUserProfile.docId, pw);
     }
   }
-  setNickname(String? nickname){
+  void setBasic(nickname, email, selecteds){
+    if(originalUserProfile.nickname != nickname){setNickname(nickname);}
+    if(originalUserProfile.email != email){setEmail(email);}
+    if(
+      originalUserProfile.married!.selected != selecteds[0] ||
+      originalUserProfile.children!.selected != selecteds[1] ||
+      originalUserProfile.education!.selected != selecteds[2] ||
+      originalUserProfile.occupation!.selected != selecteds[3] ||
+      originalUserProfile.income!.selected != selecteds[4] ||
+      originalUserProfile.residence!.selected != selecteds[5] ||
+      originalUserProfile.area!.selected != selecteds[6]){
+        setBasicData(selecteds);
+      }
+  }
+  void setNickname(String? nickname){
     if (nickname != null && nickname != ""){
       FirebaseUserRepository.updateNickname(originalUserProfile.docId, nickname);
       originalUserProfile.nickname = nickname;
       myProfile(UserModel.clone(originalUserProfile));
     }
   }
-  setEmail(String? email){
+  void setEmail(String? email){
     if (email != null && email != ""){
       FirebaseUserRepository.updateEmail(originalUserProfile.docId, email);
       originalUserProfile.email = email;
       myProfile(UserModel.clone(originalUserProfile));
     }
   }
-  setBasicData(List basicData, List dates)async{
+  void setBasicData(List basicData)async{
     bool isUpdated = false;
     List basicQuestions = Questions.basicDataTitles.keys.toList();
+    List dates = getBasicDateTimes();
     for(int i = 0; i < basicData.length; i++){
       if(basicData[i] != null && dates[i] == null){
         FirebaseUserRepository.updateBasicData(
@@ -134,6 +149,30 @@ class UserDataController extends GetxController{
       myProfile(UserModel.clone(originalUserProfile));
       isUpdated = false;
     }
+  }
+  List<String?> getBasicSelecteds(){
+    return [
+      originalUserProfile.married!.selected,
+      originalUserProfile.married!.selected,
+      originalUserProfile.children!.selected,
+      originalUserProfile.education!.selected,
+      originalUserProfile.occupation!.selected,
+      originalUserProfile.income!.selected,
+      originalUserProfile.residence!.selected,
+      originalUserProfile.area!.selected
+    ];
+  }
+  List<DateTime?> getBasicDateTimes(){
+    return [
+      originalUserProfile.married!.selectedDate,
+      originalUserProfile.married!.selectedDate,
+      originalUserProfile.children!.selectedDate,
+      originalUserProfile.education!.selectedDate,
+      originalUserProfile.occupation!.selectedDate,
+      originalUserProfile.income!.selectedDate,
+      originalUserProfile.residence!.selectedDate,
+      originalUserProfile.area!.selectedDate
+    ];
   }
 
   List<bool> getIsSelecteds(){

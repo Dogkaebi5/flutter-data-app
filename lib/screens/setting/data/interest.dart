@@ -34,43 +34,15 @@ class _InterestScreenState extends State<InterestScreen> {
   }
 
   bool canChange(i){
-    if (!originSelecteds.contains(interestOptions[i])){
+    if (!originSelecteds.contains(interestOptions[i]) || durationDates[i] == null){
       return true;
-    }else if(durationDates[i] == null){
-      return true;
-    }else if(durationDates[i]!.microsecond < DateTime.now().microsecond){
+    }else if(durationDates[i]!.microsecondsSinceEpoch < DateTime.now().microsecondsSinceEpoch){
       return true;
     }else{
       return false;
     }
   }
   
-  List<String> setSelectedList(){
-    List<String> selecteds = [];
-    Map indexMap = isSelecteds.asMap();
-    print(indexMap);
-    indexMap.forEach((key, value) { 
-      if(value){
-        selecteds.add(interestOptions[key]);
-      }
-    });
-    print(selecteds);
-    return selecteds;
-  }
-
-  setInterestsToFirestore(){
-    newSelecteds = setSelectedList();
-    if(originSelecteds.length != selectedCount){
-      controller.setInterests(newSelecteds);
-    }else{
-      for(int i = 0; i < selectedCount; i++){
-        if(originSelecteds[i] != newSelecteds[i]){
-          controller.setInterests(newSelecteds);
-          break;
-        }
-    }}
-  }
-
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -112,10 +84,10 @@ class _InterestScreenState extends State<InterestScreen> {
                     style: btnStyle,
                     onPressed: () async{
                       if(controller.myProfile().isNewUser){
-                        setInterestsToFirestore();
+                        controller.setInterests(isSelecteds);
                         navPush(context, AdditionalScreen());
                       }else{
-                        setInterestsToFirestore();
+                        controller.setInterests(isSelecteds);
                         Navigator.pop(context);
                       }
                     }, 
@@ -144,8 +116,6 @@ class _InterestScreenState extends State<InterestScreen> {
               isSelecteds[i] = true;
               newSelecteds.add(interestOptions[i]);
               durationDates[i]= controller.durationDate();
-              print(originSelecteds);
-              print(newSelecteds);
               selectedCount ++;
             }
           });
@@ -153,8 +123,8 @@ class _InterestScreenState extends State<InterestScreen> {
       child: SizedBox(
         height: 60,
         width: (MediaQuery.of(context).size.width > 360)
-          ?MediaQuery.of(context).size.width/3 - 18
-          :MediaQuery.of(context).size.width/2 - 26,
+          ? MediaQuery.of(context).size.width/3 - 18
+          : MediaQuery.of(context).size.width/2 - 26,
         child: 
         Card(
           color: (!canChange(i))
@@ -167,9 +137,7 @@ class _InterestScreenState extends State<InterestScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Text((interestOptions[i]), 
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white)),
+                      style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
                     if(canChange(i))
                       Icon(Icons.close, color: Colors.white, size: 16,),
                 ])

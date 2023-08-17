@@ -205,6 +205,38 @@ class UserDataController extends GetxController{
       interestTitles[18]: originalUserProfile.pet?.answers,
     };
   }
+
+  DateTime durationDate() =>  DateTime.now().add(Duration(days: 1));
+
+  void setInterests(isSelecteds) async{
+    List<String> newSelecteds = createNewInterestSelecteds(isSelecteds);
+    if(checkInterestHasUpdate(newSelecteds)){
+      List<String> keys = createInterestKeysList(newSelecteds);
+      Map answersMap = getAdditionalAnswersMap();
+      List<List> answers = [];
+      List<DateTime?> dates = [];
+      List? userInterests = originalUserProfile.userInterests;
+      List checkList = [];
+      if (userInterests != null){
+        switch (userInterests.length) {
+          case 0 : checkList = [null, null, null];break;
+          case 1 : checkList = [userInterests[0], null, null];break;
+          case 2 : checkList = [userInterests[0], userInterests[1], null];break;
+          case 3 : checkList = [userInterests[0], userInterests[1], userInterests[2]];break;
+        }
+      }
+      for (int i = 0; i < newSelecteds.length; i++) {
+        if(newSelecteds[i] != checkList[i]){
+          answers.add(answersMap[newSelecteds[i]]);
+          dates.add(durationDate());
+        }
+      }
+      FirebaseUserRepository.updateUserInterests(originalUserProfile.docId, keys, newSelecteds, dates, answers);
+      originalUserProfile.userInterests = newSelecteds;
+      myProfile(UserModel.clone(originalUserProfile));
+    }
+  }
+
   List<String> createInterestKeysList(List interests){
     List<String> list = [];
     for (int i = 0; i < interests.length; i++) {
@@ -214,25 +246,30 @@ class UserDataController extends GetxController{
     }
     return list;
   }
-  
-  DateTime durationDate() =>  DateTime.now().add(Duration(days: 1));
 
-  void setInterests(List<String> values) async{
-    if(values.isNotEmpty){
-      List<String> keys = createInterestKeysList(values);
-      Map answersMap = getAdditionalAnswersMap();
-      List<List> answers = [];
-      List<DateTime?> dates = [];
-      for (int i = 0; i < values.length; i++) {
-        answers.add(answersMap[values[i]]);
-        dates.add(durationDate());
+  bool checkInterestHasUpdate(List newSelecteds){
+    bool hasUpdate = false;
+    if(originalUserProfile.userInterests?.length != newSelecteds.length){
+      hasUpdate = true;
+    }else{ for(int i = 0; i < newSelecteds.length; i++){
+      if(originalUserProfile.userInterests![i] != newSelecteds[i]){
+        hasUpdate = true;
+        break;
       }
-      FirebaseUserRepository.updateUserInterests(originalUserProfile.docId, keys, values, dates, answers);
-    }
-    UserModel? userModel = await FirebaseUserRepository.findUserByUid(originalUserProfile.uid!);
-    originalUserProfile.userInterests = values;
-    originalUserProfile = userModel!;
-    myProfile(UserModel.clone(originalUserProfile));
+    }}
+    return hasUpdate;
+  }
+
+  List<String> createNewInterestSelecteds(isSelecteds){
+    List<String> interestTitles = Questions.interestsDataTitles.values.toList();
+    List<String> selecteds = [];
+    Map indexMap = isSelecteds.asMap();
+    indexMap.forEach((key, value) { 
+      if(value){
+        selecteds.add(interestTitles[key]);
+      }
+    });
+    return selecteds;
   }
 }
 

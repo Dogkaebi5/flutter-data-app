@@ -1,42 +1,45 @@
-import 'package:data_project/provider/setting_provider.dart';
+import 'package:data_project/data/question.dart';
+import 'package:data_project/firestoremodel/profile_controller.dart';
 import 'package:data_project/provider/user_basic_data_provider.dart';
 import 'package:data_project/provider/user_interest_data_provider.dart';
 import 'package:data_project/widgets/permit_switch.dart';
 import 'package:data_project/widgets/widget_style.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 class PermissionScreen extends StatefulWidget {
   const PermissionScreen({super.key});
-
   @override
   State<PermissionScreen> createState() => _PermissionScreenState();
 }
 
 class _PermissionScreenState extends State<PermissionScreen> {
-  static const List necessaryDataTexts = ["닉네임", "연령층", "이메일"];
-  static const List userDataTexts = ["성함", "성별", "출생연도", "휴대폰", "텔레마케팅 동의"];
-  static const List basciDataTexts = ['결혼정보', '자녀정보', '최종학력', '직업', '소득수준', '거주지역'];
+  final UserDataController controller = Get.put(UserDataController());
+  List necessaryDataTexts = Questions.necessaryDataTexts;
+  List userDataTexts = Questions.userDataTexts;
+  List basciDataTexts = Questions.basicDataTitles.values.toList();
   
-  List interests = List.empty(growable: true);
+  List? interests = List.empty(growable: true);
 
-  List isPermitUsers = List.empty(growable: true);
+  List? isPermitUsers = List.empty(growable: true);
   List isPermitBasics = List.empty(growable: true);
   List isPremitInterest = List.empty(growable: true);
   List basicDatas = List.empty(growable: true);
-
-  String? tmDate;
+  String tmDate = "";
 
   @override
   void initState() {
     super.initState();
     setState(() {
-      interests = context.read<UserInterestData>().selecteds;
-      isPermitUsers = context.read<SettingProvider>().userDataPermissions;
-      isPermitBasics = context.read<UserBasicData>().basicPermissions;
-      isPremitInterest = context.read<UserInterestData>().permissions;
-      tmDate = context.read<SettingProvider>().permitTmDate;
-      basicDatas = context.read<UserBasicData>().selected;
+      interests = controller.originData.userInterests;
+      isPermitUsers = controller.getUserData();
+      isPermitBasics = controller.getIsPermitBasics();
+      isPremitInterest = controller.getIsPermitInterestsWhichSelected();
+      if(controller.originData.permitTelemarketingDate != null){
+        tmDate = controller.originData.permitTelemarketingDate.toString() ;
+      }
+      basicDatas = controller.getBasicSelecteds();
     });
   }
 
@@ -63,11 +66,11 @@ class _PermissionScreenState extends State<PermissionScreen> {
                 PermitSwitch(
                   title: userDataTexts[i], 
                   hasValue: true,
-                  switchValue: isPermitUsers[i], 
+                  switchValue: (isPermitUsers != null) ? isPermitUsers![i] : true, 
                   onChanged: (value) => setState((){
-                    isPermitUsers[i] = value;
-                    if(!isPermitUsers[3]){isPermitUsers[4] = false;}
-                    context.read<SettingProvider>().setPermissions(isPermitUsers);
+                    isPermitUsers![i] = value;
+                    if(!isPermitUsers![3]){isPermitUsers![4] = false;}
+                    controller.setUserPermit(i, isPermitUsers![i]);
                   }),
                 ),
 
@@ -75,19 +78,19 @@ class _PermissionScreenState extends State<PermissionScreen> {
                 children: [
                   const Text("— 텔레마케팅 동의",),
                   Switch(
-                    value: isPermitUsers[4],
-                    onChanged: (isPermitUsers[3])?(val){
+                    value: isPermitUsers![4],
+                    onChanged: (isPermitUsers![3])?(val){
                       setState(() {
-                        isPermitUsers[4] = val;
+                        isPermitUsers![4] = val;
                         tmDate = DateTime.now().toString().split(" ")[0];
-                        context.read<SettingProvider>().setTmPermission(val);
+                        controller.setUserPermit(4, isPermitUsers![4]);
                       });
                     }:null,
                   ),
               ]),
 
-              if(isPermitUsers[4])
-                Text("텔레마케팅 동의일자 : $tmDate", style: fontSmallGrey),
+              if(isPermitUsers![4])
+                Text("텔레마케팅 동의일자 : ${tmDate.split(" ")[0]}", style: fontSmallGrey),
               const SizedBox(height: 8,),
 
               for (int i = 0; i < basciDataTexts.length; i++)
@@ -104,9 +107,9 @@ class _PermissionScreenState extends State<PermissionScreen> {
                     }: null
                 ),
               
-              for (int i = 0; i < interests.length; i++)
+              for (int i = 0; i < interests!.length; i++)
                 PermitSwitch(
-                  title: "관심사 ${(i+1).toString()} : ${interests[i]}", 
+                  title: "관심사 ${(i+1).toString()} : ${interests![i]}", 
                   hasValue: true, 
                   switchValue: isPremitInterest[i], 
                   onChanged: (val){

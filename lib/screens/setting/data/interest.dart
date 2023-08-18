@@ -83,7 +83,7 @@ class _InterestScreenState extends State<InterestScreen> {
                   ElevatedButton(
                     style: btnStyle,
                     onPressed: () async{
-                      if(controller.myProfile().isNewUser){
+                      if(controller.myProfile().isNewUser!){
                         controller.setInterests(isSelecteds);
                         navPush(context, AdditionalScreen());
                       }else{

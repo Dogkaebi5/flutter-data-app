@@ -149,7 +149,7 @@ class _BasicDataScreenState extends State<BasicDataScreen> {
                     onPressed: (isBtnEnabled)
                       ?(){
                         controller.setBasic(userNickname, userEmail, selecteds);
-                        if(controller.originData.isNewUser){
+                        if(controller.originData.isNewUser!){
                           navPush(context, InterestScreen());
                         }else{
                           Navigator.pop(context);

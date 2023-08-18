@@ -13,6 +13,9 @@ class Questions {
     "area": "거주지역(시/군/구)"
   };
 
+  static const List<String> necessaryDataTexts = ["닉네임", "연령층", "이메일"];
+  static const List<String> userDataTexts = ["성함", "성별", "출생연도", "휴대폰", "텔레마케팅 동의"];
+
   static const Map<String,String> interestsDataTitles = {
     "insurance": "보험설계",
     "loan": "대출",

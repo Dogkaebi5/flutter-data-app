@@ -61,6 +61,10 @@ class UserDataController extends GetxController{
           point: 0,
           isNoticeService: false,
           isNoticeMarketing: false,
+          isPermitName: true,
+          isPermitGender: true,
+          isPermitBirth: true,
+          isPermitMobile: true,
           isPermitTelemarketing: false,
           permitTelemarketingDate: null,
         );
@@ -78,14 +82,25 @@ class UserDataController extends GetxController{
     return FirebaseUserRepository.checkIsNewUser(originData.docId);
   }
 
-  void changePermitTeleMarketing(bool isPermit){
-    originData.isPermitTelemarketing = isPermit;
-    originData.permitTelemarketingDate = (isPermit) ? DateTime.now() : null;
-    FirebaseUserRepository.updateIsPermitTeleMarketing(
-      originData.docId, 
-      originData.isPermitTelemarketing!,
-      originData.permitTelemarketingDate
-    );
+  void setUserPermit(int i, bool isPermit){
+    String key = "";
+    if(i != 4){
+      switch(i){
+        case 0 : key = "is_permit_name"; originData.isPermitName = isPermit; break;
+        case 1 : key = "is_permit_gender"; originData.isPermitGender = isPermit; break;
+        case 2 : key = "is_permit_birth"; originData.isPermitBirth = isPermit; break;
+        case 3 : key = "is_permit_mobile"; originData.isPermitMobile = isPermit; break;
+      }
+      FirebaseUserRepository.updateIsPermitUserData(originData.docId, key, isPermit);
+    }else{
+      originData.isPermitTelemarketing = isPermit;
+      originData.permitTelemarketingDate = (isPermit) ? DateTime.now() : null;
+      FirebaseUserRepository.updateIsPermitTeleMarketing(originData.docId, isPermit, originData.permitTelemarketingDate);
+      if(isPermit) {
+        originData.isPermitMobile = isPermit;
+        FirebaseUserRepository.updateIsPermitUserData(originData.docId, "is_permit_mobile", isPermit);
+      }
+    }
   }
   void changeNoticeService(){
     if(originData.isNoticeService != null){
@@ -172,6 +187,26 @@ class UserDataController extends GetxController{
       originData.area!.selectedDate
     ];
   }
+  List<bool> getUserData(){
+    return [
+      originData.isPermitName,
+      originData.isPermitGender,
+      originData.isPermitBirth,
+      originData.isPermitMobile,
+      originData.isPermitTelemarketing
+    ];
+  }
+  List<bool> getIsPermitBasics(){
+    return [
+      originData.married!.isPermit,
+      originData.children!.isPermit,
+      originData.education!.isPermit,
+      originData.occupation!.isPermit,
+      originData.income!.isPermit,
+      originData.residence!.isPermit,
+      originData.area!.isPermit
+    ];
+  }
   List<bool> getIsSelecteds(){
     return [
       originData.insurance!.isSelected, 
@@ -221,6 +256,35 @@ class UserDataController extends GetxController{
     List<DateTime?> interestDates = getInterestDates();
     interestDates.removeWhere((item) => (item == null));
     return interestDates;
+  }
+  List<bool> getIsPermitInterestsWhichSelected(){
+    List<String> interestTitles = Questions.interestsDataTitles.values.toList();
+    Map map = {
+      interestTitles[0]: originData.insurance?.isPermit,
+      interestTitles[1]: originData.loan?.isPermit,
+      interestTitles[2]: originData.deposit?.isPermit,
+      interestTitles[3]: originData.immovables?.isPermit,
+      interestTitles[4]: originData.stock?.isPermit,
+      interestTitles[5]: originData.cryto?.isPermit,
+      interestTitles[6]: originData.golf?.isPermit,
+      interestTitles[7]: originData.tennis?.isPermit,
+      interestTitles[8]: originData.fitness?.isPermit,
+      interestTitles[9]: originData.yoga?.isPermit,
+      interestTitles[10]: originData.dietary?.isPermit,
+      interestTitles[11]: originData.educate?.isPermit,
+      interestTitles[12]: originData.parental?.isPermit,
+      interestTitles[13]: originData.automobile?.isPermit,
+      interestTitles[14]: originData.localTrip?.isPermit,
+      interestTitles[15]: originData.overseatrip?.isPermit,
+      interestTitles[16]: originData.camp?.isPermit,
+      interestTitles[17]: originData.fishing?.isPermit,
+      interestTitles[18]: originData.pet?.isPermit,
+    };
+    List<bool> result =[];
+    for (int i = 0; i < originData.userInterests!.length; i++){
+      result.add(map[originData.userInterests![i]]);
+    }
+    return result;
   }
 
   Map<String,List?> getAdditionalAnswersMap(){
@@ -331,7 +395,7 @@ class UserDataController extends GetxController{
         }
       }
     }
-    if(originData.isNewUser){
+    if(originData.isNewUser!){
       FirebaseUserRepository.notNewUser(originData.docId);
       originData.isNewUser = false;
     }
@@ -348,8 +412,7 @@ class UserDataController extends GetxController{
     return result;
   }
   
-  Future<bool> 
-  checkPassword(pw) async{
+  Future<bool> checkPassword(pw) async{
     String? originPassword = await FirebaseUserRepository.getUserPassword(originData.docId);
     if(originPassword == null || originPassword.length < 4){
       return false;

@@ -86,7 +86,7 @@ class _TermsScreen extends State<TermsScreen>{
                 onPressed:(checklist[1] && checklist[2] && checklist[4])
                   ?(){
                     bool isPermit = checklist[3]; 
-                    controller.changePermitTeleMarketing(isPermit);
+                    controller.setUserPermit(4, isPermit);
                     navPush(context, SetPasswordScreen());
                   } : null,
                 child: const Text("다음"),

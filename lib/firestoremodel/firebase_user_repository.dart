@@ -59,6 +59,12 @@ class FirebaseUserRepository {
       "permit_telemarketing_date": date
     });
   }
+  
+  static void updateIsPermitUserData(String? docId, String key, bool isPermit){
+    CollectionReference users = FirebaseFirestore.instance.collection("users");
+    users.doc(docId).update({ key: isPermit });
+  }
+
   static void updateIsNoticeService (String? docId,bool isPermit) async{
     CollectionReference users = FirebaseFirestore.instance.collection("users");
     await users.doc(docId).update({"is_notice_service": isPermit});

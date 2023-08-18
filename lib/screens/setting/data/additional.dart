@@ -48,7 +48,7 @@ class _AdditionalScreenState extends State<AdditionalScreen> {
     });
   }
   void router(){
-    if(controller.myProfile().isNewUser){
+    if(controller.myProfile().isNewUser!){
       Navigator.pushAndRemoveUntil(
         context, 
         MaterialPageRoute(builder: (context) => HomeScreen()), 

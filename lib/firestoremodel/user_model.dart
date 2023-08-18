@@ -41,7 +41,7 @@ class InterestData{
 }
 
 class UserModel{
-  bool isNewUser;
+  bool? isNewUser;
   String? uid, docId, name, mobile, gmail;
   DateTime? createdTime, lastLoginTime;
   List? loginLog;
@@ -53,13 +53,11 @@ class UserModel{
   String? bankName;
   String? bankAccount;
   int? point;
-  bool? isNoticeService;
-  bool? isNoticeMarketing;
-  bool? isPermitTelemarketing;
+  bool? isNoticeService, isNoticeMarketing;
+  bool isPermitName, isPermitGender, isPermitBirth, isPermitMobile, isPermitTelemarketing;
   DateTime? permitTelemarketingDate;
-
   UserModel({
-    this.isNewUser = true,
+    this.isNewUser,
     this.uid,
     this.docId,
     this.name,
@@ -103,8 +101,12 @@ class UserModel{
     this.point,
     this.isNoticeService,
     this.isNoticeMarketing,
-    this.isPermitTelemarketing,
-    this.permitTelemarketingDate
+    this.isPermitName = true,
+    this.isPermitGender = true,
+    this.isPermitBirth = true,
+    this.isPermitMobile = true,
+    this.isPermitTelemarketing = false,
+    this.permitTelemarketingDate, 
   });
 
   UserModel.clone(UserModel user)
@@ -153,8 +155,13 @@ class UserModel{
       point: user.point,
       isNoticeService: user.isNoticeService,
       isNoticeMarketing: user.isNoticeMarketing,
+      isPermitName : user.isPermitName,
+      isPermitGender : user.isPermitGender,
+      isPermitBirth : user.isPermitBirth,
+      isPermitMobile : user.isPermitMobile,
       isPermitTelemarketing: user.isPermitTelemarketing,
       permitTelemarketingDate: user.permitTelemarketingDate,
+
     );
 
   UserModel.fromJson(json, String doc)
@@ -202,6 +209,10 @@ class UserModel{
       point = json["point"],
       isNoticeService = json["is_notice_service"],
       isNoticeMarketing = json["is_notice_marketing"],
+      isPermitName = json["is_permit_name"],
+      isPermitGender = json["is_permit_gender"],
+      isPermitBirth = json["is_permit_birth"],
+      isPermitMobile = json["is_permit_mobile"],
       isPermitTelemarketing = json["is_permit_telemarketing"],
       permitTelemarketingDate = (json["permit_telemarketing_date"]!=null)?
         DateTime.fromMicrosecondsSinceEpoch(json["permit_telemarketing_date"].microsecondsSinceEpoch)
@@ -252,8 +263,12 @@ class UserModel{
       "point": point,
       "is_notice_service": isNoticeService,
       "is_notice_marketing": isNoticeMarketing,
+      "is_permit_name": isPermitName,
+      "is_permit_gender": isPermitGender,
+      "is_permit_birth": isPermitBirth,
+      "is_permit_mobile": isPermitMobile,
       "is_permit_telemarketing": isPermitTelemarketing,
-      "permit_telemarketing_date": permitTelemarketingDate
+      "permit_telemarketing_date": permitTelemarketingDate,
     };
   }
 }

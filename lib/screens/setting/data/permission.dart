@@ -102,14 +102,14 @@ class _PermissionScreenState extends State<PermissionScreen> {
                     ?(val){
                       setState(() {
                         isPermitBasics[i] = val;
-                        context.read<UserBasicData>().setPermissions(isPermitBasics);
+                        controller.setIsPermitBasics(i, isPermitBasics[i]);
                       });
                     }: null
                 ),
               
               for (int i = 0; i < interests!.length; i++)
                 PermitSwitch(
-                  title: "관심사 ${(i+1).toString()} : ${interests![i]}", 
+                  title: "관심사 ${(1+i).toString()} : ${interests![i]}", 
                   hasValue: true, 
                   switchValue: isPremitInterest[i], 
                   onChanged: (val){

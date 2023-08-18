@@ -102,37 +102,41 @@ class UserDataController extends GetxController{
       }
     }
   }
+
   void changeNoticeService(){
     if(originData.isNoticeService != null){
       originData.isNoticeService = !originData.isNoticeService!;
       FirebaseUserRepository.updateIsNoticeService(originData.docId, originData.isNoticeService!);
     }
   }
+
   void changeNoticeMarketing(){
     if(originData.isNoticeMarketing != null){
       originData.isNoticeMarketing = !originData.isNoticeMarketing!;
       FirebaseUserRepository.updateIsNoticeMarketing(originData.docId, originData.isNoticeMarketing!);
     }
   }
+
   void setNewPassword(String pw){
     if (pw.length == 4){
       FirebaseUserRepository.updatePassword(originData.docId, pw);
     }
   }
+
   void setBasic(nickname, email, selecteds){
     if(originData.nickname != nickname){setNickname(nickname);}
     if(originData.email != email){setEmail(email);}
-    if(
-      originData.married!.selected != selecteds[0] ||
+    if(originData.married!.selected != selecteds[0] ||
       originData.children!.selected != selecteds[1] ||
       originData.education!.selected != selecteds[2] ||
       originData.occupation!.selected != selecteds[3] ||
       originData.income!.selected != selecteds[4] ||
       originData.residence!.selected != selecteds[5] ||
-      originData.area!.selected != selecteds[6]){
+      originData.area!.selected != selecteds[6]){ 
         setBasicData(selecteds);
       }
   }
+
   void setNickname(String? nickname){
     if (nickname != null && nickname != ""){
       FirebaseUserRepository.updateNickname(originData.docId, nickname);
@@ -147,14 +151,14 @@ class UserDataController extends GetxController{
       myProfile(UserModel.clone(originData));
     }
   }
-  void setBasicData(List basicData)async{
+  void setBasicData(List selected)async{
     bool isUpdated = false;
-    List basicQuestions = Questions.basicDataTitles.keys.toList();
+    List keys = Questions.basicDataTitles.keys.toList();
     List dates = getBasicDateTimes();
-    for(int i = 0; i < basicData.length; i++){
-      if(basicData[i] != null && dates[i] == null){
+    for(int i = 0; i < selected.length; i++){
+      if(selected[i] != null && dates[i] == null){
         FirebaseUserRepository.updateBasicData(
-          originData.docId, basicQuestions[i], basicData[i], DateTime.now());
+          originData.docId, keys[i], selected[i], true, durationDate());
         isUpdated = true;
       }
     }
@@ -187,6 +191,7 @@ class UserDataController extends GetxController{
       originData.area!.selectedDate
     ];
   }
+  
   List<bool> getUserData(){
     return [
       originData.isPermitName,
@@ -229,6 +234,42 @@ class UserDataController extends GetxController{
       originData.fishing!.isSelected, 
       originData.pet!.isSelected
     ];
+  }
+  setIsPermitBasics(int i, bool isPermit){
+    String key = "";
+    String selected = "";
+    DateTime? date;
+    switch(i){
+      case 0 : key = "married"; 
+        selected = originData.married!.selected!;
+        date = originData.married!.selectedDate!;
+        originData.married!.isPermit = isPermit; break;
+      case 1 : key = "children"; 
+        selected = originData.children!.selected!;
+        date = originData.children!.selectedDate!;
+        originData.children!.isPermit = isPermit; break;
+      case 2 : key = "education"; 
+        selected = originData.education!.selected!;
+        date = originData.education!.selectedDate!;
+        originData.education!.isPermit = isPermit; break;
+      case 3 : key = "occupation"; 
+        selected = originData.occupation!.selected!;
+        date = originData.occupation!.selectedDate!;
+        originData.occupation!.isPermit = isPermit; break;
+      case 4 : key = "income"; 
+        selected = originData.income!.selected!;
+        date = originData.income!.selectedDate!;
+        originData.income!.isPermit = isPermit; break;
+      case 5 : key = "residence"; 
+        selected = originData.residence!.selected!;
+        date = originData.residence!.selectedDate!;
+        originData.residence!.isPermit = isPermit; break;
+      case 6 : key = "area"; 
+        selected = originData.area!.selected!;
+        date = originData.area!.selectedDate!;
+        originData.area!.isPermit = isPermit; break;
+    }
+    FirebaseUserRepository.updateBasicData(originData.docId, key, selected, isPermit, date);
   }
   List<DateTime?> getInterestDates(){
     return [
@@ -311,7 +352,9 @@ class UserDataController extends GetxController{
       interestTitles[18]: originData.pet?.answers,
     };
   }
+
   DateTime durationDate() =>  DateTime.now().add(Duration(days: 1));
+  
   void setInterests(isSelecteds) async{
     List<String> newSelecteds = createNewInterestSelecteds(isSelecteds);
     if(checkInterestHasUpdate(newSelecteds)){
@@ -349,7 +392,7 @@ class UserDataController extends GetxController{
     for (int i = 0; i < interests.length; i++) {
       String key = Questions.interestsDataTitles.keys.firstWhere((k) => 
         Questions.interestsDataTitles[k] == interests[i]);
-        result.add(key);
+      result.add(key);
     }
     return result;
   }

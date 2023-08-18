@@ -1,6 +1,5 @@
 import 'package:data_project/data/question.dart';
 import 'package:data_project/firestoremodel/profile_controller.dart';
-import 'package:data_project/provider/user_basic_data_provider.dart';
 import 'package:data_project/provider/user_interest_data_provider.dart';
 import 'package:data_project/widgets/permit_switch.dart';
 import 'package:data_project/widgets/widget_style.dart';
@@ -115,7 +114,7 @@ class _PermissionScreenState extends State<PermissionScreen> {
                   onChanged: (val){
                     setState(() {
                       isPremitInterest[i] = val;
-                      context.read<UserInterestData>().setPermissions(isPremitInterest);
+                      controller.setIsPremitInterest(isPremitInterest);
                   });}
                 )
             ],

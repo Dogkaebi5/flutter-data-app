@@ -353,6 +353,10 @@ class UserDataController extends GetxController{
     };
   }
 
+  void setIsPremitInterest(List isPermit){
+
+  }
+
   DateTime durationDate() =>  DateTime.now().add(Duration(days: 1));
   
   void setInterests(isSelecteds) async{

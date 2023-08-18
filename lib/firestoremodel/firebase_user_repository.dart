@@ -83,15 +83,6 @@ class FirebaseUserRepository {
     await users.doc(docId).update({"email": email});
   }
 
-  // static void updateBasicData(String? docId, String question, String selected, DateTime selectedDate)async{
-  //   CollectionReference users = FirebaseFirestore.instance.collection("users");
-  //   await users.doc(docId).update({question : 
-  //     {"selected" : selected,
-  //     "selected_date" : selectedDate,
-  //     "is_permit" : true}
-  //   });
-  // }
-
   static void updateBasicData(String? docId, String key, String selected, bool isPermit, DateTime? date){
     CollectionReference users = FirebaseFirestore.instance.collection("users");
     users.doc(docId).update({key : 

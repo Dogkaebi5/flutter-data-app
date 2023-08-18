@@ -21,7 +21,6 @@ class _AdditionalScreenState extends State<AdditionalScreen> {
   List<DateTime?> interestDates = [];
   int interestCount = 0;
 
-  // Map questions = Questions.interests;
   List originalAnswersList = [];
   Map<String, List?> newAnswersMap = {};
   List? nowSelectedQuestions;
@@ -35,7 +34,7 @@ class _AdditionalScreenState extends State<AdditionalScreen> {
     setState(() {
       userInterests = controller.myProfile().userInterests;
       interestDates = controller.getInterestDatesWithoutNull();
-      originalAnswersList = controller.getAdditionalAnswersList();
+      originalAnswersList = controller.createAnwersList(controller.getAdditionalAnswersMap());
       newAnswersMap = controller.getAdditionalAnswersMap();
       interestCount = (userInterests != null)? userInterests!.length : 0;
       if (interestCount > 0) {
@@ -99,8 +98,8 @@ class _AdditionalScreenState extends State<AdditionalScreen> {
                     children: [
                       ToggleButtons(
                         onPressed:  (index) {
-                          print("test: ${userInterests![index]}");
-                          print("test: ${originalAnswersList[index]}");
+                          print(interestDates);
+                          print(originalAnswersList[nowToggleIndex]);
                           if (index != nowToggleIndex){
                             setState(() {
                               toggleSelects = List.filled(toggleSelects.length, false);

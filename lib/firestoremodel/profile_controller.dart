@@ -222,29 +222,7 @@ class UserDataController extends GetxController{
     interestDates.removeWhere((item) => (item == null));
     return interestDates;
   }
-  List<List?> getAdditionalAnswersList(){
-    return [
-      originData.insurance?.answers,
-      originData.loan?.answers,
-      originData.deposit?.answers,
-      originData.immovables?.answers,
-      originData.stock?.answers,
-      originData.cryto?.answers,
-      originData.golf?.answers,
-      originData.tennis?.answers,
-      originData.fitness?.answers,
-      originData.yoga?.answers,
-      originData.dietary?.answers,
-      originData.educate?.answers,
-      originData.parental?.answers,
-      originData.automobile?.answers,
-      originData.localTrip?.answers,
-      originData.overseatrip?.answers,
-      originData.camp?.answers,
-      originData.fishing?.answers,
-      originData.pet?.answers,
-    ];
-  }
+
   Map<String,List?> getAdditionalAnswersMap(){
     List<String> interestTitles = Questions.interestsDataTitles.values.toList();
     return {
@@ -337,17 +315,31 @@ class UserDataController extends GetxController{
     return result;
   }
 
-  void setAdditionals(Map<String, List?> answersMap){
+  void setAdditionals(Map<String, List?> answersMap)async{
     List answersList = createAnwersList(answersMap);
-    if(checkAnswerUpdate(answersList)){
+    Map originalAnswer = getAdditionalAnswersMap();
+    List dates = getInterestDatesWithoutNull();
     List interests = originData.userInterests!;
     List<String> keys = createInterestKeysList(interests);
-    List dates = getInterestDatesWithoutNull();
-    FirebaseUserRepository.updateUserAnswers(
-      originData.docId, keys, interests, dates, answersList);
+    for(int i = 0; i < answersList.length; i++){
+      for(int j = 0; j < answersList[i].length; j++){
+        if (originalAnswer[interests[i]][j] != answersList[i][j]){
+          FirebaseUserRepository.updateUserAnswers(
+            originData.docId, keys[i], interests[i], dates[i], answersList[i]);
+          originalAnswer[interests[i]] = answersList[i];
+            break;
+        }
+      }
     }
+    if(originData.isNewUser){
+      FirebaseUserRepository.notNewUser(originData.docId);
+      originData.isNewUser = false;
+    }
+    UserModel? userModel = await FirebaseUserRepository.findUserByUid(originData.uid!);
+    originData = userModel!;
+    myProfile(UserModel.clone(originData));
   }
-
+  
   List createAnwersList(Map answersMap){
     List<List> result = [];
     for (int i = 0; i < originData.userInterests!.length; i++){
@@ -356,16 +348,5 @@ class UserDataController extends GetxController{
     return result;
   }
   
-  bool checkAnswerUpdate(List answers){
-    List originalAnswer = getAdditionalAnswersList();
-    bool result = false;
-    for (int i = 0; i < answers.length; i++) {
-      for (int j = 0; j < answers[i].length; j++) {
-        if (originalAnswer[i][j] != answers[i][j]){
-          result = true; break;
-        }
-      }
-    }
-    return result;
-  }
+  
 }

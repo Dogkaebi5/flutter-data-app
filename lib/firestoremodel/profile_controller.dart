@@ -348,5 +348,15 @@ class UserDataController extends GetxController{
     return result;
   }
   
-  
+  Future<bool> 
+  checkPassword(pw) async{
+    String? originPassword = await FirebaseUserRepository.getUserPassword(originData.docId);
+    if(originPassword == null || originPassword.length < 4){
+      return false;
+    }else if(originPassword == pw){
+      return true;
+    }else {
+      return false;
+    }
+  }
 }

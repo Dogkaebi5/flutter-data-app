@@ -113,4 +113,10 @@ class FirebaseUserRepository {
     CollectionReference users = FirebaseFirestore.instance.collection("users");
     users.doc(docId).update({"is_new_user": false});
   }
+
+  static Future<String?> getUserPassword(String? docId)async{
+    CollectionReference users = FirebaseFirestore.instance.collection("users");
+    var data = await users.doc(docId).get().then((doc) => doc.data() as Map);
+    return data["password"];
+  }
 }

@@ -1,25 +1,17 @@
-import 'package:data_project/data/password_setter.dart';
+import 'package:data_project/firestoremodel/profile_controller.dart';
 import 'package:data_project/forget_password_dialog.dart';
 import 'package:data_project/widgets/widget_style.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:pinput/pinput.dart';
 
 passwordDialog(context, callback) {
+  UserDataController controller = Get.put(UserDataController());
   bool isVisibility = false;
   String password = "";
   var callbackFunc = callback;
   bool isPasswordCorrect = true;
   int unCorrectCount = 0;
-
-  Future<bool> checkPassword(String input) async{
-    bool isCorrect = false;
-    PasswordStorage storage = PasswordStorage();
-    String correctPassword = await storage.readPassword();
-    if (input == correctPassword) {
-      isCorrect = true;
-    }
-    return isCorrect;
-  }
 
   return showDialog(
     context: context,
@@ -57,7 +49,7 @@ passwordDialog(context, callback) {
                 obscuringCharacter: "⁕",
                 onChanged: (value)=> setState(() => password = value.toString()),
                 onCompleted: (value)async{
-                  var isCorrect = await checkPassword(password);
+                  var isCorrect = await controller.checkPassword(password);
                   if(isCorrect){
                     Navigator.pop(context);
                     callbackFunc();

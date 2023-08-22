@@ -31,8 +31,8 @@ class Questions {
     "educate": "교육",
     "parental": "육아용품",
     "automobile": "자동차",
-    "localTrip": "국내여행",
-    "overseatrip": "해외여행",
+    "domestic": "국내여행",
+    "abroad": "해외여행",
     "camp": "캠핑",
     "fishing": "낚시",
     "pet": "반려동물"

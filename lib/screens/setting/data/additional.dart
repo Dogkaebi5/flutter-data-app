@@ -17,12 +17,15 @@ class AdditionalScreen extends StatefulWidget {
 class _AdditionalScreenState extends State<AdditionalScreen> {
   UserDataController controller = Get.put(UserDataController());
 
-  List? userInterests;
-  List<DateTime?> interestDates = [];
+  List userInterests = [];
+  List interestDates = [];
   int interestCount = 0;
 
-  List originalAnswersList = [];
-  Map<String, List?> newAnswersMap = {};
+  List answers1 = [];
+  List answers2 = [];
+  List answers3 = [];
+
+  Map newAnswersMap = {};
   List? nowSelectedQuestions;
 
   List<bool> toggleSelects = List.empty(growable: true);
@@ -32,13 +35,19 @@ class _AdditionalScreenState extends State<AdditionalScreen> {
   void initState() {
     super.initState();
     setState(() {
-      userInterests = controller.myProfile().userInterests;
-      interestDates = controller.getInterestDatesWithoutNull();
-      originalAnswersList = controller.createAnwersList(controller.getAdditionalAnswersMap());
+      userInterests = controller.myProfile().userInterests ?? [];
+      interestDates = controller.myProfile().userInterestDates ?? [];
+      Map answerMap = controller.getAdditionalAnswersMap();
+      List answersList = controller.createSelectedAnwers(answerMap);
+      switch (answersList.length){
+        case 1 : answers1.addAll(answersList[0]); break;
+        case 2 : answers1.addAll(answersList[0]); answers2.addAll(answersList[1]); break;
+        case 3 : answers1.addAll(answersList[0]); answers2.addAll(answersList[1]); answers3.addAll(answersList[2]);break;
+      }
       newAnswersMap = controller.getAdditionalAnswersMap();
-      interestCount = (userInterests != null)? userInterests!.length : 0;
+      interestCount = userInterests.length;
       if (interestCount > 0) {
-        nowSelectedQuestions = Questions.interests[userInterests![0]];
+        nowSelectedQuestions = Questions.interests[userInterests[0]];
       }
       switch(interestCount){
         case 1 : toggleSelects = [true]; break;
@@ -48,7 +57,7 @@ class _AdditionalScreenState extends State<AdditionalScreen> {
     });
   }
   void router(){
-    if(controller.myProfile().isNewUser!){
+    if(controller.myProfile().isNewUser ?? true){
       Navigator.pushAndRemoveUntil(
         context, 
         MaterialPageRoute(builder: (context) => HomeScreen()), 
@@ -56,11 +65,16 @@ class _AdditionalScreenState extends State<AdditionalScreen> {
       );
     }else{ Navigator.pop(context); }
   }
-
   bool canChange(i){
-    if (originalAnswersList[nowToggleIndex][i] == null){
+    List li = [];
+    switch (nowToggleIndex){
+      case 0 : li = answers1; break;
+      case 1 : li = answers2; break;
+      case 2 : li = answers3; break;
+    }
+    if (li[i] == null){
       return true;
-    }else if (interestDates[nowToggleIndex]!.microsecondsSinceEpoch < DateTime.now().microsecondsSinceEpoch){
+    }else if (controller.isDurationSmallerThanNow(interestDates[nowToggleIndex])){
       return true;
     }else {
       return false;
@@ -94,28 +108,26 @@ class _AdditionalScreenState extends State<AdditionalScreen> {
                     icon: Icons.library_add),
                   const SizedBox(height: 32,),
                   (interestCount > 0)
-                  ?Column(
+                  ? Column(
                     children: [
                       ToggleButtons(
                         onPressed:  (index) {
-                          print(interestDates);
-                          print(originalAnswersList[nowToggleIndex]);
                           if (index != nowToggleIndex){
                             setState(() {
                               toggleSelects = List.filled(toggleSelects.length, false);
                               toggleSelects[index] = true;
                               nowToggleIndex = index;
-                              nowSelectedQuestions = Questions.interests[userInterests![index]];
+                              nowSelectedQuestions = Questions.interests[userInterests[index]];
                             });
                           }
                         },
                         isSelected: toggleSelects,
                         children: [
-                          for (int i = 0; i < userInterests!.length; i++)
+                          for (int i = 0; i < userInterests.length; i++)
                             Container(
                               width: 100,
                               padding: const EdgeInsets.all(2),
-                              child: Text(userInterests![i], 
+                              child: Text(userInterests[i], 
                                 textAlign: TextAlign.center,
                                 style: fontSmallTitle,
                             )),
@@ -129,10 +141,10 @@ class _AdditionalScreenState extends State<AdditionalScreen> {
                             isEnabled: canChange(i), 
                             question: nowSelectedQuestions![i]["title"], 
                             options: nowSelectedQuestions![i]["option"], 
-                            selected: newAnswersMap[userInterests![nowToggleIndex]]?[i], 
+                            selected: newAnswersMap[userInterests[nowToggleIndex]][i], 
                             onChanged: (value) {
                               setState((){
-                                newAnswersMap[userInterests![nowToggleIndex]]?[i] = value;
+                                newAnswersMap[userInterests[nowToggleIndex]][i] = value;
                               });}
                             ),
 
@@ -147,29 +159,29 @@ class _AdditionalScreenState extends State<AdditionalScreen> {
                     style: btnStyle,
                     onPressed: (){
                       switch (interestCount) {
-                        case 1 : controller.setAdditionals(newAnswersMap); router(); break;
+                        case 1 : controller.setAnswers(newAnswersMap); router(); break;
                         case 2 : 
                           if(toggleSelects[0]){
                             setState((){
                               nowToggleIndex++;
                               toggleSelects = [false, true];
-                              nowSelectedQuestions = Questions.interests[userInterests![nowToggleIndex]];
+                              nowSelectedQuestions = Questions.interests[userInterests[nowToggleIndex]];
                             });
-                          }else{controller.setAdditionals(newAnswersMap); router(); break;}
+                          }else{controller.setAnswers(newAnswersMap); router(); break;}
                         case 3 : 
                           if(toggleSelects[0]){
                             setState((){
                               nowToggleIndex++;
                               toggleSelects = [false, true, false];
-                              nowSelectedQuestions = Questions.interests[userInterests![nowToggleIndex]];
+                              nowSelectedQuestions = Questions.interests[userInterests[nowToggleIndex]];
                             });
                           }else if (toggleSelects[1]){
                             setState((){
                               nowToggleIndex++;
                               toggleSelects = [false, false, true];
-                              nowSelectedQuestions = Questions.interests[userInterests![nowToggleIndex]];
+                              nowSelectedQuestions = Questions.interests[userInterests[nowToggleIndex]];
                             });
-                          }else {controller.setAdditionals(newAnswersMap); router(); break;}
+                          }else {controller.setAnswers(newAnswersMap); router(); break;}
                         default: router(); break;
                       }
                     }, 

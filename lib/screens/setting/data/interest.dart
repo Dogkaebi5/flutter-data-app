@@ -18,27 +18,28 @@ class _InterestScreenState extends State<InterestScreen> {
   List<String> originSelecteds = List.empty(growable: true);
   List<String> newSelecteds = List.empty(growable: true);
   List<bool> isSelecteds = List.empty(growable: true);
-  List<DateTime?> durationDates = List.empty(growable: true);
+  List newDates = List.empty(growable: true);
   int selectedCount = 0;
   
   @override
   void initState(){
     super.initState();
     setState(() {
-      isSelecteds = List.from(controller.getIsSelecteds());
-      durationDates = List.from(controller.getInterestDates());
       originSelecteds = List.from(controller.myProfile().userInterests??[]);
+      isSelecteds = controller.createInterestIsSelectedsMap(originSelecteds).values.toList();
+      newDates = List.from(controller.myProfile().userInterestDates??[]);
       newSelecteds = List.from(controller.myProfile().userInterests??[]);
       selectedCount = originSelecteds.length;
     });
   }
 
   bool canChange(i){
-    if (!originSelecteds.contains(interestOptions[i]) || durationDates[i] == null){
+    List dates = controller.createInterestDatesMap().values.toList();
+    if (!originSelecteds.contains(interestOptions[i])){
       return true;
-    }else if(durationDates[i]!.microsecondsSinceEpoch < DateTime.now().microsecondsSinceEpoch){
+    }else if (controller.isDurationSmallerThanNow(dates[i])){
       return true;
-    }else{
+    }else {
       return false;
     }
   }
@@ -82,12 +83,12 @@ class _InterestScreenState extends State<InterestScreen> {
                   ),
                   ElevatedButton(
                     style: btnStyle,
-                    onPressed: () async{
+                    onPressed: () {
                       if(controller.myProfile().isNewUser!){
-                        controller.setInterests(isSelecteds);
+                        controller.setInterests(newSelecteds);
                         navPush(context, AdditionalScreen());
                       }else{
-                        controller.setInterests(isSelecteds);
+                        controller.setInterests(newSelecteds);
                         Navigator.pop(context);
                       }
                     }, 
@@ -104,18 +105,21 @@ class _InterestScreenState extends State<InterestScreen> {
   createInterstCard(i){
     return InkWell(
       onTap: (!canChange(i))
-        ? (){}
+        ? (){
+          List dates = controller.createInterestDatesMap().values.toList();
+          print("test: ${dates[i]}");
+        }
         : (){
           setState(() {
             if(newSelecteds.contains(interestOptions[i])){
               isSelecteds[i] = false;
-              durationDates[i] = null;
+              newDates.removeAt(newSelecteds.indexOf(interestOptions[i]));
               newSelecteds.remove(interestOptions[i]);
               selectedCount --;
             }else if(selectedCount < 3){
               isSelecteds[i] = true;
               newSelecteds.add(interestOptions[i]);
-              durationDates[i]= controller.durationDate();
+              newDates.add(controller.durationDate());
               selectedCount ++;
             }
           });
@@ -155,15 +159,14 @@ class _InterestScreenState extends State<InterestScreen> {
     if(selectedCount > 0){
       return Column(mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          for(var i = 0; i < interestOptions.length; i++)
-            if(isSelecteds[i])
+          for(var i = 0; i < newSelecteds.length; i++)
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(2.0),
-                    child: Text(interestOptions[i], style: const TextStyle(color: Colors.deepPurple, fontSize: 16)),
+                    child: Text(newSelecteds[i], style: const TextStyle(color: Colors.deepPurple, fontSize: 16)),
                   ),
-                  Text('저장 유지기간 : ~ ${durationDates[i].toString().split(" ")[0]}',),
+                  Text('저장 유지기간 : ~ ${newDates[i].toString().split(" ")[0]}',),
               ],),
         ],
       );

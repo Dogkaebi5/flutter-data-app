@@ -83,7 +83,7 @@ class FirebaseUserRepository {
     await users.doc(docId).update({"email": email});
   }
 
-  static void updateBasicData(String? docId, String key, String selected, bool isPermit, DateTime? date){
+  static void updateBasicData(String? docId, String key, String? selected, bool isPermit, DateTime? date){
     CollectionReference users = FirebaseFirestore.instance.collection("users");
     users.doc(docId).update({key : 
       {"selected" : selected,
@@ -92,28 +92,32 @@ class FirebaseUserRepository {
     });
   }
 
-  static void updateUserInterests(String? docId, List<String> keys, List<String> values, List<DateTime?> date, List<List> answers) async{
+  static void updateInterests(String? docId, List<String> newInterests) async {
     CollectionReference users = FirebaseFirestore.instance.collection("users");
-    for (int i = 0; i < values.length; i++){
-      users.doc(docId).update({
-        keys[i] : {
-          "title" : values[i],
-          "is_selected": true,
-          "selected_date": date[i],
-          "is_permit": true,
-          "answers": answers[i]
-        }
-      });
-    }
-    await users.doc(docId).update({"user_interests" : values});
+    await users.doc(docId).update({"user_interests" : newInterests});
+  }
+  static void updateInterestDates(String? docId, List dates) async {
+    CollectionReference users = FirebaseFirestore.instance.collection("users");
+    await users.doc(docId).update({"user_interest_dates" : dates});
+  }
+  static void updateInterestPermit(String? docId, List permit) async {
+    CollectionReference users = FirebaseFirestore.instance.collection("users");
+    await users.doc(docId).update({"user_interest_permits" : permit});
   }
 
-  static void updateUserAnswers(String? docId, String keys, String interests, DateTime date, List answers){
-  CollectionReference users = FirebaseFirestore.instance.collection("users");
-  users.doc(docId).update({keys: {
-      "title" : interests, "is_selected": true, "selected_date": date,
-      "is_permit": true, "answers": answers}});
+  static void updateAnswers(String? docId, List keys, List answers,) async {
+    CollectionReference users = FirebaseFirestore.instance.collection("users");
+    for(int i = 0; i < keys.length; i++){
+      await users.doc(docId).update({keys[i] : answers[i]});
+    }
   }
+
+  // static void updateUserAnswers(String? docId, String keys, String interests, DateTime date, List answers){
+  // CollectionReference users = FirebaseFirestore.instance.collection("users");
+  // users.doc(docId).update({keys: {
+  //     "title" : interests, "is_selected": true, "selected_date": date,
+  //     "is_permit": true, "answers": answers}});
+  // }
 
   static void notNewUser(String? docId){
     CollectionReference users = FirebaseFirestore.instance.collection("users");

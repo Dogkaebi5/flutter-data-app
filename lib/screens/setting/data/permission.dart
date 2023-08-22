@@ -1,11 +1,9 @@
 import 'package:data_project/data/question.dart';
 import 'package:data_project/firestoremodel/profile_controller.dart';
-import 'package:data_project/provider/user_interest_data_provider.dart';
 import 'package:data_project/widgets/permit_switch.dart';
 import 'package:data_project/widgets/widget_style.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
 
 class PermissionScreen extends StatefulWidget {
   const PermissionScreen({super.key});
@@ -27,20 +25,20 @@ class _PermissionScreenState extends State<PermissionScreen> {
   List basicDatas = List.empty(growable: true);
   String tmDate = "";
 
-  @override
-  void initState() {
-    super.initState();
-    setState(() {
-      interests = controller.originData.userInterests;
-      isPermitUsers = controller.getUserData();
-      isPermitBasics = controller.getIsPermitBasics();
-      isPremitInterest = controller.getIsPermitInterestsWhichSelected();
-      if(controller.originData.permitTelemarketingDate != null){
-        tmDate = controller.originData.permitTelemarketingDate.toString() ;
-      }
-      basicDatas = controller.getBasicSelecteds();
-    });
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   setState(() {
+  //     interests = controller.originData.userInterests;
+  //     isPermitUsers = controller.getUserData();
+  //     isPermitBasics = controller.getIsPermitBasics();
+  //     isPremitInterest = controller.getIsPermitInterestsWhichSelected();
+  //     if(controller.originData.permitTelemarketingDate != null){
+  //       tmDate = controller.originData.permitTelemarketingDate.toString() ;
+  //     }
+  //     basicDatas = controller.getBasicSelecteds();
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {

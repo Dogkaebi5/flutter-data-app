@@ -23,7 +23,7 @@ class _BasicDataScreenState extends State<BasicDataScreen> {
   List residenceOptions = Questions.region.keys.toList();
   List<String?> areaOptions = List.empty(growable: true);
 
-  String? userNickname, userEmail;
+  String userNickname = "", userEmail = "";
   
   String? residenceSelected;
   
@@ -35,7 +35,7 @@ class _BasicDataScreenState extends State<BasicDataScreen> {
   bool canChange(i){
     if (dateList[i] == null){
       return true;
-    } else if (dateList[i]!.microsecondsSinceEpoch > DateTime.now().microsecondsSinceEpoch){
+    } else if (controller.isDurationSmallerThanNow(dateList[i])){
       return true;
     }
     return false;
@@ -45,8 +45,8 @@ class _BasicDataScreenState extends State<BasicDataScreen> {
   void initState(){
     super.initState();
     setState(() {
-      userNickname = controller.myProfile().nickname??controller.myProfile().name;
-      userEmail = controller.myProfile().email??controller.myProfile().gmail;
+      userNickname = (controller.myProfile().nickname??controller.myProfile().name)!;
+      userEmail = (controller.myProfile().email??controller.myProfile().gmail)!;
       selecteds = controller.getBasicSelecteds();
       dateList = controller.getBasicDateTimes();
       residenceSelected = controller.myProfile().residence?.selected;

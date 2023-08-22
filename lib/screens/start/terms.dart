@@ -85,8 +85,7 @@ class _TermsScreen extends State<TermsScreen>{
                 style: btnStyle,
                 onPressed:(checklist[1] && checklist[2] && checklist[4])
                   ?(){
-                    bool isPermit = checklist[3]; 
-                    controller.setUserPermit(4, isPermit);
+                    controller.setUserPermit(4, checklist[3]);
                     navPush(context, SetPasswordScreen());
                   } : null,
                 child: const Text("다음"),

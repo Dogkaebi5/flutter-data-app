@@ -29,17 +29,6 @@ class FirebaseUserRepository {
     }else{ return false; }
   }
 
-  static bool checkIsNewUser(String? docId){
-    CollectionReference users = FirebaseFirestore.instance.collection("users");
-    Map<String, dynamic> data = {};
-    users.doc(docId).get().then(
-      (doc) => data = doc.data() as Map<String, dynamic>,
-      onError: (e) => {print("Error: $e")}
-    );
-    if(data["nickname"] == null){ return true;
-    }else{ return false; }
-  }
-
   static void updateLastLoginDate(String? docId, DateTime time) async{
     CollectionReference users = FirebaseFirestore.instance.collection("users");
     await users.doc(docId).update({
@@ -51,7 +40,12 @@ class FirebaseUserRepository {
     CollectionReference users = FirebaseFirestore.instance.collection("users");
     await users.doc(docId).update({"password": password});
   }
-  
+
+  static void updateIsPermitUserData(String? docId, String key, bool isPermit){
+    CollectionReference users = FirebaseFirestore.instance.collection("users");
+    users.doc(docId).update({ key: isPermit });
+  }
+
   static void updateIsPermitTeleMarketing (String? docId, bool isPermit, DateTime? date) async{
     CollectionReference users = FirebaseFirestore.instance.collection("users");
     await users.doc(docId).update({
@@ -60,15 +54,11 @@ class FirebaseUserRepository {
     });
   }
 
-  static void updateIsPermitUserData(String? docId, String key, bool isPermit){
-    CollectionReference users = FirebaseFirestore.instance.collection("users");
-    users.doc(docId).update({ key: isPermit });
-  }
-
   static void updateIsNoticeService (String? docId,bool isPermit) async{
     CollectionReference users = FirebaseFirestore.instance.collection("users");
     await users.doc(docId).update({"is_notice_service": isPermit});
   }
+
   static void updateIsNoticeMarketing (String? docId,bool isPermit) async{
     CollectionReference users = FirebaseFirestore.instance.collection("users");
     await users.doc(docId).update({"is_notice_marketing": isPermit});
@@ -110,6 +100,11 @@ class FirebaseUserRepository {
     for(int i = 0; i < keys.length; i++){
       await users.doc(docId).update({keys[i] : answers[i]});
     }
+  }
+
+  static void updateIsNewUser(String? docId, bool isNew){
+    CollectionReference users = FirebaseFirestore.instance.collection("users");
+    users.doc(docId).update({"is_new_user" : isNew});
   }
 
   // static void updateUserAnswers(String? docId, String keys, String interests, DateTime date, List answers){

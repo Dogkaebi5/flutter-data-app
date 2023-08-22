@@ -21,10 +21,9 @@ class _AuthRouterState extends State<AuthRouter> {
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (context, snapshot) {
         UserDataController().to.authStateChanges(snapshot.data);
-        bool isNewUser = controller.myProfile().isNewUser?? true;
         if(!snapshot.hasData){
           return AppStartScreen();
-        }else if(isNewUser){
+        }else if(controller.myProfile().isNewUser?? true){
           return TermsScreen();
         }else {
           return HomeScreen();

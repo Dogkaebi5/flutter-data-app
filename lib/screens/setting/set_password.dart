@@ -98,7 +98,7 @@ class _SetPasswordScreen extends State<SetPasswordScreen> {
                   onCompleted: (value){
                     if(_newPassword == _checkNewPassword){
                       controller.setNewPassword(_newPassword);
-                      if (controller.checkIsNewUser()) {
+                      if (controller.myProfile().isNewUser ?? true) {
                         navPush(context, BasicDataScreen());
                       }else {
                         Navigator.pushReplacement(

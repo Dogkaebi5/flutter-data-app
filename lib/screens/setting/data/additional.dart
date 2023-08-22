@@ -58,6 +58,7 @@ class _AdditionalScreenState extends State<AdditionalScreen> {
   }
   void router(){
     if(controller.myProfile().isNewUser ?? true){
+      controller.setIsNewUser(false);
       Navigator.pushAndRemoveUntil(
         context, 
         MaterialPageRoute(builder: (context) => HomeScreen()), 
@@ -108,48 +109,43 @@ class _AdditionalScreenState extends State<AdditionalScreen> {
                     icon: Icons.library_add),
                   const SizedBox(height: 32,),
                   (interestCount > 0)
-                  ? Column(
-                    children: [
-                      ToggleButtons(
-                        onPressed:  (index) {
-                          if (index != nowToggleIndex){
-                            setState(() {
-                              toggleSelects = List.filled(toggleSelects.length, false);
-                              toggleSelects[index] = true;
-                              nowToggleIndex = index;
-                              nowSelectedQuestions = Questions.interests[userInterests[index]];
-                            });
-                          }
-                        },
-                        isSelected: toggleSelects,
-                        children: [
-                          for (int i = 0; i < userInterests.length; i++)
-                            Container(
-                              width: 100,
-                              padding: const EdgeInsets.all(2),
-                              child: Text(userInterests[i], 
-                                textAlign: TextAlign.center,
-                                style: fontSmallTitle,
-                            )),
-                      ]),
-                      const SizedBox(height: 12,),
-                      createInterestDateText(),
-                      const SizedBox(height: 40,),
-                      if(nowSelectedQuestions != null)
-                        for (int i = 0; i < nowSelectedQuestions!.length; i++)
-                          QuestionDropDown(
-                            isEnabled: canChange(i), 
-                            question: nowSelectedQuestions![i]["title"], 
-                            options: nowSelectedQuestions![i]["option"], 
-                            selected: newAnswersMap[userInterests[nowToggleIndex]][i], 
-                            onChanged: (value) {
-                              setState((){
-                                newAnswersMap[userInterests[nowToggleIndex]][i] = value;
-                              });}
-                            ),
-
+                  ?Column(children:[
+                    ToggleButtons(
+                      onPressed: (index) {
+                        if (index != nowToggleIndex){
+                          setState(() {
+                            toggleSelects = List.filled(toggleSelects.length, false);
+                            toggleSelects[index] = true;
+                            nowToggleIndex = index;
+                            nowSelectedQuestions = Questions.interests[userInterests[index]];
+                          });
+                        }
+                      },
+                      isSelected: toggleSelects,
+                      children: [
+                        for (int i = 0; i < userInterests.length; i++)
+                          Container(
+                            width: 100,
+                            padding: const EdgeInsets.all(2),
+                            child: Text(userInterests[i], 
+                              textAlign: TextAlign.center,
+                              style: fontSmallTitle,
+                          )),
+                    ]),
+                    const SizedBox(height: 12,),
+                    createInterestDateText(),
+                    const SizedBox(height: 40,),
+                    if(nowSelectedQuestions != null)
+                      for (int i = 0; i < nowSelectedQuestions!.length; i++)
+                        QuestionDropDown(
+                          isEnabled: canChange(i), 
+                          question: nowSelectedQuestions![i]["title"], 
+                          options: nowSelectedQuestions![i]["option"], 
+                          selected: newAnswersMap[userInterests[nowToggleIndex]][i], 
+                          onChanged: (value) =>  setState(() => newAnswersMap[userInterests[nowToggleIndex]][i] = value)
+                        ),
                   ])
-                  : Column(
+                  :Column(
                     children: const [
                       Text("선택한 관심사가 없습니다."),
                       SizedBox(height: 80,),

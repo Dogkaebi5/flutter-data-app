@@ -79,13 +79,6 @@ class UserDataController extends GetxController{
     }
     myProfile(UserModel.clone(originData));
   }
-
-  bool checkHasPassword(){
-    return FirebaseUserRepository.checkPassword(originData.docId);
-  }
-  bool checkIsNewUser(){
-    return FirebaseUserRepository.checkIsNewUser(originData.docId);
-  }
   
   DateTime durationDate() =>  DateTime.now().add(Duration(days: 1));
   
@@ -95,23 +88,24 @@ class UserDataController extends GetxController{
   
   void setUserPermit(int i, bool isPermit){
     String key = "";
-    if(i != 4){
-      switch(i){
-        case 0 : key = "is_permit_name"; originData.isPermitName = isPermit; break;
-        case 1 : key = "is_permit_gender"; originData.isPermitGender = isPermit; break;
-        case 2 : key = "is_permit_birth"; originData.isPermitBirth = isPermit; break;
-        case 3 : key = "is_permit_mobile"; originData.isPermitMobile = isPermit; break;
-      }
-      FirebaseUserRepository.updateIsPermitUserData(originData.docId, key, isPermit);
-    }else{
+    switch(i){
+      case 0 : key = "is_permit_name"; originData.isPermitName = isPermit; break;
+      case 1 : key = "is_permit_gender"; originData.isPermitGender = isPermit; break;
+      case 2 : key = "is_permit_birth"; originData.isPermitBirth = isPermit; break;
+      case 3 : key = "is_permit_mobile"; originData.isPermitMobile = isPermit; break;
+      default: break;
+    }
+    FirebaseUserRepository.updateIsPermitUserData(originData.docId, key, isPermit);
+    if( i == 3 && !isPermit && originData.isPermitTelemarketing! ){
+      FirebaseUserRepository.updateIsPermitTeleMarketing(originData.docId, isPermit, null);
+      originData.isPermitTelemarketing = isPermit;
+    }
+    if( i == 4 ){
       originData.isPermitTelemarketing = isPermit;
       originData.permitTelemarketingDate = (isPermit) ? DateTime.now() : null;
       FirebaseUserRepository.updateIsPermitTeleMarketing(originData.docId, isPermit, originData.permitTelemarketingDate);
-      if(isPermit) {
-        originData.isPermitMobile = isPermit;
-        FirebaseUserRepository.updateIsPermitUserData(originData.docId, "is_permit_mobile", isPermit);
-      }
     }
+    myProfile(UserModel.clone(originData));
   }
 
   List<bool> getUserDataPermits() => [ originData.isPermitName!, originData.isPermitGender!, originData.isPermitBirth!, originData.isPermitMobile!, originData.isPermitTelemarketing!];
@@ -150,6 +144,7 @@ class UserDataController extends GetxController{
     originData.email = email;
     myProfile(UserModel.clone(originData));
   }
+
   void setBasicData(List<String?> selecteds){
     List keys = Questions.basicDataTitles.keys.toList();
     List<DateTime?> dates = getBasicDateTimes();
@@ -161,7 +156,8 @@ class UserDataController extends GetxController{
       }
     }
   }
-  void setIsPermitBasics(int i, bool isPermit){
+  
+  void setBasicPermits(int i, bool isPermit){
     String key = "", selected = "";
     DateTime? date;
     switch(i){
@@ -301,6 +297,11 @@ class UserDataController extends GetxController{
     setAnswersToOriginData(answers);
   }
 
+  void setIsNewUser(bool isNew){
+    FirebaseUserRepository.updateIsNewUser(originData.docId, isNew);
+    originData.isNewUser = isNew;
+    myProfile(UserModel.clone(originData));
+  }
 
   List<String> createInterestKeysList(Map originMap, List selecteds){
     List<String> result = [];
@@ -328,8 +329,8 @@ class UserDataController extends GetxController{
     return result;
   }
 
-  void setIsPremitInterest(List isPermit){
-
+  void setInterestPermits(List isPermits){
+    FirebaseUserRepository.updateInterestPermit(originData.docId, isPermits);
   }
   // bool checkInterestHasUpdate(List newSelecteds){
   //   bool result = false;

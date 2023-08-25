@@ -1,12 +1,11 @@
-import 'package:data_project/provider/new_user_provider.dart';
+import 'package:data_project/firestoremodel/profile_controller.dart';
 import 'package:data_project/provider/setting_provider.dart';
-import 'package:data_project/provider/user_basic_data_provider.dart';
-import 'package:data_project/provider/user_interest_data_provider.dart';
 import 'package:data_project/screens/home/detail_dialog.dart';
 import 'package:data_project/screens/start/auth_router.dart';
 import 'package:data_project/widgets/detail_card.dart';
 import 'package:data_project/widgets/nav_bar.dart';
 import 'package:data_project/widgets/widget_style.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:data_project/screens/point/withdraw.dart';
@@ -21,8 +20,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final UserDataController controller = Get.put(UserDataController());
   List details = List.empty(growable: true);
-  int point = 0;
   bool hasNewNotice = false;
   List<bool> sortSelections = [true, false];
   DateTime signUpDate = DateTime(2023, 1, 1);
@@ -49,7 +48,6 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     setState(() {
       details = context.read<SettingProvider>().details;
-      point = context.read<SettingProvider>().point;
       hasNewNotice = context.read<SettingProvider>().hasNewNotice;
       setSortDateText(
         today.subtract(Duration(days:30)).toString().split(' ')[0],
@@ -85,11 +83,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             Row(children: [
                               const Icon(Icons.account_balance_wallet, color: Colors.white, size: 32),
                               const SizedBox(width: 12,),
-                              Text("$point P", 
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 30))
+                                Obx(() => Text("${controller.myProfile().point ?? 0} P", 
+                                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 30))),
                             ])
                         ]),
                         Container(
@@ -180,43 +175,15 @@ class _HomeScreenState extends State<HomeScreen> {
                         TextButton(
                           onPressed: (){
                             FirebaseAuth.instance.signOut();
-                            Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(builder: (context) =>  AuthRouter()),
-                              ModalRoute.withName('/'),
-                            );
+                            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) =>  AuthRouter()), ModalRoute.withName('/'));
                           },
                           child: const Text("/test\nlogout",style: testBtnStyle)
                         ),
                         TextButton(
                           onPressed: (){
-                            FirebaseAuth.instance.signOut();
-                            context.read<NewUserProvider>().setNewUser();
-                            context.read<SettingProvider>().reset();
-                            context.read<UserBasicData>().reset();
-                            context.read<UserInterestData>().reset();
-                            Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(builder: (context) => AuthRouter()),
-                              ModalRoute.withName('/'),
-                            );
+                            controller.pointCtrl(10000);
                           },
-                          child: const Text("/test\nnewUser", style: testBtnStyle)
-                        ),
-                        TextButton(
-                          onPressed: (){setState((){
-                            context.read<SettingProvider>().pointTest([10000]);
-                            point = context.read<SettingProvider>().point;
-                            hasNewNotice = context.read<SettingProvider>().hasNewNotice;
-                          });},
-                          child: const Text("/test\n+10k", style: testBtnStyle)
-                        ),
-                        TextButton(
-                          onPressed: (){setState((){
-                            context.read<SettingProvider>().clearDetail();
-                            point = context.read<SettingProvider>().point;
-                          });},
-                          child: const Text("/test\ndel all", style: testBtnStyle)
+                          child: const Text("/test\n+point",style: testBtnStyle)
                         ),
                       ],
                     ),

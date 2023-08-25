@@ -124,4 +124,9 @@ class FirebaseUserRepository {
     var data = await users.doc(docId).get().then((doc) => doc.data() as Map);
     return data["password"];
   }
+
+  static void updatePoint(String? docId, int newPoint){
+    CollectionReference users = FirebaseFirestore.instance.collection("users");
+    users.doc(docId).update({"point": newPoint});
+  }
 }

@@ -6,29 +6,40 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class AuthRouter extends StatefulWidget {
+class AuthRouter extends StatelessWidget {
   const AuthRouter({super.key});
-  @override
-  State<AuthRouter> createState() => _AuthRouterState();
-}
-
-class _AuthRouterState extends State<AuthRouter> {
-  final UserDataController controller = Get.put(UserDataController());
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context){
     return StreamBuilder(
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (context, snapshot) {
-        UserDataController().to.authStateChanges(snapshot.data);
-        if(!snapshot.hasData){
-          return AppStartScreen();
-        }else if(controller.myProfile().isNewUser?? true){
-          return TermsScreen();
-        }else {
-          return HomeScreen();
-        }
-      },
+         UserDataController().to.authStateChanges(snapshot.data);
+        return (!snapshot.hasData) ? AppStartScreen() : NewUserRouter();
+      }
+    );
+  }  
+}
+
+class NewUserRouter extends StatefulWidget {
+  NewUserRouter({super.key});
+
+  @override
+  State<NewUserRouter> createState() => _NewUserRouterState();
+}
+
+class _NewUserRouterState extends State<NewUserRouter> {
+  final UserDataController controller = Get.put(UserDataController());
+
+  @override
+  Widget build (BuildContext context) {
+    return Obx(() => 
+      (controller.myProfile().isNewUser == null) ? 
+      Stack(children: const [
+        Opacity(opacity: .5,
+          child: ModalBarrier(dismissible: false, color: Colors.black)),
+        Center(child: CircularProgressIndicator(color: Colors.deepPurple))])
+      : (controller.myProfile().isNewUser!) ? TermsScreen() : HomeScreen()
     );
   }
 }

@@ -19,7 +19,6 @@ class UserDataController extends GetxController{
         originData = userModel;
         FirebaseUserRepository.updateLastLoginDate(userModel.docId, DateTime.now());
       }else{
-        List<String> interestTitles = Questions.interests.keys.toList();
         originData = UserModel(
           isNewUser: true,
           uid: firebaseUser.uid, 
@@ -79,8 +78,8 @@ class UserDataController extends GetxController{
     }
     myProfile(UserModel.clone(originData));
   }
-  
-  DateTime durationDate() =>  DateTime.now().add(Duration(days: 1));
+
+  DateTime durationDate() => DateTime.now().add(Duration(days: 1));
   
   bool isDurationSmallerThanNow(DateTime? dates){
     return (dates??DateTime.now()).microsecondsSinceEpoch <= DateTime.now().microsecondsSinceEpoch;
@@ -345,8 +344,6 @@ class UserDataController extends GetxController{
   //   return result;
   // }
 
-
-
   // void setAdditionals(Map<String, List?> answersMap)async{
   //   List answersList = createAnwersList(answersMap);
   //   Map originalAnswer = getAdditionalAnswersMap();
@@ -381,5 +378,12 @@ class UserDataController extends GetxController{
     }else {
       return false;
     }
+  }
+
+  void pointCtrl(int point){
+    int sumPoint = (originData.point??0) + point;
+    FirebaseUserRepository.updatePoint(originData.docId, sumPoint);
+    originData.point = sumPoint;
+    myProfile(UserModel.clone(originData));
   }
 }

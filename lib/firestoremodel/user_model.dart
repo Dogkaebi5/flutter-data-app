@@ -149,10 +149,12 @@ class UserModel{
       permitTelemarketingDate : user.permitTelemarketingDate,
     );
 
-  static List userInterestTimestampToDate(json){
-    List dates = [];
-    for(int i = 0; i < json.length; i++){
-      dates.add(json[i].toDate());
+  static List? userInterestTimestampToDate(json){
+    List? dates = [];
+    if(json != null){
+      for(int i = 0; i < json.length; i++){
+        dates.add(json[i].toDate());
+      }
     }
     return dates;
   }

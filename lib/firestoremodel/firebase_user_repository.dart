@@ -46,9 +46,12 @@ class FirebaseUserRepository {
     users.doc(docId).update({ key: isPermit });
   }
 
-  static void updateIsPermitTeleMarketing (String? docId, bool isPermit, DateTime? date) async{
+  static void updateIsPermitTeleMarketing (String? docId, bool isPermit, DateTime? date){
+    print("test: $docId");
+    print("test: $isPermit");
+    print("test: $date");
     CollectionReference users = FirebaseFirestore.instance.collection("users");
-    await users.doc(docId).update({
+    users.doc(docId).update({
       "is_permit_telemarketing": isPermit,
       "permit_telemarketing_date": date
     });
@@ -107,13 +110,6 @@ class FirebaseUserRepository {
     users.doc(docId).update({"is_new_user" : isNew});
   }
 
-  // static void updateUserAnswers(String? docId, String keys, String interests, DateTime date, List answers){
-  // CollectionReference users = FirebaseFirestore.instance.collection("users");
-  // users.doc(docId).update({keys: {
-  //     "title" : interests, "is_selected": true, "selected_date": date,
-  //     "is_permit": true, "answers": answers}});
-  // }
-
   static void notNewUser(String? docId){
     CollectionReference users = FirebaseFirestore.instance.collection("users");
     users.doc(docId).update({"is_new_user": false});
@@ -128,5 +124,40 @@ class FirebaseUserRepository {
   static void updatePoint(String? docId, int newPoint){
     CollectionReference users = FirebaseFirestore.instance.collection("users");
     users.doc(docId).update({"point": newPoint});
+  }
+
+  static void updateDetails(uid, detail){
+    CollectionReference details = FirebaseFirestore.instance.collection("details");
+    details.doc(uid).update(
+      {"details": FieldValue.arrayUnion([detail])}
+    );
+  }
+
+  static getSaleDetailId()async{
+    CollectionReference details = FirebaseFirestore.instance.collection("details");
+    var id = await details.doc("details_id").get().then((doc) => doc.data());
+    return id;
+  }
+
+  static getTeleSaleDetailId()async{
+    CollectionReference details = FirebaseFirestore.instance.collection("details");
+    var id = await details.doc("tele_sale_details_id").get().then((doc) => doc.data());
+    return id;
+  }
+  static getWithdrawDetailId()async{
+    CollectionReference details = FirebaseFirestore.instance.collection("details");
+    var id = await details.doc("withdraw_details_id").get().then((doc) => doc.data());
+    return id;
+  }
+
+  static updateDetailId(id){
+    CollectionReference details = FirebaseFirestore.instance.collection("details");
+    details.doc("details_id").update({"details_id": id});
+  }
+
+  static resetUser(String? docId, UserModel empty){
+    CollectionReference users = FirebaseFirestore.instance.collection("users");
+    Map emptyUser = empty.toMap();
+    users.doc(docId).update(emptyUser as Map<Object, Object?>);
   }
 }

@@ -174,20 +174,22 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: [
                         TextButton(
                           onPressed: (){
-                            FirebaseAuth.instance.signOut();
                             Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) =>  AuthRouter()), ModalRoute.withName('/'));
+                            FirebaseAuth.instance.signOut();
                           },
                           child: const Text("/test\nlogout",style: testBtnStyle)
                         ),
                         TextButton(
-                          onPressed: (){
-                            controller.pointCtrl(10000);
-                          },
+                          onPressed: () => controller.pointCtrl(10000),
                           child: const Text("/test\n+point",style: testBtnStyle)
+                        ),
+                        TextButton(
+                          onPressed: () => controller.reset(),
+                          child: const Text("/test\nreset",style: testBtnStyle)
                         ),
                       ],
                     ),
-                    const SizedBox(height: 80,),
+                    const SizedBox(height: 80),
                   ]
                 ),
               ),
@@ -218,11 +220,9 @@ class _HomeScreenState extends State<HomeScreen> {
               List date = pickerDate.toString().split(" ");
               if (date.length > 4 && date[4] != "null)"){
                 setSortDateText(date[1], date[4]);
-                print("4: $date");
                 Navigator.pop(context);
               } else if (date.length > 4 && date[4] == "null)"){
                 setSortDateText(date[1], date[1]);
-                print("1: $date");
                 Navigator.pop(context);
               } else {
                 setOneMonth();

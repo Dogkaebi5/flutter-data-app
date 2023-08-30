@@ -105,10 +105,7 @@ class _InterestScreenState extends State<InterestScreen> {
   createInterstCard(i){
     return InkWell(
       onTap: (!canChange(i))
-        ? (){
-          List dates = controller.createInterestDatesMap().values.toList();
-          print("test: ${dates[i]}");
-        }
+        ? (){}
         : (){
           setState(() {
             if(newSelecteds.contains(interestOptions[i])){

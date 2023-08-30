@@ -12,6 +12,61 @@ class UserDataController extends GetxController{
   List<String> basicTitles = Questions.basicDataTitles.values.toList();
   List<String> interestTitles = Questions.interestsDataTitles.values.toList();
 
+  UserModel createEmptyUser(User firebaseUser) {
+    return UserModel(
+      isNewUser: true,
+      uid: firebaseUser.uid, 
+      name: firebaseUser.displayName?? "홍길동",
+      gmail: firebaseUser.email?? "example@example.com",
+      mobile: firebaseUser.phoneNumber?? "010-0000-0000",
+      createdTime: DateTime.now(), 
+      lastLoginTime: DateTime.now(),
+      loginLog: [DateTime.now()],
+      nickname: null,
+      email: null,
+      married: BasicData(null, null, false),
+      children: BasicData(null, null, false),
+      education: BasicData(null, null, false),
+      occupation: BasicData(null, null, false),
+      income: BasicData(null, null, false),
+      residence: BasicData(null, null, false),
+      area: BasicData(null, null, false),
+      userInterests: null,
+      userInterestDates: null,
+      userInterestPermits: null,
+      insurance: List.filled(Questions.interests[interestTitles[0]]!.length, null),
+      loan: List.filled(Questions.interests[interestTitles[1]]!.length, null),
+      deposit: List.filled(Questions.interests[interestTitles[2]]!.length, null),
+      immovables: List.filled(Questions.interests[interestTitles[3]]!.length, null),
+      stock: List.filled(Questions.interests[interestTitles[4]]!.length, null),
+      cryto: List.filled(Questions.interests[interestTitles[5]]!.length, null),
+      golf: List.filled(Questions.interests[interestTitles[6]]!.length, null),
+      tennis: List.filled(Questions.interests[interestTitles[7]]!.length, null),
+      fitness: List.filled(Questions.interests[interestTitles[8]]!.length, null),
+      yoga: List.filled(Questions.interests[interestTitles[9]]!.length, null),
+      dietary: List.filled(Questions.interests[interestTitles[10]]!.length, null),
+      educate: List.filled(Questions.interests[interestTitles[11]]!.length, null),
+      parental: List.filled(Questions.interests[interestTitles[12]]!.length, null),
+      automobile: List.filled(Questions.interests[interestTitles[13]]!.length, null),
+      domestic: List.filled(Questions.interests[interestTitles[14]]!.length, null),
+      abroad: List.filled(Questions.interests[interestTitles[15]]!.length, null),
+      camp: List.filled(Questions.interests[interestTitles[16]]!.length, null),
+      fishing: List.filled(Questions.interests[interestTitles[17]]!.length, null),
+      pet: List.filled(Questions.interests[interestTitles[18]]!.length, null),
+      password: null,
+      bankName: null,
+      bankAccount: null,
+      point: 0,
+      isNoticeService: false,
+      isNoticeMarketing: false,
+      isPermitName: true,
+      isPermitGender: true,
+      isPermitBirth: true,
+      isPermitMobile: true,
+      isPermitTelemarketing: false,
+      permitTelemarketingDate: null);
+  }
+
   authStateChanges(User? firebaseUser) async {
     if(firebaseUser != null){
       UserModel? userModel = await FirebaseUserRepository.findUserByUid(firebaseUser.uid);
@@ -19,59 +74,7 @@ class UserDataController extends GetxController{
         originData = userModel;
         FirebaseUserRepository.updateLastLoginDate(userModel.docId, DateTime.now());
       }else{
-        originData = UserModel(
-          isNewUser: true,
-          uid: firebaseUser.uid, 
-          name: firebaseUser.displayName?? "홍길동",
-          gmail: firebaseUser.email?? "example@example.com",
-          mobile: firebaseUser.phoneNumber?? "010-0000-0000",
-          createdTime: DateTime.now(), 
-          lastLoginTime: DateTime.now(),
-          loginLog: [DateTime.now()],
-          nickname: null,
-          email: null,
-          married: BasicData(null, null, false),
-          children: BasicData(null, null, false),
-          education: BasicData(null, null, false),
-          occupation: BasicData(null, null, false),
-          income: BasicData(null, null, false),
-          residence: BasicData(null, null, false),
-          area: BasicData(null, null, false),
-          userInterests: null,
-          userInterestDates: null,
-          userInterestPermits: null,
-          insurance: List.filled(Questions.interests[interestTitles[0]]!.length, null),
-          loan: List.filled(Questions.interests[interestTitles[1]]!.length, null),
-          deposit: List.filled(Questions.interests[interestTitles[2]]!.length, null),
-          immovables: List.filled(Questions.interests[interestTitles[3]]!.length, null),
-          stock: List.filled(Questions.interests[interestTitles[4]]!.length, null),
-          cryto: List.filled(Questions.interests[interestTitles[5]]!.length, null),
-          golf: List.filled(Questions.interests[interestTitles[6]]!.length, null),
-          tennis: List.filled(Questions.interests[interestTitles[7]]!.length, null),
-          fitness: List.filled(Questions.interests[interestTitles[8]]!.length, null),
-          yoga: List.filled(Questions.interests[interestTitles[9]]!.length, null),
-          dietary: List.filled(Questions.interests[interestTitles[10]]!.length, null),
-          educate: List.filled(Questions.interests[interestTitles[11]]!.length, null),
-          parental: List.filled(Questions.interests[interestTitles[12]]!.length, null),
-          automobile: List.filled(Questions.interests[interestTitles[13]]!.length, null),
-          domestic: List.filled(Questions.interests[interestTitles[14]]!.length, null),
-          abroad: List.filled(Questions.interests[interestTitles[15]]!.length, null),
-          camp: List.filled(Questions.interests[interestTitles[16]]!.length, null),
-          fishing: List.filled(Questions.interests[interestTitles[17]]!.length, null),
-          pet: List.filled(Questions.interests[interestTitles[18]]!.length, null),
-          password: null,
-          bankName: null,
-          bankAccount: null,
-          point: 0,
-          isNoticeService: false,
-          isNoticeMarketing: false,
-          isPermitName: true,
-          isPermitGender: true,
-          isPermitBirth: true,
-          isPermitMobile: true,
-          isPermitTelemarketing: false,
-          permitTelemarketingDate: null,
-        );
+        originData = createEmptyUser(firebaseUser); 
         String docId = await FirebaseUserRepository.signup(originData);
         originData.docId = docId;
       }
@@ -87,17 +90,20 @@ class UserDataController extends GetxController{
   
   void setUserPermit(int i, bool isPermit){
     String key = "";
-    switch(i){
-      case 0 : key = "is_permit_name"; originData.isPermitName = isPermit; break;
-      case 1 : key = "is_permit_gender"; originData.isPermitGender = isPermit; break;
-      case 2 : key = "is_permit_birth"; originData.isPermitBirth = isPermit; break;
-      case 3 : key = "is_permit_mobile"; originData.isPermitMobile = isPermit; break;
-      default: break;
+    if (i <= 3){
+      switch(i){
+        case 0 : key = "is_permit_name"; originData.isPermitName = isPermit; break;
+        case 1 : key = "is_permit_gender"; originData.isPermitGender = isPermit; break;
+        case 2 : key = "is_permit_birth"; originData.isPermitBirth = isPermit; break;
+        case 3 : key = "is_permit_mobile"; originData.isPermitMobile = isPermit; break;
+        default: break;
+      }
+      FirebaseUserRepository.updateIsPermitUserData(originData.docId, key, isPermit);
     }
-    FirebaseUserRepository.updateIsPermitUserData(originData.docId, key, isPermit);
     if( i == 3 && !isPermit && originData.isPermitTelemarketing! ){
       FirebaseUserRepository.updateIsPermitTeleMarketing(originData.docId, isPermit, null);
       originData.isPermitTelemarketing = isPermit;
+      originData.permitTelemarketingDate = null;
     }
     if( i == 4 ){
       originData.isPermitTelemarketing = isPermit;
@@ -234,7 +240,7 @@ class UserDataController extends GetxController{
       result[interestTitles[i]] = null;
     }
     if (originData.userInterestDates != null){
-      for (int i = 0; i < originData.userInterests!.length; i++){
+      for (int i = 0; i < originData.userInterestDates!.length; i++){
         result[originData.userInterests![i]] = originData.userInterestDates![i];
       }
     }
@@ -331,43 +337,6 @@ class UserDataController extends GetxController{
   void setInterestPermits(List isPermits){
     FirebaseUserRepository.updateInterestPermit(originData.docId, isPermits);
   }
-  // bool checkInterestHasUpdate(List newSelecteds){
-  //   bool result = false;
-  //   if(originData.userInterests?.length != newSelecteds.length){
-  //     result = true;
-  //   }else{ for(int i = 0; i < newSelecteds.length; i++){
-  //     if(originData.userInterests![i] != newSelecteds[i]){
-  //       result = true;
-  //       break;
-  //     }
-  //   }}
-  //   return result;
-  // }
-
-  // void setAdditionals(Map<String, List?> answersMap)async{
-  //   List answersList = createAnwersList(answersMap);
-  //   Map originalAnswer = getAdditionalAnswersMap();
-  //   List dates = getInterestDatesWithoutNull();
-  //   List interests = originData.userInterests!;
-  //   List<String> keys = createInterestKeysList(interests);
-  //   for(int i = 0; i < answersList.length; i++){
-  //     for(int j = 0; j < answersList[i].length; j++){
-  //       if (originalAnswer[interests[i]][j] != answersList[i][j]){
-  //         FirebaseUserRepository.updateUserAnswers(
-  //           originData.docId, keys[i], interests[i], dates[i], answersList[i]);
-  //         originalAnswer[interests[i]] = answersList[i];
-  //           break;
-  //       }
-  //     }
-  //   }
-  //   if(originData.isNewUser!){
-  //     FirebaseUserRepository.notNewUser(originData.docId);
-  //     originData.isNewUser = false;
-  //   }
-  //   UserModel? userModel = await FirebaseUserRepository.findUserByUid(originData.uid!);
-  //   originData = userModel!;
-  //   myProfile(UserModel.clone(originData));
-  // }
   
   Future<bool> checkPassword(pw) async{
     String? originPassword = await FirebaseUserRepository.getUserPassword(originData.docId);
@@ -385,5 +354,35 @@ class UserDataController extends GetxController{
     FirebaseUserRepository.updatePoint(originData.docId, sumPoint);
     originData.point = sumPoint;
     myProfile(UserModel.clone(originData));
+  }
+  
+  getDetailId(typenum){
+    int nowId = 0;
+    switch (typenum) {
+      case 1: nowId = FirebaseUserRepository.getSaleDetailId() + 1; break;
+      case 2: nowId = FirebaseUserRepository.getTeleSaleDetailId() + 1; break;
+      case 3: nowId = FirebaseUserRepository.getWithdrawDetailId() + 1; break;
+    }
+    return nowId;
+  }
+  
+  testMakeDetail(){
+    int id = getDetailId(1);
+    Map detail = {
+      "uid": originData.uid,
+      "title": "데이터 판매",
+      "id": id,
+      "type": "리워드",
+      "date": DateTime.now(),
+      "point": 10000,
+    };
+    FirebaseUserRepository.updateDetails(originData.uid, detail);
+    FirebaseUserRepository.updateDetailId(id);
+  }
+
+  void reset(){
+    UserModel empty = createEmptyUser(FirebaseAuth.instance.currentUser!);
+    FirebaseUserRepository.resetUser(originData.docId, empty);
+    authStateChanges(FirebaseAuth.instance.currentUser!);
   }
 }

@@ -47,9 +47,6 @@ class FirebaseUserRepository {
   }
 
   static void updateIsPermitTeleMarketing (String? docId, bool isPermit, DateTime? date){
-    print("test: $docId");
-    print("test: $isPermit");
-    print("test: $date");
     CollectionReference users = FirebaseFirestore.instance.collection("users");
     users.doc(docId).update({
       "is_permit_telemarketing": isPermit,
@@ -126,16 +123,15 @@ class FirebaseUserRepository {
     users.doc(docId).update({"point": newPoint});
   }
 
-  static void updateDetails(uid, detail){
+  static void updateDetailId(id){
     CollectionReference details = FirebaseFirestore.instance.collection("details");
-    details.doc(uid).update(
-      {"details": FieldValue.arrayUnion([detail])}
-    );
+    details.doc("details_id").update({"details_id": id});
   }
 
-  static getSaleDetailId()async{
+  static Future<int> getSaleDetailId()async{
     CollectionReference details = FirebaseFirestore.instance.collection("details");
-    var id = await details.doc("details_id").get().then((doc) => doc.data());
+    Map data = await details.doc("details_id").get().then((doc) => doc.data() as Map);
+    int id = data["details_id"];
     return id;
   }
 
@@ -150,9 +146,22 @@ class FirebaseUserRepository {
     return id;
   }
 
-  static updateDetailId(id){
+  static void updateDetails(uid, Map detail){
     CollectionReference details = FirebaseFirestore.instance.collection("details");
-    details.doc("details_id").update({"details_id": id});
+    var data;
+    details.doc(uid).get().then((doc) => data = doc.data());
+    if (data == null){
+      details.doc(uid).set({"details": [detail]});
+    }else{
+      details.doc(uid).update({"details": FieldValue.arrayUnion([detail])});
+    }
+  }
+
+  static Future<List> getDetails(uid) async{
+    CollectionReference crf = FirebaseFirestore.instance.collection("details");
+    Map data = await crf.doc(uid).get().then((doc) => doc.data() as Map);
+    List details = data['details'];
+    return details;
   }
 
   static resetUser(String? docId, UserModel empty){

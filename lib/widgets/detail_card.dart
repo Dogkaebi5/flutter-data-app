@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 
 class DetailCard extends StatefulWidget {
   final String title;
-  final String date;
-  final String point;
+  final DateTime date;
+  final int point;
   final onTap;
   DetailCard({
     required this.title,
@@ -20,6 +20,9 @@ class DetailCard extends StatefulWidget {
 class _DetailCardState extends State<DetailCard> {
   @override
   Widget build(BuildContext context) {
+    String detailDate = widget.date.toString().split(' ')[0];
+    String detailsPoint = (widget.point > 0) ? "+ ${widget.point}" : "- ${widget.point}";
+
     return InkWell(
       onTap: widget.onTap,
       child: Card(
@@ -32,20 +35,16 @@ class _DetailCardState extends State<DetailCard> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(widget.title,
-                    style: const TextStyle(fontWeight: FontWeight.bold),),
+                  Text(widget.title, style: const TextStyle(fontWeight: FontWeight.bold)),
                   const SizedBox(height: 4,),
-                  Text(
-                    widget.date.split(' ')[0], 
-                    style: fontSmallGrey
-                  ),
+                  Text(detailDate, style: fontSmallGrey),
                 ],
               ),
-              Text(widget.point,
+              Text(detailsPoint,
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: widget.point.split(' ')[0] == "+"
+                  color: detailsPoint.split(' ')[0] == "+"
                     ? const Color.fromRGBO(149, 117, 205, 1)
                     : const Color.fromRGBO(229, 115, 115, 1)
                 ),)

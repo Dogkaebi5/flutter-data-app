@@ -9,6 +9,8 @@ class UserDataController extends GetxController{
   UserModel originData = UserModel();
   Rx<UserModel> myProfile = UserModel().obs;
   
+  List details = [].obs;
+
   List<String> basicTitles = Questions.basicDataTitles.values.toList();
   List<String> interestTitles = Questions.interestsDataTitles.values.toList();
 
@@ -74,7 +76,7 @@ class UserDataController extends GetxController{
         originData = userModel;
         FirebaseUserRepository.updateLastLoginDate(userModel.docId, DateTime.now());
       }else{
-        originData = createEmptyUser(firebaseUser); 
+        originData = createEmptyUser(firebaseUser);
         String docId = await FirebaseUserRepository.signup(originData);
         originData.docId = docId;
       }
@@ -209,9 +211,6 @@ class UserDataController extends GetxController{
     List newDates = originData.userInterestDates??[];
     List newPermits = originData.userInterestPermits??[];
     List dates = [];
-    print("test: $selected");
-    print("test: $isSelectedMap");
-    print("test: $newSelecteds");
     dates.addAll(originData.userInterestDates??[]);
     switch (dates.length){
       case 0 : dates = [null,null,null]; break;
@@ -356,18 +355,19 @@ class UserDataController extends GetxController{
     myProfile(UserModel.clone(originData));
   }
   
-  getDetailId(typenum){
+  getDetailId(typenum) async{
     int nowId = 0;
     switch (typenum) {
-      case 1: nowId = FirebaseUserRepository.getSaleDetailId() + 1; break;
-      case 2: nowId = FirebaseUserRepository.getTeleSaleDetailId() + 1; break;
-      case 3: nowId = FirebaseUserRepository.getWithdrawDetailId() + 1; break;
+      case 1: nowId = await FirebaseUserRepository.getSaleDetailId(); break;
+      case 2: nowId = FirebaseUserRepository.getTeleSaleDetailId(); break;
+      case 3: nowId = FirebaseUserRepository.getWithdrawDetailId(); break;
     }
-    return nowId;
+    return (nowId+1);
   }
   
-  testMakeDetail(){
-    int id = getDetailId(1);
+  testCreateDetail()async{
+    int id = await getDetailId(1);
+    print(id);
     Map detail = {
       "uid": originData.uid,
       "title": "데이터 판매",
@@ -375,10 +375,54 @@ class UserDataController extends GetxController{
       "type": "리워드",
       "date": DateTime.now(),
       "point": 10000,
+      "buyer": "(주)테스트회사",
+      "info": ["닉네임", "연령층", "이메일", "성함", "휴대폰", "관심사 1"]
     };
     FirebaseUserRepository.updateDetails(originData.uid, detail);
     FirebaseUserRepository.updateDetailId(id);
+    refreshDetails();
   }
+
+  void refreshDetails() async{
+    details = await FirebaseUserRepository.getDetails(originData.uid);
+  }
+
+  // testCreateWithdrawDetail(point)async{
+  //   int id = await getDetailId(3);
+  //   Map detail = {
+  //     "title": "출금",
+  //     "id": id,
+  //     "type": "출금",
+  //     "date": DateTime.now(),
+  //     "point": point,
+  //     "withdraw": point,
+  //     "fee": "${pointList[1].toString()} 원",
+  //     "tax": "${pointList[2].toString()} 원",
+  //     "amount": "${pointList[3].toString()} 원",
+  //     "account": [name, "$_bankName $_bankAccNum"],
+  //     "status" : "완료"
+  //   };
+  // }
+
+  // testCreateSaleNotice(){
+  //   return {
+  //     "id": _saleDetailID.toString(),
+  //     "type": "normal", 
+  //     "title": "[데이플러스] 리워드 안내",
+  //     "content": "판매 접수된 정보가 구매 확정되어 포인트가 적립되었습니다!",
+  //     "date": DateTime.now().toString().split(".")[0],
+  //   };
+  // }
+  // testCreateWithdrawNotice(){
+  //   return {
+  //     "id": _withDrawDetailID.toString(),
+  //     "type": "normal", 
+  //     "title": "[데이플러스] 출금 성공",
+  //     "content": "신청하신 포인트가 정상 출금되었습니다.",
+  //     "date": DateTime.now().toString().split(".")[0],
+  //   };
+  // }
+
 
   void reset(){
     UserModel empty = createEmptyUser(FirebaseAuth.instance.currentUser!);

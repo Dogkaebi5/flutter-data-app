@@ -21,7 +21,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final UserDataController controller = Get.put(UserDataController());
-  List details = List.empty(growable: true);
   bool hasNewNotice = false;
   List<bool> sortSelections = [true, false];
   DateTime signUpDate = DateTime(2023, 1, 1);
@@ -47,7 +46,6 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState(){
     super.initState();
     setState(() {
-      details = context.read<SettingProvider>().details;
       hasNewNotice = context.read<SettingProvider>().hasNewNotice;
       setSortDateText(
         today.subtract(Duration(days:30)).toString().split(' ')[0],
@@ -56,7 +54,8 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   @override
-  Widget build(BuildContext context, ) {
+  Widget build(BuildContext context){
+    controller.refreshDetails();
     return Scaffold(
       backgroundColor: const Color.fromRGBO(126, 87, 194, 1),
       bottomSheet: NavBar(), 
@@ -153,21 +152,19 @@ class _HomeScreenState extends State<HomeScreen> {
                         style: fontSmallGrey
                       ),
                     const SizedBox(height: 12,),
-                
-                    if(details.isEmpty)
+                    if(controller.details.isEmpty)
                       Row(children: const[
                         SizedBox(height:30, width:24),
                         Text("기록이 없습니다."),
                       ])
                     else 
-                      for(int i = details.length-1; i > -1; i--)
+                      for(int i = controller.details.length-1; i > -1; i--)
                         DetailCard(
-                          title: details[i]['title'], 
-                          date: details[i]['date'], 
-                          point: details[i]['point'],
-                          onTap: (){detailDialog(context, i, details);}
+                          title: controller.details[i]['title'], 
+                          date: controller.details[i]['date'].toDate(), 
+                          point: controller.details[i]['point'],
+                          onTap: (){detailDialog(context, i, controller.details);}
                         ),
-
                     /////////////////test btns
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -180,7 +177,10 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: const Text("/test\nlogout",style: testBtnStyle)
                         ),
                         TextButton(
-                          onPressed: () => controller.pointCtrl(10000),
+                          onPressed: () {
+                            controller.pointCtrl(10000);
+                            controller.testCreateDetail();
+                          },
                           child: const Text("/test\n+point",style: testBtnStyle)
                         ),
                         TextButton(

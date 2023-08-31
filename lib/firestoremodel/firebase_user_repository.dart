@@ -4,7 +4,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class FirebaseUserRepository {
   static Future<String> signup(UserModel user) async{
     CollectionReference users = FirebaseFirestore.instance.collection("users");
+    CollectionReference details = FirebaseFirestore.instance.collection("details");
     DocumentReference drf = await users.add(user.toMap());
+    details.doc(user.uid).set({"details": []});
     return drf.id;
   }
 
@@ -148,13 +150,7 @@ class FirebaseUserRepository {
 
   static void updateDetails(uid, Map detail){
     CollectionReference details = FirebaseFirestore.instance.collection("details");
-    var data;
-    details.doc(uid).get().then((doc) => data = doc.data());
-    if (data == null){
-      details.doc(uid).set({"details": [detail]});
-    }else{
-      details.doc(uid).update({"details": FieldValue.arrayUnion([detail])});
-    }
+    details.doc(uid).update({"details": FieldValue.arrayUnion([detail])});
   }
 
   static Future<List> getDetails(uid) async{
@@ -166,7 +162,9 @@ class FirebaseUserRepository {
 
   static resetUser(String? docId, UserModel empty){
     CollectionReference users = FirebaseFirestore.instance.collection("users");
+    CollectionReference details = FirebaseFirestore.instance.collection("details");
     Map emptyUser = empty.toMap();
+    details.doc(empty.uid).update({"details": []});
     users.doc(docId).update(emptyUser as Map<Object, Object?>);
   }
 }

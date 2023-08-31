@@ -105,7 +105,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                         index++;
                       }
                       if (index < details.length) {
-                        detailDialog(context, index, details);
+                        detailDialog(context, details[index]);
                       }else {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(

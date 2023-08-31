@@ -55,7 +55,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context){
-    controller.refreshDetails();
     return Scaffold(
       backgroundColor: const Color.fromRGBO(126, 87, 194, 1),
       bottomSheet: NavBar(), 
@@ -152,6 +151,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         style: fontSmallGrey
                       ),
                     const SizedBox(height: 12,),
+                    
                     if(controller.details.isEmpty)
                       Row(children: const[
                         SizedBox(height:30, width:24),
@@ -161,9 +161,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       for(int i = controller.details.length-1; i > -1; i--)
                         DetailCard(
                           title: controller.details[i]['title'], 
-                          date: controller.details[i]['date'].toDate(), 
+                          date: controller.details[i]['date'].toDate(), //ctrl와 fire의 add한 형식이 다름
                           point: controller.details[i]['point'],
-                          onTap: (){detailDialog(context, i, controller.details);}
+                          onTap: (){detailDialog(context, controller.details[i]);}
                         ),
                     /////////////////test btns
                     Row(
@@ -177,14 +177,18 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: const Text("/test\nlogout",style: testBtnStyle)
                         ),
                         TextButton(
-                          onPressed: () {
+                          onPressed: () async{
                             controller.pointCtrl(10000);
-                            controller.testCreateDetail();
+                            await controller.testCreateDetail();
+                            setState(() {});
                           },
                           child: const Text("/test\n+point",style: testBtnStyle)
                         ),
                         TextButton(
-                          onPressed: () => controller.reset(),
+                          onPressed: (){
+                            controller.reset();
+                            setState((){});
+                          },
                           child: const Text("/test\nreset",style: testBtnStyle)
                         ),
                       ],

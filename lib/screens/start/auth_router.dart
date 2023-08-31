@@ -45,7 +45,6 @@ class _NewUserRouterState extends State<NewUserRouter> {
   @override
   void initState() {
     super.initState();
-    controller.refreshDetails();
     Timer(Duration(milliseconds: 200), (){
       (controller.myProfile().isNewUser!) 
       ? navPush(context, TermsScreen())

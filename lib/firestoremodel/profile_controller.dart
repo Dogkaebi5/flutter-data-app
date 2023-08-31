@@ -72,11 +72,14 @@ class UserDataController extends GetxController{
   authStateChanges(User? firebaseUser) async {
     if(firebaseUser != null){
       UserModel? userModel = await FirebaseUserRepository.findUserByUid(firebaseUser.uid);
+      List firebasDetails = await FirebaseUserRepository.getDetails(firebaseUser.uid);
       if (userModel != null){
         originData = userModel;
+        details = firebasDetails;
         FirebaseUserRepository.updateLastLoginDate(userModel.docId, DateTime.now());
       }else{
         originData = createEmptyUser(firebaseUser);
+        details = [];
         String docId = await FirebaseUserRepository.signup(originData);
         originData.docId = docId;
       }
@@ -367,7 +370,6 @@ class UserDataController extends GetxController{
   
   testCreateDetail()async{
     int id = await getDetailId(1);
-    print(id);
     Map detail = {
       "uid": originData.uid,
       "title": "데이터 판매",
@@ -380,12 +382,10 @@ class UserDataController extends GetxController{
     };
     FirebaseUserRepository.updateDetails(originData.uid, detail);
     FirebaseUserRepository.updateDetailId(id);
-    refreshDetails();
-  }
-
-  void refreshDetails() async{
     details = await FirebaseUserRepository.getDetails(originData.uid);
   }
+
+
 
   // testCreateWithdrawDetail(point)async{
   //   int id = await getDetailId(3);
@@ -424,9 +424,10 @@ class UserDataController extends GetxController{
   // }
 
 
-  void reset(){
+  void reset() {
     UserModel empty = createEmptyUser(FirebaseAuth.instance.currentUser!);
     FirebaseUserRepository.resetUser(originData.docId, empty);
     authStateChanges(FirebaseAuth.instance.currentUser!);
+    details = [];
   }
 }

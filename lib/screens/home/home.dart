@@ -19,7 +19,9 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final UserDataController controller = Get.put(UserDataController());
-  
+
+  int navBarSelectedIndex = 0;
+  bool hasNewNotice = false;
   List<bool> sortSelections = [true, false];
   DateTime signUpDate = DateTime(2023, 1, 1);
   DateTime today = DateTime.now();
@@ -48,13 +50,14 @@ class _HomeScreenState extends State<HomeScreen> {
         today.subtract(Duration(days:30)).toString().split(' ')[0],
         today.toString().split(' ')[0]);
     });
+    hasNewNotice = controller.hasNewNotice;
   }
 
   @override
   Widget build(BuildContext context){
     return Scaffold(
       backgroundColor: const Color.fromRGBO(126, 87, 194, 1),
-      bottomSheet: NavBar(), 
+      bottomSheet: NavBar(),
       body:  WillPopScope(
         onWillPop: () => Future(() => false),
         child: SafeArea(
@@ -158,7 +161,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       for(int i = controller.details.length-1; i > -1; i--)
                         DetailCard(
                           title: controller.details[i]['title'], 
-                          date: controller.details[i]['date'].toDate(), //ctrl와 fire의 add한 형식이 다름
+                          date: controller.details[i]['date'].toDate(),
                           point: controller.details[i]['point'],
                           onTap: (){detailDialog(context, controller.details[i]);}
                         ),
@@ -169,15 +172,14 @@ class _HomeScreenState extends State<HomeScreen> {
                         TextButton(
                           onPressed: (){
                             Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) =>  AuthRouter()), ModalRoute.withName('/'));
-                            FirebaseAuth.instance.signOut();
-                          },
+                            FirebaseAuth.instance.signOut();},
                           child: const Text("/test\nlogout",style: testBtnStyle)
                         ),
                         TextButton(
                           onPressed: () async{
                             controller.pointCtrl(10000);
                             await controller.testCreateDetail();
-                            setState(() {});
+                            setState((){});
                           },
                           child: const Text("/test\n+point",style: testBtnStyle)
                         ),

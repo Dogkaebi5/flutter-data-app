@@ -1,10 +1,7 @@
 import 'package:data_project/firestoremodel/profile_controller.dart';
-import 'package:data_project/provider/setting_provider.dart';
 import 'package:data_project/widgets/widget_style.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
-
 import 'detail_dialog.dart';
 
 class NotificationScreen extends StatefulWidget {
@@ -17,7 +14,7 @@ class NotificationScreen extends StatefulWidget {
 class _NotificationScreenState extends State<NotificationScreen> {
   final UserDataController ctrl = Get.put(UserDataController());
 
-  int contNewNotice = 0;
+  int countNewNotice = 0;
   bool isNoticePermit = false;
 
   void setIsNotice(){
@@ -27,15 +24,14 @@ class _NotificationScreenState extends State<NotificationScreen> {
   }
 
   @override
-  void initState(){
-    super.initState();
+  void initState() {
     setState(() {
-
-      context.read<SettingProvider>().setHasNewNotice(false);
-      contNewNotice = ctrl.countNewNotice;
+      countNewNotice = ctrl.countNewNotice;
       isNoticePermit = 
         (ctrl.myProfile().isNoticeService! && ctrl.myProfile().isNoticeMarketing!)?true:false;
+      ctrl.setHasNewNotice(false);
     });
+    super.initState();
   }
 
   @override
@@ -95,15 +91,15 @@ class _NotificationScreenState extends State<NotificationScreen> {
                     if(ctrl.notices[i]["type"] == "tele"){
                       notificationDialog(i);
                     }else if (ctrl.notices[i]["type"] == "normal"){
-                      int index = 0;
+                      int detailIndex = 0;
                       int id = ctrl.notices[i]["id"];
                       List details = ctrl.details;
                       for (var detail in details) {
                         if(detail.containsValue(id)){ break; }
-                        index++;
+                        detailIndex++;
                       }
-                      if (index < details.length) {
-                        detailDialog(context, details[index]);
+                      if (detailIndex < details.length) {
+                        detailDialog(context, details[detailIndex]);
                       }else {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
@@ -155,7 +151,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                   ),
                 ),
             ElevatedButton(onPressed: (){
-              print("test ${ctrl.notices[1]["date"]}");
+              
             }, child: Text("test"))    
           ]
         ),
@@ -163,15 +159,11 @@ class _NotificationScreenState extends State<NotificationScreen> {
     );
   }
 
-  setBadge(){
-    if (contNewNotice > 0){
-      contNewNotice--;
-      return Positioned(
-        right: 12,
-        top: 12,
-        child: Container(
-          width: 8,
-          height: 8,
+  Widget setBadge(){
+    if (countNewNotice > 0){
+      countNewNotice--;
+      return Positioned( right: 12, top: 12,
+        child: Container( width: 8, height: 8,
           decoration: BoxDecoration(
             color: Colors.red,
             borderRadius: BorderRadius.circular(4)

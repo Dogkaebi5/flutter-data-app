@@ -75,10 +75,12 @@ class UserDataController extends GetxController{
   authStateChanges(User? firebaseUser) async {
     if(firebaseUser != null){
       UserModel? userModel = await FirebaseUserRepository.findUserByUid(firebaseUser.uid);
-      List firebasDetails = await FirebaseUserRepository.getDetails(firebaseUser.uid);
+      List firebaseDetails = await FirebaseUserRepository.getDetails(firebaseUser.uid);
+      List firebaseNotices = await FirebaseUserRepository.getNotices(firebaseUser.uid);
       if (userModel != null){
         originData = userModel;
-        details = firebasDetails;
+        details = firebaseDetails;
+        notices = firebaseNotices;
         FirebaseUserRepository.updateLastLoginDate(userModel.docId, DateTime.now());
       }else{
         originData = createEmptyUser(firebaseUser);
@@ -382,7 +384,7 @@ class UserDataController extends GetxController{
     FirebaseUserRepository.updateDetails(originData.uid, detail);
     FirebaseUserRepository.updateDetailId(id);
     details = await FirebaseUserRepository.getDetails(originData.uid);
-    testCreateSaleNotice(id);
+    await testCreateSaleNotice(id);
   }
   testCreateSaleNotice(id) async{
     Map notice = {
@@ -393,8 +395,10 @@ class UserDataController extends GetxController{
       "date": DateTime.now().toString().split(".")[0],
     };
     FirebaseUserRepository.updateNotices(originData.uid, notice);
-    countNewNotice++;
     notices = await FirebaseUserRepository.getNotices(originData.uid);
+    countNewNotice++;
+    hasNewNotice = true;
+    update();
   }
 
   // testCreateWithdrawDetail(point)async{
@@ -414,8 +418,6 @@ class UserDataController extends GetxController{
   //   };
   // }
 
-
-
   // testCreateWithdrawNotice(){
   //   return {
   //     "id": _withDrawDetailID.toString(),
@@ -426,8 +428,8 @@ class UserDataController extends GetxController{
   //   };
   // }
 
-  setCountNewNotice(int i) => countNewNotice = i;
-  setHasNewNotice(bool hasNew) => hasNewNotice = hasNew;
+  setCountNewNotice(int i){countNewNotice = i;update();}
+  setHasNewNotice(bool hasNew){hasNewNotice = hasNew;update();}
   
   void reset() {
     UserModel empty = createEmptyUser(FirebaseAuth.instance.currentUser!);

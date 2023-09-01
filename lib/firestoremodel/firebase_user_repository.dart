@@ -124,16 +124,15 @@ class FirebaseUserRepository {
     CollectionReference users = FirebaseFirestore.instance.collection("users");
     users.doc(docId).update({"point": newPoint});
   }
-
-  static Future<int> getSaleDetailId()async{
+  static Future<int> getDetailId(key)async{
     CollectionReference details = FirebaseFirestore.instance.collection("details");
-    Map data = await details.doc("details_id").get().then((doc) => doc.data() as Map);
-    int id = data["details_id"];
+    Map data = await details.doc("ids").get().then((doc) => doc.data() as Map);
+    int id = data[key];
     return id;
   }
-  static void updateDetailId(id){
+  static void updateDetailId(key, id){
     CollectionReference details = FirebaseFirestore.instance.collection("details");
-    details.doc("details_id").update({"details_id": id});
+    details.doc("ids").update({key: id});
   }
   static Future<List> getDetails(uid) async{
     CollectionReference crf = FirebaseFirestore.instance.collection("details");
@@ -173,6 +172,7 @@ class FirebaseUserRepository {
     CollectionReference details = FirebaseFirestore.instance.collection("details");
     Map emptyUser = empty.toMap();
     details.doc(empty.uid).update({"details": []});
+    details.doc(empty.uid).update({"notices": []});
     users.doc(docId).update(emptyUser as Map<Object, Object?>);
   }
 }

@@ -1,11 +1,11 @@
+import 'package:data_project/firestoremodel/profile_controller.dart';
 import 'package:data_project/password_dialog.dart';
-import 'package:data_project/provider/setting_provider.dart';
 import 'package:data_project/screens/point/bank_data.dart';
 import 'package:data_project/widgets/widget_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:pinput/pinput.dart';
-import 'package:provider/provider.dart';
 
 class WithdrawScreen extends StatefulWidget {
   const WithdrawScreen({super.key});
@@ -14,6 +14,7 @@ class WithdrawScreen extends StatefulWidget {
 }
 
 class _WithdrawScreenState extends State<WithdrawScreen> {
+  final UserDataController ctrl = Get.put(UserDataController());
   int? inputPoint = 0;
   int fee = 1000;
   int tax = 0;
@@ -23,7 +24,7 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
   bool isHasAcc = false;
   String? bank;
   String? account;
-  int point = 0;
+
 
   int calculateFee(int? point) => (point != null && point < 10000 ) ? 1000 : 0;
   int calculateTax(int? point) => (point != null) ? (point * 0.033).floor() : 0;
@@ -32,8 +33,9 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
     val = (point != null) ? point - fee - tax : 0;
     return (val > 0) ? val : 0; 
   }
+
   void withdraw(){
-    context.read<SettingProvider>().pointTest([-inputPoint!, fee, tax, amount]);
+    ctrl.withdraw(inputPoint, fee, tax);
     Navigator.pop(context);
   }
 
@@ -43,10 +45,9 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
   void initState() {
     super.initState();
     setState(() {
-      point = context.read<SettingProvider>().point;
-      isHasAcc = context.read<SettingProvider>().isHasAcc;
-      bank = context.read<SettingProvider>().bankData[1];
-      account = context.read<SettingProvider>().bankData[2];
+      bank = ctrl.myProfile().bankName;
+      account = ctrl.myProfile().bankAccount;
+      isHasAcc = (account != null) ? true : false;
     });
   }
 
@@ -121,7 +122,7 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
                 hintText: "0",
                 hintStyle: TextStyle(fontSize: 40, color: Colors.black),
               ),
-              maxLength: point.toString().length + 1,
+              maxLength: ctrl.myProfile().point.toString().length + 1,
               inputFormatters: [
                 FilteringTextInputFormatter.allow(RegExp('[0-9]')),
                 FilteringTextInputFormatter.deny(RegExp(r'^0+'),),],
@@ -135,9 +136,9 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
                     _controller.clear();
                   }else {
                     inputPoint = int.parse(value);
-                    if (inputPoint! > point){
-                      _controller.setText(point.toString());
-                      inputPoint = point;
+                    if (inputPoint! > ctrl.myProfile().point!){
+                      _controller.setText(ctrl.myProfile().point.toString());
+                      inputPoint = ctrl.myProfile().point;
                     }
                   }
                   fee = calculateFee(inputPoint);
@@ -148,7 +149,7 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
             ),
             const Text("포인트를 입력하세요", style: fontSmallGrey),
             const SizedBox(height: 4),
-            Text('보유포인트 : ${point.toString()} P',),
+            Text('보유포인트 : ${ctrl.myProfile().point.toString()} P',),
             const SizedBox(height: 48),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,

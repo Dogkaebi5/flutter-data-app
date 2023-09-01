@@ -362,9 +362,9 @@ class UserDataController extends GetxController{
   getDetailId(typenum) async{
     int nowId = 0;
     switch (typenum) {
-      case 1: nowId = await FirebaseUserRepository.getSaleDetailId(); break;
-      // case 2: nowId = FirebaseUserRepository.getTeleSaleDetailId(); break;
-      // case 3: nowId = FirebaseUserRepository.getWithdrawDetailId(); break;
+      case 1: nowId = await FirebaseUserRepository.getDetailId("details_id"); break;
+      case 2: nowId = await FirebaseUserRepository.getDetailId("tele_sale_details_id"); break;
+      case 3: nowId = await FirebaseUserRepository.getDetailId("withdraw_details_id"); break;
     }
     return (nowId+1);
   }
@@ -382,7 +382,7 @@ class UserDataController extends GetxController{
       "info": ["닉네임", "연령층", "이메일", "성함", "휴대폰", "관심사 1"]
     };
     FirebaseUserRepository.updateDetails(originData.uid, detail);
-    FirebaseUserRepository.updateDetailId(id);
+    FirebaseUserRepository.updateDetailId("details_id", id);
     details = await FirebaseUserRepository.getDetails(originData.uid);
     await testCreateSaleNotice(id);
   }
@@ -401,32 +401,45 @@ class UserDataController extends GetxController{
     update();
   }
 
-  // testCreateWithdrawDetail(point)async{
-  //   int id = await getDetailId(3);
-  //   Map detail = {
-  //     "title": "출금",
-  //     "id": id,
-  //     "type": "출금",
-  //     "date": DateTime.now(),
-  //     "point": point,
-  //     "withdraw": point,
-  //     "fee": "${pointList[1].toString()} 원",
-  //     "tax": "${pointList[2].toString()} 원",
-  //     "amount": "${pointList[3].toString()} 원",
-  //     "account": [name, "$_bankName $_bankAccNum"],
-  //     "status" : "완료"
-  //   };
-  // }
+  withdraw(point, fee, tax)async{
+    pointCtrl(-point);
+    await createWithdrawDetail(point, fee, tax);
+  }
+  createWithdrawDetail(point, fee, tax)async{
+    int id = await getDetailId(3);
+    Map detail = {
+      "title": "출금",
+      "id": id,
+      "type": "출금",
+      "date": DateTime.now(),
+      "point": "${point.toString()} P",
+      "withdraw": "${point.toString()} P",
+      "fee": "${fee.toString()} 원",
+      "tax": "${tax.toString()} 원",
+      "amount": "${(point-fee-tax).toString()} 원",
+      "account": [originData.name, "${originData.bankName} ${originData.bankAccount}"],
+      "status" : "완료"
+    };
+    FirebaseUserRepository.updateDetails(originData.uid, detail);
+    FirebaseUserRepository.updateDetailId("withdraw_details_id", id);
+    details = await FirebaseUserRepository.getDetails(originData.uid);
+    await createWithdrawNotice(id);
+  }
 
-  // testCreateWithdrawNotice(){
-  //   return {
-  //     "id": _withDrawDetailID.toString(),
-  //     "type": "normal", 
-  //     "title": "[데이플러스] 출금 성공",
-  //     "content": "신청하신 포인트가 정상 출금되었습니다.",
-  //     "date": DateTime.now().toString().split(".")[0],
-  //   };
-  // }
+  createWithdrawNotice(id) async{
+    Map notice = {
+      "id": id.toString(),
+      "type": "출금", 
+      "title": "[데이플러스] 출금 성공",
+      "content": "신청하신 포인트가 정상 출금되었습니다.",
+      "date": DateTime.now()
+    };
+    FirebaseUserRepository.updateNotices(originData.uid, notice);
+    notices = await FirebaseUserRepository.getNotices(originData.uid);
+    countNewNotice++;
+    hasNewNotice = true;
+    update();
+  }
 
   setCountNewNotice(int i){countNewNotice = i;update();}
   setHasNewNotice(bool hasNew){hasNewNotice = hasNew;update();}
@@ -436,5 +449,6 @@ class UserDataController extends GetxController{
     FirebaseUserRepository.resetUser(originData.docId, empty);
     authStateChanges(FirebaseAuth.instance.currentUser!);
     details = [];
+    notices = [];
   }
 }

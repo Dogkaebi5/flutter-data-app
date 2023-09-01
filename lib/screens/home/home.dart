@@ -1,12 +1,10 @@
 import 'package:data_project/firestoremodel/profile_controller.dart';
-import 'package:data_project/provider/setting_provider.dart';
 import 'package:data_project/screens/home/detail_dialog.dart';
 import 'package:data_project/screens/start/auth_router.dart';
 import 'package:data_project/widgets/detail_card.dart';
 import 'package:data_project/widgets/nav_bar.dart';
 import 'package:data_project/widgets/widget_style.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:data_project/screens/point/withdraw.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -21,7 +19,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final UserDataController controller = Get.put(UserDataController());
-  bool hasNewNotice = false;
+  
   List<bool> sortSelections = [true, false];
   DateTime signUpDate = DateTime(2023, 1, 1);
   DateTime today = DateTime.now();
@@ -46,7 +44,6 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState(){
     super.initState();
     setState(() {
-      hasNewNotice = context.read<SettingProvider>().hasNewNotice;
       setSortDateText(
         today.subtract(Duration(days:30)).toString().split(' ')[0],
         today.toString().split(' ')[0]);

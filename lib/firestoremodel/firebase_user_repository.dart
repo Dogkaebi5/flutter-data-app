@@ -6,7 +6,7 @@ class FirebaseUserRepository {
     CollectionReference users = FirebaseFirestore.instance.collection("users");
     CollectionReference details = FirebaseFirestore.instance.collection("details");
     DocumentReference drf = await users.add(user.toMap());
-    details.doc(user.uid).set({"details": []});
+    details.doc(user.uid).set({"details": [], "notices": []});
     return drf.id;
   }
 
@@ -125,39 +125,47 @@ class FirebaseUserRepository {
     users.doc(docId).update({"point": newPoint});
   }
 
-  static void updateDetailId(id){
-    CollectionReference details = FirebaseFirestore.instance.collection("details");
-    details.doc("details_id").update({"details_id": id});
-  }
-
   static Future<int> getSaleDetailId()async{
     CollectionReference details = FirebaseFirestore.instance.collection("details");
     Map data = await details.doc("details_id").get().then((doc) => doc.data() as Map);
     int id = data["details_id"];
     return id;
   }
-
-  static getTeleSaleDetailId()async{
+  static void updateDetailId(id){
     CollectionReference details = FirebaseFirestore.instance.collection("details");
-    var id = await details.doc("tele_sale_details_id").get().then((doc) => doc.data());
-    return id;
+    details.doc("details_id").update({"details_id": id});
   }
-  static getWithdrawDetailId()async{
-    CollectionReference details = FirebaseFirestore.instance.collection("details");
-    var id = await details.doc("withdraw_details_id").get().then((doc) => doc.data());
-    return id;
-  }
-
-  static void updateDetails(uid, Map detail){
-    CollectionReference details = FirebaseFirestore.instance.collection("details");
-    details.doc(uid).update({"details": FieldValue.arrayUnion([detail])});
-  }
-
   static Future<List> getDetails(uid) async{
     CollectionReference crf = FirebaseFirestore.instance.collection("details");
     Map data = await crf.doc(uid).get().then((doc) => doc.data() as Map);
     List details = data['details'];
     return details;
+  }
+  static void updateDetails(uid, Map detail){
+    CollectionReference details = FirebaseFirestore.instance.collection("details");
+    details.doc(uid).update({"details": FieldValue.arrayUnion([detail])});
+  }
+
+  // static getTeleSaleDetailId()async{
+  //   CollectionReference details = FirebaseFirestore.instance.collection("details");
+  //   var id = await details.doc("tele_sale_details_id").get().then((doc) => doc.data());
+  //   return id;
+  // }
+  // static getWithdrawDetailId()async{
+  //   CollectionReference details = FirebaseFirestore.instance.collection("details");
+  //   var id = await details.doc("withdraw_details_id").get().then((doc) => doc.data());
+  //   return id;
+  // }
+
+  static Future<List> getNotices(uid)async{
+    CollectionReference crf = FirebaseFirestore.instance.collection("details");
+    Map data = await crf.doc(uid).get().then((doc) => doc.data() as Map);
+    List notices = data['notices'];
+    return notices;
+  }
+  static void updateNotices(uid, Map notice){
+    CollectionReference details = FirebaseFirestore.instance.collection("details");
+    details.doc(uid).update({"notices": FieldValue.arrayUnion([notice])});
   }
 
   static resetUser(String? docId, UserModel empty){

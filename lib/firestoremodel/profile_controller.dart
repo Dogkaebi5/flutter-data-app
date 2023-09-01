@@ -10,6 +10,9 @@ class UserDataController extends GetxController{
   Rx<UserModel> myProfile = UserModel().obs;
   
   List details = [].obs;
+  List notices = [].obs;
+  int countNewNotice = 0;
+  bool hasNewNotice = false;
 
   List<String> basicTitles = Questions.basicDataTitles.values.toList();
   List<String> interestTitles = Questions.interestsDataTitles.values.toList();
@@ -126,17 +129,13 @@ class UserDataController extends GetxController{
     }
   }
   
-  void changeNoticeService(){
-    if(originData.isNoticeService != null){
-      originData.isNoticeService = !originData.isNoticeService!;
-      FirebaseUserRepository.updateIsNoticeService(originData.docId, originData.isNoticeService!);
-    }
+  void changeNoticeService(bool isPermit){
+    originData.isNoticeService = isPermit;
+    FirebaseUserRepository.updateIsNoticeService(originData.docId, isPermit);
   }
-  void changeNoticeMarketing(){
-    if(originData.isNoticeMarketing != null){
-      originData.isNoticeMarketing = !originData.isNoticeMarketing!;
-      FirebaseUserRepository.updateIsNoticeMarketing(originData.docId, originData.isNoticeMarketing!);
-    }
+  void changeNoticeMarketing(bool isPermit){
+    originData.isNoticeMarketing = isPermit;
+    FirebaseUserRepository.updateIsNoticeMarketing(originData.docId, isPermit);
   }
 
   void setBasic(String nickname, String email, List<String?> selecteds){
@@ -362,8 +361,8 @@ class UserDataController extends GetxController{
     int nowId = 0;
     switch (typenum) {
       case 1: nowId = await FirebaseUserRepository.getSaleDetailId(); break;
-      case 2: nowId = FirebaseUserRepository.getTeleSaleDetailId(); break;
-      case 3: nowId = FirebaseUserRepository.getWithdrawDetailId(); break;
+      // case 2: nowId = FirebaseUserRepository.getTeleSaleDetailId(); break;
+      // case 3: nowId = FirebaseUserRepository.getWithdrawDetailId(); break;
     }
     return (nowId+1);
   }
@@ -383,9 +382,20 @@ class UserDataController extends GetxController{
     FirebaseUserRepository.updateDetails(originData.uid, detail);
     FirebaseUserRepository.updateDetailId(id);
     details = await FirebaseUserRepository.getDetails(originData.uid);
+    testCreateSaleNotice(id);
   }
-
-
+  testCreateSaleNotice(id) async{
+    Map notice = {
+      "id": id,
+      "type": "normal", 
+      "title": "[데이플러스] 리워드 안내",
+      "content": "판매 접수된 정보가 구매 확정되어 포인트가 적립되었습니다!",
+      "date": DateTime.now().toString().split(".")[0],
+    };
+    FirebaseUserRepository.updateNotices(originData.uid, notice);
+    countNewNotice++;
+    notices = await FirebaseUserRepository.getNotices(originData.uid);
+  }
 
   // testCreateWithdrawDetail(point)async{
   //   int id = await getDetailId(3);
@@ -404,15 +414,8 @@ class UserDataController extends GetxController{
   //   };
   // }
 
-  // testCreateSaleNotice(){
-  //   return {
-  //     "id": _saleDetailID.toString(),
-  //     "type": "normal", 
-  //     "title": "[데이플러스] 리워드 안내",
-  //     "content": "판매 접수된 정보가 구매 확정되어 포인트가 적립되었습니다!",
-  //     "date": DateTime.now().toString().split(".")[0],
-  //   };
-  // }
+
+
   // testCreateWithdrawNotice(){
   //   return {
   //     "id": _withDrawDetailID.toString(),
@@ -423,7 +426,9 @@ class UserDataController extends GetxController{
   //   };
   // }
 
-
+  setCountNewNotice(int i) => countNewNotice = i;
+  setHasNewNotice(bool hasNew) => hasNewNotice = hasNew;
+  
   void reset() {
     UserModel empty = createEmptyUser(FirebaseAuth.instance.currentUser!);
     FirebaseUserRepository.resetUser(originData.docId, empty);

@@ -407,16 +407,17 @@ class UserDataController extends GetxController{
   }
   createWithdrawDetail(point, fee, tax)async{
     int id = await getDetailId(3);
+    int amount = point - fee - tax;
     Map detail = {
       "title": "출금",
       "id": id,
       "type": "출금",
       "date": DateTime.now(),
-      "point": "${point.toString()} P",
-      "withdraw": "${point.toString()} P",
-      "fee": "${fee.toString()} 원",
-      "tax": "${tax.toString()} 원",
-      "amount": "${(point-fee-tax).toString()} 원",
+      "point": point,
+      "withdraw": point,
+      "fee": fee,
+      "tax": tax,
+      "amount": amount,
       "account": [originData.name, "${originData.bankName} ${originData.bankAccount}"],
       "status" : "완료"
     };
@@ -432,7 +433,7 @@ class UserDataController extends GetxController{
       "type": "출금", 
       "title": "[데이플러스] 출금 성공",
       "content": "신청하신 포인트가 정상 출금되었습니다.",
-      "date": DateTime.now()
+      "date": DateTime.now().toString().split(".")[0],
     };
     FirebaseUserRepository.updateNotices(originData.uid, notice);
     notices = await FirebaseUserRepository.getNotices(originData.uid);

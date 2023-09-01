@@ -21,7 +21,7 @@ class _DetailCardState extends State<DetailCard> {
   @override
   Widget build(BuildContext context) {
     String detailDate = widget.date.toString().split(' ')[0];
-    String detailsPoint = (widget.point > 0) ? "+ ${widget.point}" : "- ${widget.point}";
+    String detailsPoint = (widget.title == "출금") ? "- ${widget.point} P" : "+ ${widget.point} P";
 
     return InkWell(
       onTap: widget.onTap,

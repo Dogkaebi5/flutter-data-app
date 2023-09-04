@@ -436,8 +436,8 @@ class UserDataController extends GetxController{
 
   createWithdrawNotice(id) async{
     Map notice = {
-      "id": id.toString(),
-      "type": "출금", 
+      "id": id,
+      "type": "withdraw", 
       "title": "[데이플러스] 출금 성공",
       "content": "신청하신 포인트가 정상 출금되었습니다.",
       "date": DateTime.now().toString().split(".")[0],

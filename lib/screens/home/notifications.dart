@@ -90,7 +90,9 @@ class _NotificationScreenState extends State<NotificationScreen> {
                   onTap: (){
                     if(ctrl.notices[i]["type"] == "tele"){
                       notificationDialog(i);
-                    }else if (ctrl.notices[i]["type"] == "normal"){
+                    }else if (
+                    ctrl.notices[i]["type"] == "normal" || 
+                    ctrl.notices[i]["type"] == "withdraw"){
                       int detailIndex = 0;
                       int id = ctrl.notices[i]["id"];
                       List details = ctrl.details;

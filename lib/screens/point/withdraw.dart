@@ -70,8 +70,8 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
                 final List? data = await navPush(context, BankDataScreen());
                 if (data != null) {
                   setState((){
-                    bank = data[1];
-                    account = data[2];
+                    bank = data[0];
+                    account = data[1];
                     isHasAcc = true;
                   });
                 }

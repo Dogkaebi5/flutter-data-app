@@ -1,11 +1,12 @@
+import 'package:data_project/firestoremodel/profile_controller.dart';
 import 'package:data_project/provider/setting_provider.dart';
 import 'package:data_project/widgets/widget_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
-final List<String> bankList = ['국민은행', '하나은행', '신한은행', '우리은행', '농협은행', '기업은행', '산업은행', '제일은행', '카카오뱅크', '케이뱅크', '토스뱅크'];
-
+const List<String> bankList = ['국민은행', '하나은행', '신한은행', '우리은행', '농협은행', '기업은행', '산업은행', '제일은행', '카카오뱅크', '케이뱅크', '토스뱅크'];
 
 class BankDataScreen extends StatefulWidget {
   const BankDataScreen({super.key});
@@ -15,7 +16,7 @@ class BankDataScreen extends StatefulWidget {
 }
 
 class _BankDataScreenState extends State<BankDataScreen> {
-
+  final UserDataController ctrl = Get.put(UserDataController());
   bool isHasAcc = false;
   List bankData = List.empty(growable: true);
   String? bank;

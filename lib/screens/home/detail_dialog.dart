@@ -1,9 +1,8 @@
 import 'package:data_project/widgets/widget_style.dart';
 import 'package:flutter/material.dart';
 
-List tradeDetailTitleTexts = ["타이틀", "거래ID", "거래종류", "거래일시", "포인트 변화", "구매자", "구매내역"];
-List withDrawDetailTitleTexts = ["타이틀", "거래ID", "거래종류", "거래일시", "포인트 변화", "출금신청 포인트", "출금 수수료", "사업소득세", "출금예정 금액", "출금계좌", "출금상태"];
-
+const List tradeDetailTitleTexts = ["타이틀", "거래ID", "거래종류", "거래일시", "포인트 변화", "구매자", "구매내역"];
+const List withDrawDetailTitleTexts = ["타이틀", "거래ID", "거래종류", "거래일시", "포인트 변화", "출금신청 포인트", "출금 수수료", "사업소득세", "출금예정 금액", "출금계좌", "출금상태"];
 
 detailDialog(context, Map detail) { 
   return showDialog(
@@ -49,47 +48,35 @@ detailDialog(context, Map detail) {
                           child: Text("•   ${detail["info"][i]}"))
                     ],
                   )
-                  //   else Column(
-                  //     crossAxisAlignment: CrossAxisAlignment.start,
-                  //     children: [
-                  //       Padding(
-                  //         padding: const EdgeInsets.all(12),
-                  //         child: Column(
-                  //           children: [
-                  //             for (int i = 5; i < 9; i++)
-                  //             createDetailText(withDrawDetailTitleTexts[i], detailValueList[i]),
-                  //           ]
-                  //         )
-                  //       ),
-                  //       const SizedBox(height: 10,),
-                  //       createDetailText(withDrawDetailTitleTexts[9], ""),
-                  //       Padding(
-                  //         padding: const EdgeInsets.all(12),
-                  //         child: 
-                  //         Column(
-                  //           crossAxisAlignment: CrossAxisAlignment.start,
-                  //           children: [
-                  //             Text(detailValueList[9][0]),
-                  //             const SizedBox(height: 4,),
-                  //             Text(detailValueList[9][1]),
-                  //           ],
-                  //         )
-                  //       ),
-                  //       const SizedBox(height: 10,),
-                  //       createDetailText(withDrawDetailTitleTexts[10], detailValueList[10]),
-                  //     ],
-                  //   ),
-            ]),
-          )
-          // else Text("작성필요"),
-        ]
-      )
+                else if(detail["type"] == "출금")
+                  Column(crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(padding: const EdgeInsets.all(12),
+                        child: Column(children: [
+                          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [Text("출금신청 포인트"), Text(detail["withdraw"].toString())]),
+                          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [Text("출금 수수료"), Text(detail["fee"].toString())]),
+                          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [Text("사업소득세"), Text(detail["tax"].toString())]),
+                          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [Text("출금예정 금액"), Text(detail["amount"].toString())]),
+                      ])),
+                      const SizedBox(height: 10),
+                      Text("출금계좌"),
+                      Padding(padding: const EdgeInsets.all(12),
+                        child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(detail["account"][0]),
+                            const SizedBox(height: 4,),
+                            Text(detail["account"][1]),
+                      ])),
+                      const SizedBox(height: 10,),
+                      Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [Text("출금상태"), Text(detail["status"])]),
+                  ]),
+          ]))
+      ])
     )
   );
-}
-
-createDetailText(title, value){
-  return Row(
-    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    children: [ Text(title), Text(value),]);
 }

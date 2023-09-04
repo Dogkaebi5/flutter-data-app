@@ -23,7 +23,7 @@ class UserDataController extends GetxController{
       uid: firebaseUser.uid, 
       name: firebaseUser.displayName?? "홍길동",
       gmail: firebaseUser.email?? "example@example.com",
-      mobile: firebaseUser.phoneNumber?? "010-0000-0000",
+      mobile: firebaseUser.phoneNumber,
       createdTime: DateTime.now(), 
       lastLoginTime: DateTime.now(),
       loginLog: [DateTime.now()],
@@ -93,10 +93,18 @@ class UserDataController extends GetxController{
   }
 
   DateTime durationDate() => DateTime.now().add(Duration(days: 1));
-  
   bool isDurationSmallerThanNow(DateTime? dates){
     return (dates??DateTime.now()).microsecondsSinceEpoch <= DateTime.now().microsecondsSinceEpoch;
-  } 
+  }
+
+  String getMobile(){
+    String? result = originData.mobile;
+    if (result == null || result == ""){
+      return "0000";
+    }else{
+      return result.split("-")[2];
+    }
+  }
   
   void setUserPermit(int i, bool isPermit){
     String key = "";
@@ -134,10 +142,12 @@ class UserDataController extends GetxController{
   void changeNoticeService(bool isPermit){
     originData.isNoticeService = isPermit;
     FirebaseUserRepository.updateIsNoticeService(originData.docId, isPermit);
+    myProfile(UserModel.clone(originData));
   }
   void changeNoticeMarketing(bool isPermit){
     originData.isNoticeMarketing = isPermit;
     FirebaseUserRepository.updateIsNoticeMarketing(originData.docId, isPermit);
+    myProfile(UserModel.clone(originData));
   }
 
   void setBasic(String nickname, String email, List<String?> selecteds){

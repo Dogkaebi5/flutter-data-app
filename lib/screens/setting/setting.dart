@@ -1,13 +1,12 @@
+import 'package:data_project/firestoremodel/profile_controller.dart';
 import 'package:data_project/password_dialog.dart';
-import 'package:data_project/provider/setting_provider.dart';
 import 'package:data_project/screens/setting/data/data_setting.dart';
 import 'package:data_project/screens/setting/del_user_dialog.dart';
 import 'package:data_project/screens/setting/set_password.dart';
 import 'package:data_project/screens/webview/webview.dart';
 import 'package:data_project/widgets/widget_style.dart';
 import 'package:flutter/material.dart';
-
-import 'package:provider/provider.dart';
+import 'package:get/get.dart';
 
 class SettingScreen extends StatefulWidget {
   const SettingScreen({super.key});
@@ -17,17 +16,18 @@ class SettingScreen extends StatefulWidget {
 }
 
 class _SettingScreenState extends State<SettingScreen> {
+  final UserDataController ctrl = Get.put(UserDataController()); 
   bool isServiceNotice = false;
   bool isMarketNotice = false;
   String mobile = "";
 
   void changeServiceNoticePermit(){
     setState(() => isServiceNotice = !isServiceNotice);
-    context.read<SettingProvider>().setNoticeService(isServiceNotice);
+    ctrl.changeNoticeService(isServiceNotice);
   }
   void changeMarketingNoticePermit(){
     setState(() => isMarketNotice = !isMarketNotice);
-    context.read<SettingProvider>().setNoticeMarket(isMarketNotice);
+    ctrl.changeNoticeMarketing(isMarketNotice);
   }
   void moveToData(){
     Navigator.push(context,
@@ -35,8 +35,7 @@ class _SettingScreenState extends State<SettingScreen> {
     );
   }
   void moveToSetPassword(){
-    nav() => Navigator.push(context,
-      MaterialPageRoute(builder: (context) => const SetPasswordScreen()));
+    nav() => Navigator.push(context, MaterialPageRoute(builder: (context) => const SetPasswordScreen()));
     passwordDialog(context, nav);
   }
   void moveToTextWebview(){navPush(context, Webview());}
@@ -45,14 +44,13 @@ class _SettingScreenState extends State<SettingScreen> {
     return InkWell(
       onTap: () => navigator(),
       child: Container(
-        margin: const EdgeInsets.only(top:1),
         height: 60,
+        margin: const EdgeInsets.only(top:1),
         padding: const EdgeInsets.symmetric(horizontal: 20),
         color: const Color.fromRGBO(255, 255, 255, 1),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(title, style: fontSmallTitle ),
+            Text(title, style: fontSmallTitle),
             const SizedBox(width: 8,),
             if(infoText != null)
               Text(infoText, style: const TextStyle(color: Colors.black54)),
@@ -63,23 +61,14 @@ class _SettingScreenState extends State<SettingScreen> {
   }
 
   StatefulBuilder setSwitch(String title, bool isOn, callback){
-    return StatefulBuilder(
-      builder: (BuildContext context, StateSetter setState){
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            InkWell(child: Text(title, style: fontSmallTitle),
-              onTap: () => setState((){
-                isOn = !isOn; callback();
-              }),
-            ),
-            Switch(
-              value: isOn, 
-              onChanged: (value) => setState((){
-                isOn = value; callback();
-              }),
-            )
-        ]);
+    return StatefulBuilder(builder: (BuildContext context, StateSetter setState){
+      return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          InkWell(child: Text(title, style: fontSmallTitle),
+            onTap: () => setState((){isOn = !isOn; callback();})),
+          Switch(value: isOn, 
+            onChanged: (value) => setState((){isOn = value; callback();}))
+      ]);
     });
   }
   
@@ -87,107 +76,72 @@ class _SettingScreenState extends State<SettingScreen> {
   void initState(){
     super.initState();
     setState(() {
-      isServiceNotice = context.read<SettingProvider>().isNotice[0];
-      isMarketNotice = context.read<SettingProvider>().isNotice[1];
-      mobile = context.read<SettingProvider>().mobile;
+      isServiceNotice = ctrl.myProfile().isNoticeService!;
+      isMarketNotice = ctrl.myProfile().isNoticeMarketing!;
+      mobile = ctrl.getMobile();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 240, 240, 240),
       appBar: AppBar(title: const Text('설정'),
-        shadowColor: const Color.fromARGB(0, 0, 0, 0),
-      ),
+        shadowColor: const Color.fromARGB(0, 0, 0, 0)),
       body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: .4,),
-            InkWell(
-              onTap: () => passwordDialog(context, moveToData),
+            const SizedBox(height: .4),
+            InkWell( onTap: () => passwordDialog(context, moveToData),
               child: Container(
                 padding: const EdgeInsets.symmetric(vertical: 56, horizontal: 24),
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: const [Colors.deepPurple, Color.fromRGBO(149, 117, 205, 1)],
                     begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                  boxShadow: [greyShadow],
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
-                    Row(
-                      children: [
-                        Icon(Icons.account_circle_outlined,
-                          size: 40,
-                          color: Colors.white,
-                        ),
-                        SizedBox(width: 12,),
-                        Column(
-                          children: [
-                            Text("데이터 설정",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                            ),),
-                            Text("데이터 수정하기", style: TextStyle(color: Color.fromRGBO(237, 231, 246, 1)))
-                        ]),
-                    ]),
-                    Icon(Icons.arrow_forward_ios,color: Colors.white,
-                    ),
-                  ]
-            ))),
+                    end: Alignment.bottomRight),
+                  boxShadow: [greyShadow]),
+                child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,children: const [
+                  Row(children: [
+                    Icon(Icons.account_circle_outlined,
+                      size: 40, color: Colors.white),
+                    SizedBox(width: 12,),
+                    Column(children: [
+                      Text("데이터 설정", style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
+                      Text("데이터 수정하기", style: TextStyle(color: Color.fromRGBO(237, 231, 246, 1))) ]),
+                  ]),
+                  Icon(Icons.arrow_forward_ios,color: Colors.white)
+                ])
+            )),
             const SizedBox(height: 20),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+            Container(padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
               color: const Color.fromRGBO(255, 255, 255, 1),
-              child: Column(
-                children: [
-                  setSwitch("서비스 알림 설정", 
-                    isServiceNotice, 
-                    changeServiceNoticePermit),
-                  setSwitch("마케팅 알림 설정", 
-                    isMarketNotice, 
-                    changeMarketingNoticePermit),
+              child: Column(children:[
+                setSwitch("서비스 알림 설정", isServiceNotice, changeServiceNoticePermit),
+                setSwitch("마케팅 알림 설정", isMarketNotice, changeMarketingNoticePermit),
               ]),
             ),
             setLinkCard("비밀번호 설정", moveToSetPassword, null),
             setLinkCard("휴대폰 변경 설정", moveToTextWebview, "010-****-$mobile"),
             const SizedBox(height: 20),
-            Padding(
-              padding: const EdgeInsets.only(left: 12),
+            Padding(padding: const EdgeInsets.only(left: 12),
               child: TextButton(
                 onPressed: () => navPush(context, Webview()),
-                child: Text('이용약관')
-              ),
+                child: Text('이용약관')),
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 12),
+            Padding(padding: const EdgeInsets.only(left: 12),
               child: TextButton(
                 onPressed: () => navPush(context, Webview()),
-                child: Text('고객센터')
-              ),
+                child: Text('고객센터')),
             ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 16,horizontal: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
-                  Text('버전 정보'),
-                  Text('최신 1.0.0'),
-                ],
-              ),
+            Padding(padding: EdgeInsets.symmetric(vertical: 16,horizontal: 20),
+              child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: const [Text('버전 정보'), Text('최신 1.0.0')]),
             ),
             const SizedBox(height: 12,),
-            Center(child: OutlinedButton(onPressed: (){
-              deleteUserDialog(context);
-            }, child: const Text('회원탈퇴')))
+            Center(child: OutlinedButton(
+              onPressed: () => deleteUserDialog(context),
+              child: const Text('회원탈퇴')))
           ],
         ),
       ),

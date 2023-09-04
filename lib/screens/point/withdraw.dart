@@ -19,12 +19,11 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
   int fee = 1000;
   int tax = 0;
   int amount = 0;
-  final TextEditingController _controller = TextEditingController();
 
+  final TextEditingController _controller = TextEditingController();
   bool isHasAcc = false;
   String? bank;
   String? account;
-
 
   int calculateFee(int? point) => (point != null && point < 10000 ) ? 1000 : 0;
   int calculateTax(int? point) => (point != null) ? (point * 0.033).floor() : 0;
@@ -39,15 +38,13 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
     Navigator.pop(context);
   }
 
-
-
   @override
   void initState() {
     super.initState();
     setState(() {
       bank = ctrl.myProfile().bankName;
       account = ctrl.myProfile().bankAccount;
-      isHasAcc = (account != null) ? true : false;
+      isHasAcc = (account != null);
     });
   }
 
@@ -73,9 +70,9 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
                 final List? data = await navPush(context, BankDataScreen());
                 if (data != null) {
                   setState((){
-                    isHasAcc = data[0];
                     bank = data[1];
                     account = data[2];
+                    isHasAcc = true;
                   });
                 }
               },

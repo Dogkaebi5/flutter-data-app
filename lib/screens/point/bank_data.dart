@@ -1,10 +1,8 @@
 import 'package:data_project/firestoremodel/profile_controller.dart';
-import 'package:data_project/provider/setting_provider.dart';
 import 'package:data_project/widgets/widget_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
 
 const List<String> bankList = ['국민은행', '하나은행', '신한은행', '우리은행', '농협은행', '기업은행', '산업은행', '제일은행', '카카오뱅크', '케이뱅크', '토스뱅크'];
 
@@ -21,15 +19,15 @@ class _BankDataScreenState extends State<BankDataScreen> {
   List bankData = List.empty(growable: true);
   String? bank;
   String? acc;
-  
   String? newBank;
 
   @override
   void initState() {
     super.initState();
     setState(() {
-      isHasAcc = context.read<SettingProvider>().isHasAcc;
-      bankData = context.read<SettingProvider>().bankData;
+      bank = ctrl.myProfile().bankName;
+      acc = ctrl.myProfile().bankAccount;
+      isHasAcc = (acc != null);
     });
   }
 
@@ -62,15 +60,13 @@ class _BankDataScreenState extends State<BankDataScreen> {
               ),
               child: 
                 isHasAcc?
-                Text("현재 등록계좌 :\n${bankData[1]}  ${bankData[2]}")
+                Text("현재 등록계좌 :\n$bank  $acc}")
                 :const Text("현재 등록계좌 :\n없음")
               ),
             
             OutlinedButton(
               style: FilledButton.styleFrom(
-                backgroundColor: Colors.white,
-                minimumSize: Size(double.infinity, 64)
-              ),
+                backgroundColor: Colors.white, minimumSize: Size(double.infinity, 64)),
               onPressed: () async {
                 newBank = await bankListDialog();
                 if(newBank != null){
@@ -107,8 +103,8 @@ class _BankDataScreenState extends State<BankDataScreen> {
               onPressed: (bank != null && acc!= null)
                 ?() {
                   setState(() => isHasAcc = true);
-                  context.read<SettingProvider>().setBank(bank, acc);
-                  Navigator.pop(context, [true, bank, acc]);
+                  ctrl.setBank(bank!, acc!);
+                  Navigator.pop(context, [bank, acc]);
                 }
                 :null, 
               child: const Text('계좌등록')),

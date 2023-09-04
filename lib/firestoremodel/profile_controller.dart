@@ -359,6 +359,13 @@ class UserDataController extends GetxController{
     myProfile(UserModel.clone(originData));
   }
   
+  void setBank(String bank, String acc){
+    originData.bankName = bank;
+    originData.bankAccount = acc;
+    FirebaseUserRepository.updateBank(originData.docId, bank, acc);
+    myProfile(UserModel.clone(originData));
+  }
+
   getDetailId(typenum) async{
     int nowId = 0;
     switch (typenum) {

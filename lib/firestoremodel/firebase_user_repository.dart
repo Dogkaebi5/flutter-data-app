@@ -124,6 +124,12 @@ class FirebaseUserRepository {
     CollectionReference users = FirebaseFirestore.instance.collection("users");
     users.doc(docId).update({"point": newPoint});
   }
+
+  static void updateBank(String? docId, String bank, String acc){
+    CollectionReference users = FirebaseFirestore.instance.collection("users");
+    users.doc(docId).update({"bank_name": bank, "bank_account": acc});
+  }
+
   static Future<int> getDetailId(key)async{
     CollectionReference details = FirebaseFirestore.instance.collection("details");
     Map data = await details.doc("ids").get().then((doc) => doc.data() as Map);

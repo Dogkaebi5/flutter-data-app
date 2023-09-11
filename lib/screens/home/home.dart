@@ -12,7 +12,6 @@ import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({super.key});
-
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
@@ -35,9 +34,12 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
   void setOneMonth(){
+    DateTime monthAgo = today.subtract(Duration(days:30));
     setState((){
       sortSelections = [true, false];
-      sortStartDate = today.subtract(Duration(days:30)).toString().split(' ')[0];
+      (signUpDate.isAfter(monthAgo))
+        ?sortStartDate = today.subtract(Duration(days:30)).toString().split(' ')[0]
+        :sortStartDate = signUpDate.toString().split(' ')[0];
       sortEndDate =  today.toString().split(' ')[0];
     });
   }
@@ -50,6 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
         today.subtract(Duration(days:30)).toString().split(' ')[0],
         today.toString().split(' ')[0]);
     });
+    signUpDate = controller.myProfile().createdTime!;
     hasNewNotice = controller.hasNewNotice;
   }
 

@@ -1,24 +1,16 @@
 import 'package:data_project/widgets/widget_style.dart';
 import 'package:flutter/material.dart';
 
-const List tradeDetailTitleTexts = ["타이틀", "거래ID", "거래종류", "거래일시", "포인트 변화", "구매자", "구매내역"];
-const List withDrawDetailTitleTexts = ["타이틀", "거래ID", "거래종류", "거래일시", "포인트 변화", "출금신청 포인트", "출금 수수료", "사업소득세", "출금예정 금액", "출금계좌", "출금상태"];
-
 detailDialog(context, Map detail) { 
-  return showDialog(
-    context: context,
-    builder: (BuildContext context) => Dialog.fullscreen(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+  return showDialog(context: context,
+    builder: (BuildContext context) => 
+      Dialog.fullscreen(child: Column(crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           IconButton(
             onPressed: () => Navigator.pop(context), 
-            icon: const Icon(Icons.close)
-          ),
-          Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            icon: const Icon(Icons.close)),
+          Padding(padding: const EdgeInsets.all(20),
+            child: Column(crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(detail["title"], style: fontSmallTitle),
                 const SizedBox(height: 15),

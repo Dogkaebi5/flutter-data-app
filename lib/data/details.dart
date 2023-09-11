@@ -1,4 +1,7 @@
 class Details {
+  static List tradeDetailTitleTexts = ["타이틀", "거래ID", "거래종류", "거래일시", "포인트 변화", "구매자", "구매내역"];
+  static List withDrawDetailTitleTexts = ["타이틀", "거래ID", "거래종류", "거래일시", "포인트 변화", "출금신청 포인트", "출금 수수료", "사업소득세", "출금예정 금액", "출금계좌", "출금상태"];
+  
   List<Map> details = [
     {"title": "데이터 판매(샘플)",
     "id": "10000",

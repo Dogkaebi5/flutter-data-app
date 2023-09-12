@@ -25,15 +25,11 @@ class _DetailCardState extends State<DetailCard> {
 
     return InkWell(
       onTap: widget.onTap,
-      child: Card(
-        margin: const EdgeInsets.all(1),
-        child: Container(
-          padding: const EdgeInsets.all(20),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: Card(margin: const EdgeInsets.all(1),
+        child: Container(padding: const EdgeInsets.all(20),
+          child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              Column(crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(widget.title, style: const TextStyle(fontWeight: FontWeight.bold)),
                   const SizedBox(height: 4,),

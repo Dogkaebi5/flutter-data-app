@@ -19,7 +19,7 @@ detailDialog(context, Map detail) {
                 Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [Text("거래종류"), Text(detail["type"])]),
                 Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [Text("거래일시"), Text(detail["date"].toDate().toString().split(' ')[0])]),
+                  children: [Text("거래일시"), Text(detail["date"].toDate().toString().split('.')[0])]),
                 const SizedBox(height: 16,),
                 const Divider(color: Colors.black54,),
                 const SizedBox(height: 16,),

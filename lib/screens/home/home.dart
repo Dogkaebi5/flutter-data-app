@@ -26,6 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
   DateTime today = DateTime.now();
   DateTime? sortStartDate;
   DateTime? sortEndDate;
+  List sortDetails = [];
 
   void setSortDate(DateTime selectStartDate, DateTime selectEndDate){
     setState((){
@@ -43,6 +44,17 @@ class _HomeScreenState extends State<HomeScreen> {
       sortEndDate =  today;
     });
   }
+  void setSortDetails(){
+    List details = controller.details;
+    sortDetails = [];
+    for (int i = 0; i < details.length; i++){
+      if(details[i]['date'].toDate().isAfter(sortStartDate) &&
+      details[i]['date'].toDate().isBefore(sortEndDate)){
+        sortDetails.add(details[i]);
+      }
+    }
+    setState(() {});
+  }
 
   @override
   void initState(){
@@ -51,6 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
       setOneMonth();
       signUpDate = controller.myProfile().createdTime!;
       hasNewNotice = controller.hasNewNotice;
+      setSortDetails();
     });
   }
 
@@ -67,7 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Padding(padding: const EdgeInsets.symmetric(vertical: 20, horizontal:24),
                 child: Column(crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    const SizedBox(height: 40,),
+                    const SizedBox(height: 40),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -78,12 +91,18 @@ class _HomeScreenState extends State<HomeScreen> {
                             const SizedBox(height: 4,),
                             Row(children: [
                               const Icon(Icons.account_balance_wallet, color: Colors.white, size: 32),
-                              const SizedBox(width: 12,),
-                                Obx(() => Text("${controller.myProfile().point ?? 0} P", 
-                                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 30))),
+                              const SizedBox(width: 12),
+                                Obx(() => 
+                                  Text("${controller.myProfile().point ?? 0} P", 
+                                  style: const TextStyle(
+                                    color: Colors.white, 
+                                    fontWeight: FontWeight.bold, 
+                                    fontSize: 30)))
                             ])
                         ]),
-                        Container(height: 40, width: 40,
+                        Container(
+                          height: 40, 
+                          width: 40,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
                             color: const Color.fromRGBO(255, 255, 255, 1),),
@@ -122,10 +141,15 @@ class _HomeScreenState extends State<HomeScreen> {
                     isSelected: sortSelections,
                     onPressed: (index){
                       setState((){
-                        sortSelections = [false, false];
-                        sortSelections[index] = !sortSelections[index];
+                      sortSelections = [false, false];
+                      sortSelections[index] = !sortSelections[index];
                       });
-                      (index == 1) ? showDatePickerDialog() : setOneMonth();
+                      if (index == 1) {
+                        showDatePickerDialog();
+                      }else{
+                        setOneMonth();
+                        setSortDetails();
+                      }
                     },              
                     children: const [
                       SizedBox(width: 120, child: Text("1개월", textAlign: TextAlign.center)),
@@ -139,19 +163,19 @@ class _HomeScreenState extends State<HomeScreen> {
                       '검색기간 : ${sortStartDate.toString().split(' ')[0]} ~ ${sortEndDate.toString().split(' ')[0]}', 
                       style: fontSmallGrey),
                   const SizedBox(height: 12,),
-                  
-                  if(controller.details.isEmpty)
+                  ////
+                  if(sortDetails.isEmpty)
                     Row(children: const[
                       SizedBox(height:30, width:24),
                       Text("기록이 없습니다."),
                     ])
                   else 
-                    for(int i = controller.details.length-1; i > -1; i--)
+                    for(int i = sortDetails.length-1; i > -1; i--)
                       DetailCard(
-                        title: controller.details[i]['title'], 
-                        date: controller.details[i]['date'].toDate(),
-                        point: controller.details[i]['point'],
-                        onTap: (){detailDialog(context, controller.details[i]);}
+                        title: sortDetails[i]['title'], 
+                        date: sortDetails[i]['date'].toDate(),
+                        point: sortDetails[i]['point'],
+                        onTap: (){detailDialog(context, sortDetails[i]);}
                       ),
                   /////////////////test btns
                   Row(mainAxisAlignment: MainAxisAlignment.center,
@@ -159,7 +183,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       TextButton(
                         onPressed: (){
                           Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) =>  AuthRouter()), ModalRoute.withName('/'));
-                          FirebaseAuth.instance.signOut();},
+                          FirebaseAuth.instance.signOut();
+                        },
                         child: const Text("/test\nlogout",style: testBtnStyle)),
                       TextButton(
                         onPressed: () async{
@@ -197,7 +222,6 @@ class _HomeScreenState extends State<HomeScreen> {
             maxDate: DateTime.now(),
             minDate: signUpDate,
             onCancel: (){
-              setOneMonth();
               Navigator.pop(context);
             },
             onSelectionChanged: (args) {
@@ -211,6 +235,7 @@ class _HomeScreenState extends State<HomeScreen> {
             },
             onSubmit: (args) {
               Navigator.pop(context);
+              setState(()=> setSortDetails());
             }
           ),
         )

@@ -9,7 +9,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return FutureBuilder(
       future: Firebase.initializeApp(),
-      builder: (context, snapshot ){
+      builder: (context, snapshot){
         if(snapshot.hasError){
           return Center(child: Text("구글 서버 연결을 실패했습니다."));
         }

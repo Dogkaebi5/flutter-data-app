@@ -1,6 +1,6 @@
-import 'package:data_project/app.dart';
 import 'package:data_project/firestoremodel/profile_controller.dart';
 import 'package:data_project/firebase_options.dart';
+import 'package:data_project/screens/start/auth_router.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
       initialBinding: BindingsBuilder(() {
         Get.lazyPut(() => UserDataController());
       }),
-      home: App()
+      home: AuthRouter()
     );
   }
 }

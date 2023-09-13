@@ -75,12 +75,10 @@ class UserDataController extends GetxController{
   authStateChanges(User? firebaseUser) async {
     if(firebaseUser != null){
       UserModel? userModel = await FirebaseUserRepository.findUserByUid(firebaseUser.uid);
-      List firebaseDetails = await FirebaseUserRepository.getDetails(firebaseUser.uid);
-      List firebaseNotices = await FirebaseUserRepository.getNotices(firebaseUser.uid);
       if (userModel != null){
         originData = userModel;
-        details = firebaseDetails;
-        notices = firebaseNotices;
+        details = await FirebaseUserRepository.getDetails(firebaseUser.uid);
+        notices = await FirebaseUserRepository.getNotices(firebaseUser.uid);
         FirebaseUserRepository.updateLastLoginDate(userModel.docId, DateTime.now());
       }else{
         originData = createEmptyUser(firebaseUser);

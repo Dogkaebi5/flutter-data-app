@@ -18,16 +18,18 @@ class AuthRouter extends StatelessWidget {
     return StreamBuilder(
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (context, snapshot) {
-        if(snapshot.hasData){
+        if(!snapshot.hasData){
+          print("1: ${snapshot.data}");
+          return AppStartScreen();
+        }else {
           UserDataController().to.authStateChanges(snapshot.data);
+          print("2: ${snapshot.data}");
+          return Obx(() => (controller.myProfile().isNewUser == null)
+            ?Stack(children: const [
+              Opacity(opacity: .5, child: ModalBarrier(dismissible: false, color: Colors.black)),
+              Center(child: CircularProgressIndicator(color: Colors.deepPurple))]) 
+            :NewUserRouter());
         }
-        return 
-        (!snapshot.hasData) ? AppStartScreen() : 
-        Obx(() => (controller.myProfile().isNewUser == null) ?
-          Stack(children: const [
-            Opacity(opacity: .5, child: ModalBarrier(dismissible: false, color: Colors.black)),
-            Center(child: CircularProgressIndicator(color: Colors.deepPurple))]) 
-          : NewUserRouter());
       }
     );
   }  
@@ -45,7 +47,7 @@ class _NewUserRouterState extends State<NewUserRouter> {
   @override
   void initState() {
     super.initState();
-    Timer(Duration(milliseconds: 200), (){
+    Timer(Duration(milliseconds: 1000), (){
       (controller.myProfile().isNewUser!) 
       ? navPush(context, TermsScreen())
       : navPush(context, HomeScreen());

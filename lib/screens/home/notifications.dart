@@ -54,8 +54,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                   borderRadius: BorderRadius.circular(50),
                   boxShadow: [greyShadow],
                 ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                child: Row(crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Icon(Icons.notifications_on,
                       size: 28,
@@ -79,8 +78,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
               ),
             ),
             if (ctrl.notices.isEmpty)
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+              Padding(padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
                 child: const Align(
                   alignment: Alignment.topLeft,
                   child: Text("알림이 없습니다.")))

@@ -49,8 +49,7 @@ class _PermissionScreenState extends State<PermissionScreen> {
           child: Column(crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               for (int i = 0; i < necessaryDataTexts.length; i++)
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(necessaryDataTexts[i], style: TextStyle(color: Colors.black87, fontSize: 16)),
                     const SizedBox(height: 36, width: 40,

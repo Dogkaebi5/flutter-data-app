@@ -32,91 +32,88 @@ class _SetPasswordScreen extends State<SetPasswordScreen> {
         child: PageView(
           controller: _pageViewController,
           children: [
-            Column(
-              children:[
-                const SizedBox(height: 224,),
-                const Text("새로운 비밀번호", style: fontSmallTitle),
-                const SizedBox(height: 8,),
-                const Text("숫자 4자리을 입력하세요"),
-                const SizedBox(height: 8,),
-                IconButton(
-                  onPressed: () => setState(() => _isVisibilityNew = !_isVisibilityNew),
-                  icon: _isVisibilityNew ? const Icon(Icons.visibility) : const Icon(Icons.visibility_off),
-                  color: _isVisibilityNew ? const Color.fromRGBO(186, 104, 200, 1) : const Color.fromRGBO(158, 158, 158, 1) ,
-                ),
-                const SizedBox(height: 20,),
-                Pinput(
-                  defaultPinTheme: defaultPin,
-                  focusedPinTheme: focusedPin,
-                  submittedPinTheme: submittedPin,
-                  autofocus : true,
-                  obscureText : _isVisibilityNew? false :true,
-                  obscuringCharacter: "⁕",
-                  onChanged: (value)=> setState(()=> _newPassword = value),
-                  onCompleted: (value){
-                    _pageViewController.nextPage(
-                      duration: const Duration(milliseconds: 300), 
-                      curve: Curves.linear,
-                  );}
-            ),],),
+            Column(children:[
+              const SizedBox(height: 224,),
+              const Text("새로운 비밀번호", style: fontSmallTitle),
+              const SizedBox(height: 8,),
+              const Text("숫자 4자리을 입력하세요"),
+              const SizedBox(height: 8,),
+              IconButton(
+                onPressed: () => setState(() => _isVisibilityNew = !_isVisibilityNew),
+                icon: _isVisibilityNew ? const Icon(Icons.visibility) : const Icon(Icons.visibility_off),
+                color: _isVisibilityNew ? const Color.fromRGBO(186, 104, 200, 1) : const Color.fromRGBO(158, 158, 158, 1) ,
+              ),
+              const SizedBox(height: 20,),
+              Pinput(
+                defaultPinTheme: defaultPin,
+                focusedPinTheme: focusedPin,
+                submittedPinTheme: submittedPin,
+                autofocus : true,
+                obscureText : _isVisibilityNew? false :true,
+                obscuringCharacter: "⁕",
+                onChanged: (value)=> setState(()=> _newPassword = value),
+                onCompleted: (value){
+                  _pageViewController.nextPage(
+                    duration: const Duration(milliseconds: 300), 
+                    curve: Curves.linear,
+                );}
+              )
+            ]),
 
-            Column(
-              children:[
-                Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: GestureDetector(
-                      onTap: (){ 
-                        _pageViewController.previousPage(
-                          duration: const Duration(milliseconds: 300), 
-                          curve: Curves.linear,);
-                      },
-                      child: const Icon(Icons.arrow_back),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 160,),
-                const Text("비밀번호 다시 확인", style: fontSmallTitle),
-                const SizedBox(height: 8,),
-                const Text("입력한 비밀번호를 다시 입력해주세요"),
-                const SizedBox(height: 8,),
-                IconButton(
-                  onPressed: () => setState(() => _isVisibilityCheck = !_isVisibilityCheck),
-                  icon: _isVisibilityCheck ? const Icon(Icons.visibility) : const Icon(Icons.visibility_off),
-                  color: _isVisibilityCheck ? const Color.fromRGBO(186, 104, 200, 1) : const Color.fromRGBO(158, 158, 158, 1) ,
-                ),
-                const SizedBox(height: 20 ,),
-                Pinput(
-                  defaultPinTheme: defaultPin,
-                  focusedPinTheme: focusedPin,
-                  submittedPinTheme: submittedPin,
-                  autofocus : true,
-                  obscureText : _isVisibilityCheck? false :true,
-                  obscuringCharacter: "⁕",
-                  onChanged: (value)=> setState(()=> _checkNewPassword = value),
-                  onCompleted: (value){
-                    if(_newPassword == _checkNewPassword){
-                      controller.setNewPassword(_newPassword);
-                      if (controller.myProfile().isNewUser ?? true) {
-                        navPush(context, BasicDataScreen());
-                      }else {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(builder: (context) => HomeScreen()),
-                        );
-                      }
-                    }else{
-                      setState(()=> isCorrectPassword = false);
+            Column(children:[
+              Padding(padding: const EdgeInsets.all(20.0),
+                child: Align(alignment: Alignment.topLeft,
+                  child: GestureDetector(
+                    onTap: (){ 
+                      _pageViewController.previousPage(
+                        duration: const Duration(milliseconds: 300), 
+                        curve: Curves.linear,);
+                    },
+                    child: const Icon(Icons.arrow_back),
+                  )
+                )
+              ),
+              const SizedBox(height: 160,),
+              const Text("비밀번호 다시 확인", style: fontSmallTitle),
+              const SizedBox(height: 8,),
+              const Text("입력한 비밀번호를 다시 입력해주세요"),
+              const SizedBox(height: 8,),
+              IconButton(
+                onPressed: () => setState(() => _isVisibilityCheck = !_isVisibilityCheck),
+                icon: _isVisibilityCheck ? const Icon(Icons.visibility) : const Icon(Icons.visibility_off),
+                color: _isVisibilityCheck ? const Color.fromRGBO(186, 104, 200, 1) : const Color.fromRGBO(158, 158, 158, 1) ,
+              ),
+              const SizedBox(height: 20 ,),
+              Pinput(
+                defaultPinTheme: defaultPin,
+                focusedPinTheme: focusedPin,
+                submittedPinTheme: submittedPin,
+                autofocus : true,
+                obscureText : _isVisibilityCheck? false :true,
+                obscuringCharacter: "⁕",
+                onChanged: (value)=> setState(()=> _checkNewPassword = value),
+                onCompleted: (value){
+                  if(_newPassword == _checkNewPassword){
+                    controller.setNewPassword(_newPassword);
+                    if (controller.myProfile().isNewUser ?? true) {
+                      navPush(context, BasicDataScreen());
+                    }else {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => HomeScreen()),
+                      );
                     }
+                  }else{
+                    setState(()=> isCorrectPassword = false);
                   }
-                ),
-                const SizedBox(height: 20,),
-                if (isCorrectPassword != null || isCorrectPassword == false)
-                  const Text("비밀번호가 일치하지 않습니다", style: TextStyle(color: Colors.red)),
-            ],)
-        ],),
-        ),
-      );
+                }
+              ),
+              const SizedBox(height: 20),
+              if (isCorrectPassword != null || isCorrectPassword == false)
+                const Text("비밀번호가 일치하지 않습니다", style: TextStyle(color: Colors.red)),
+            ])
+        ])
+      )
+    );
   }
 }

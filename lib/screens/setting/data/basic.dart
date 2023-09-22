@@ -49,6 +49,8 @@ class _BasicDataScreenState extends State<BasicDataScreen> {
       userEmail = (controller.myProfile().email??controller.myProfile().gmail)!;
       selecteds = controller.getBasicSelecteds();
       dateList = controller.getBasicDateTimes();
+      print("test1: $selecteds");
+      print("test2: $dateList");
       residenceSelected = controller.myProfile().residence?.selected;
       if(residenceSelected != null){
         areaOptions = residenceMap[residenceSelected];

@@ -98,10 +98,8 @@ class _AdditionalScreenState extends State<AdditionalScreen> {
       child: Scaffold(
         body: SafeArea(
           child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20, horizontal:24),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+            child: Padding(padding: const EdgeInsets.symmetric(vertical: 20, horizontal:24),
+              child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const DataPageHeader(
                     title: "추가정보", 
@@ -145,8 +143,7 @@ class _AdditionalScreenState extends State<AdditionalScreen> {
                           onChanged: (value) =>  setState(() => newAnswersMap[userInterests[nowToggleIndex]][i] = value)
                         ),
                   ])
-                  :Column(
-                    children: const [
+                  :Column(children: const [
                       Text("선택한 관심사가 없습니다."),
                       SizedBox(height: 80,),
                     ],
@@ -180,7 +177,7 @@ class _AdditionalScreenState extends State<AdditionalScreen> {
                           }else {controller.setAnswers(newAnswersMap); router(); break;}
                         default: router(); break;
                       }
-                    }, 
+                    },
                     child: const Text('확인 저장')
                   ),
                   const SizedBox(height: 20,),

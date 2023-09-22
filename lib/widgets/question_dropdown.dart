@@ -4,13 +4,13 @@ class QuestionDropDown extends StatefulWidget {
   final bool isEnabled;
   final String question;
   final List options;
-  String? selected;
+  final String? selected;
   final onChanged;
   QuestionDropDown({
     required this.isEnabled,
     required this.question,
     required this.options,
-    required this.selected,
+    this.selected,
     required this.onChanged,
     super.key});
 
@@ -21,6 +21,7 @@ class QuestionDropDown extends StatefulWidget {
 class _QuestionDropDownState extends State<QuestionDropDown> {
   @override
   Widget build(BuildContext context) {
+    String? selected = widget.selected;
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -37,20 +38,20 @@ class _QuestionDropDownState extends State<QuestionDropDown> {
             style: const TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 14,
-            ),
+            )
           ),
           Padding(
             padding: const EdgeInsets.only(left:8, right:8),
             child: DropdownButton(
               isExpanded: true,
-              value: widget.selected,
+              value: selected,
               items: widget.options.map((e) => DropdownMenuItem(
                 enabled: widget.isEnabled,
                 value: e,
                 child: Text(e))).toList(), 
               onChanged: (value) {
-                setState(()=> widget.selected = value as String?);
-                widget.onChanged(widget.selected);
+                setState(()=> selected = value as String?);
+                widget.onChanged(selected);
               }
             ),
           ),

@@ -19,11 +19,9 @@ class AuthRouter extends StatelessWidget {
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (context, snapshot) {
         if(!snapshot.hasData){
-          print("1: ${snapshot.data}");
           return AppStartScreen();
         }else {
           UserDataController().to.authStateChanges(snapshot.data);
-          print("2: ${snapshot.data}");
           return Obx(() => (controller.myProfile().isNewUser == null)
             ?Stack(children: const [
               Opacity(opacity: .5, child: ModalBarrier(dismissible: false, color: Colors.black)),

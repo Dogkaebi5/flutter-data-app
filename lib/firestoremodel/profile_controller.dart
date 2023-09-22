@@ -167,11 +167,19 @@ class UserDataController extends GetxController{
   void setBasicData(List<String?> selecteds){
     List keys = Questions.basicDataTitles.keys.toList();
     List<DateTime?> dates = getBasicDateTimes();
-    List originSeleted = getBasicSelecteds();
     for(int i=0; i<selecteds.length; i++){
       if(isDurationSmallerThanNow(dates[i]) && selecteds[i] != null){
         FirebaseUserRepository.updateBasicData(originData.docId, keys[i], selecteds[i], true, durationDate());
-        originSeleted[i] = selecteds[i];
+        switch(i){
+          case 0 : originData.married = BasicData(selecteds[i], durationDate(), true); 
+          case 1 : originData.children = BasicData(selecteds[i], durationDate(), true); 
+          case 2 : originData.education = BasicData(selecteds[i], durationDate(), true); 
+          case 3 : originData.occupation = BasicData(selecteds[i], durationDate(), true); 
+          case 4 : originData.income = BasicData(selecteds[i], durationDate(), true); 
+          case 5 : originData.residence = BasicData(selecteds[i], durationDate(), true); 
+          case 6 : originData.area = BasicData(selecteds[i], durationDate(), true); 
+        }
+        myProfile(UserModel.clone(originData));
       }
     }
   }

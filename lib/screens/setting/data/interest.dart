@@ -52,10 +52,8 @@ class _InterestScreenState extends State<InterestScreen> {
       child: Scaffold(
         body: SafeArea(
           child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20, horizontal:24),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+            child: Padding(padding: const EdgeInsets.symmetric(vertical: 20, horizontal:24),
+              child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const DataPageHeader(
                     title: "관심사", 
@@ -74,12 +72,11 @@ class _InterestScreenState extends State<InterestScreen> {
                   Container(
                     margin: const EdgeInsets.symmetric(vertical:10),
                     width: double.infinity,
-                    child:Wrap(
-                      alignment: WrapAlignment.center,
+                    child: Wrap(alignment: WrapAlignment.center,
                       children: [
                         for(var i = 0; i < interestOptions.length; i++)
                           createInterstCard(i)
-                    ]),
+                    ])
                   ),
                   ElevatedButton(
                     style: btnStyle,
@@ -129,23 +126,19 @@ class _InterestScreenState extends State<InterestScreen> {
         child: 
         Card(
           color: (!canChange(i))
-              ? Colors.deepPurple.shade200
-              : isSelecteds[i] ? Colors.deepPurple : Colors.white,
+            ? Colors.deepPurple.shade200 : isSelecteds[i]
+            ? Colors.deepPurple : Colors.white,
           child: Center(
             child:
               isSelecteds[i] 
-                ? Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                ? Row(mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Text((interestOptions[i]), 
                       style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
                     if(canChange(i))
                       Icon(Icons.close, color: Colors.white, size: 16,),
                 ])
-                : Text(
-                interestOptions[i],
-                textAlign: TextAlign.center,
-                ),
+                : Text(interestOptions[i], textAlign: TextAlign.center),
           ),
         ),
       )

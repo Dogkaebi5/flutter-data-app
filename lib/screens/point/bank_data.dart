@@ -42,7 +42,7 @@ class _BankDataScreenState extends State<BankDataScreen> {
         title: const Text("계좌등록",
           style: TextStyle(
           color: Colors.black87,
-          ),),
+          )),
         centerTitle: true,
       ),
       body: Padding(

@@ -4,7 +4,7 @@ class TermCheckbox extends StatefulWidget {
   final String text;
   final bool isLink;
   final bool isRequired;
-  bool isChecked;
+  final bool isChecked;
   final textOnTap;
   final checkboxOnChanged;
 
@@ -24,6 +24,7 @@ class TermCheckbox extends StatefulWidget {
 class _TermCheckboxState extends State<TermCheckbox> {
   @override
   Widget build(BuildContext context) {
+    bool isChecked = widget.isChecked;
     return Row(
       children: [
         (widget.isLink)
@@ -41,9 +42,9 @@ class _TermCheckboxState extends State<TermCheckbox> {
         if (widget.isRequired) const Text(" (필수)", style: TextStyle(color: Colors.deepPurple)),
         const Spacer(),
         Checkbox(
-          value: widget.isChecked, 
+          value: isChecked, 
           onChanged: (value){
-            setState(() => widget.isChecked = value!);
+            setState(() => isChecked = value!);
             widget.checkboxOnChanged(value);
           }
         )

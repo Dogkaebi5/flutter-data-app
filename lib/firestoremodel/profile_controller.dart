@@ -10,6 +10,7 @@ class UserDataController extends GetxController{
   Rx<UserModel> myProfile = UserModel().obs;
   
   List details = [].obs;
+  List sortDetails = [].obs;
   List notices = [].obs;
   int countNewNotice = 0;
   bool hasNewNotice = false;
@@ -408,6 +409,7 @@ class UserDataController extends GetxController{
     FirebaseUserRepository.updateDetailId("details_id", id);
     details = await FirebaseUserRepository.getDetails(originData.uid);
     await testCreateSaleNotice(id);
+    update();
   }
   testCreateSaleNotice(id) async{
     Map notice = {
@@ -421,6 +423,11 @@ class UserDataController extends GetxController{
     notices = await FirebaseUserRepository.getNotices(originData.uid);
     countNewNotice++;
     hasNewNotice = true;
+    update();
+  }
+
+  setSortDetails(List newDetails){
+    sortDetails = newDetails;
     update();
   }
 

@@ -40,119 +40,103 @@ class _NotificationScreenState extends State<NotificationScreen> {
       backgroundColor: const Color.fromARGB(255, 245, 245, 245),
       appBar: AppBar(title: const Text("알림")),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            GestureDetector(
-              onTap: () => setIsNotice(),
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 300),
-                margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 40),
-                padding: EdgeInsets.symmetric(horizontal: isNoticePermit? 20 : 40),
-                height: isNoticePermit ? 60 : 100,
-                decoration: BoxDecoration(
-                  color: Colors.deepPurple.shade50,
-                  borderRadius: BorderRadius.circular(50),
-                  boxShadow: [greyShadow],
-                ),
-                child: Row(crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Icon(Icons.notifications_on,
-                      size: 28,
-                      color: isNoticePermit? Colors.deepPurple : Colors.grey,
-                    ),
-                    const SizedBox(width: 12),
-                    Text("알림설정",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                        color: isNoticePermit? Colors.black87 : Colors.black54
-                      ),
-                    ),
-                    const Spacer(),
-                    Switch(
-                      value: isNoticePermit, 
-                      onChanged: (value) => setIsNotice()
-                    )
-                  ],
-                ),
-              ),
+        child: Column(children: [
+          GestureDetector(
+            onTap: () => setIsNotice(),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 300),
+              margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 40),
+              padding: EdgeInsets.symmetric(horizontal: isNoticePermit? 20 : 40),
+              height: isNoticePermit ? 60 : 100,
+              decoration: BoxDecoration(
+                color: Colors.deepPurple.shade50,
+                borderRadius: BorderRadius.circular(50),
+                boxShadow: [greyShadow]),
+              child: Row(crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(Icons.notifications_on,
+                    size: 28, color: isNoticePermit? Colors.deepPurple : Colors.grey),
+                  const SizedBox(width: 12),
+                  Text("알림설정",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                      color: isNoticePermit? Colors.black87 : Colors.black54)),
+                  const Spacer(),
+                  Switch(
+                    value: isNoticePermit, 
+                    onChanged: (value) => setIsNotice()
+                  )
+              ]),
             ),
-            if (ctrl.notices.isEmpty)
-              Padding(padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-                child: const Align(
-                  alignment: Alignment.topLeft,
-                  child: Text("알림이 없습니다.")))
-            else
-              for(int i = ctrl.notices.length-1; i > -1; i--)
-                InkWell(
-                  onTap: (){
-                    if(ctrl.notices[i]["type"] == "tele"){
-                      notificationDialog(i);
-                    }else if (
-                    ctrl.notices[i]["type"] == "normal" || 
-                    ctrl.notices[i]["type"] == "withdraw"){
-                      int detailIndex = 0;
-                      int id = ctrl.notices[i]["id"];
-                      List details = ctrl.details;
-                      for (var detail in details) {
-                        if(detail.containsValue(id)){ break; }
-                        detailIndex++;
-                      }
-                      if (detailIndex < details.length) {
-                        detailDialog(context, details[detailIndex]);
-                      }else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: const Text("상세내역을 찾지 못했습니다."),
-                            duration: const Duration(seconds: 3), 
-                            action: SnackBarAction(
-                              label: 'Close',
-                              onPressed: (){},
-                            ),
-                          )
-                        );
-                      }
+          ),
+          if (ctrl.notices.isEmpty)
+            Padding(padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+              child: const Align(alignment: Alignment.topLeft,
+                child: Text("알림이 없습니다.")))
+          else
+            for(int i = ctrl.notices.length-1; i > -1; i--)
+              InkWell(
+                onTap: (){
+                  if(ctrl.notices[i]["type"] == "tele"){
+                    notificationDialog(i);
+                  }else if (
+                  ctrl.notices[i]["type"] == "normal" || 
+                  ctrl.notices[i]["type"] == "withdraw"){
+                    int detailIndex = 0;
+                    int id = ctrl.notices[i]["id"];
+                    List details = ctrl.details;
+                    for (var detail in details) {
+                      if(detail.containsValue(id)){ break; }
+                      detailIndex++;
                     }
-                  },
-                  child: Card(
-                    margin: const EdgeInsets.all(1),
+                    if (detailIndex < details.length) {
+                      detailDialog(context, details[detailIndex]);
+                    }else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: const Text("상세내역을 찾지 못했습니다."),
+                          duration: const Duration(seconds: 3), 
+                          action: SnackBarAction(
+                            label: 'Close',
+                            onPressed: (){},
+                          ),
+                        )
+                      );
+                    }
+                  }
+                },
+                  child: Card(margin: const EdgeInsets.all(1),
                     child: Stack(
-                      children:[Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              ctrl.notices[i]['title'], 
-                              style: const  TextStyle(fontWeight: FontWeight.bold),
-                              overflow: TextOverflow.ellipsis,
-                              textAlign: TextAlign.justify,
-                              maxLines: 1,
-                            ),
-                            const SizedBox(height: 4,),
-                            Text(
-                              ctrl.notices[i]['content'], 
-                              overflow: TextOverflow.clip,
-                              textAlign: TextAlign.justify,
-                              maxLines: 2,
-                            ),
-                            const SizedBox(height: 4,),
-                            Text(
-                              ctrl.notices[i]['date'],
-                              style: fontSmallGrey,
-                            ),
-                          ],
-                        ),
+                      children:[
+                        Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                          child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                ctrl.notices[i]['title'], 
+                                style: const  TextStyle(fontWeight: FontWeight.bold),
+                                overflow: TextOverflow.ellipsis,
+                                textAlign: TextAlign.justify,
+                                maxLines: 1),
+                              const SizedBox(height: 4),
+                              Text(
+                                ctrl.notices[i]['content'], 
+                                overflow: TextOverflow.clip,
+                                textAlign: TextAlign.justify,
+                                maxLines: 2),
+                              const SizedBox(height: 4),
+                              Text(
+                                ctrl.notices[i]['date'],
+                                style: fontSmallGrey)
+                          ]),
                       ),
                       setBadge(),
                       ]
                     ),
                   ),
                 ),
-            ElevatedButton(onPressed: (){
-              
-            }, child: Text("test"))    
           ]
         ),
       )

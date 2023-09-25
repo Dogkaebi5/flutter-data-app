@@ -45,10 +45,8 @@ class _BankDataScreenState extends State<BankDataScreen> {
           )),
         centerTitle: true,
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+      body: Padding(padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
               width: double.infinity,
@@ -56,8 +54,7 @@ class _BankDataScreenState extends State<BankDataScreen> {
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
                 color: Colors.deepPurple.shade50,
-                borderRadius: BorderRadius.circular(20)
-              ),
+                borderRadius: BorderRadius.circular(20)),
               child: 
                 isHasAcc?
                 Text("현재 등록계좌 :\n$bank  $acc}")

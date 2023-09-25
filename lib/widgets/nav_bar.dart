@@ -40,7 +40,7 @@ class _NavBarState extends State<NavBar> {
                         ),
                       ),
                     )
-                  ],) 
+                  ]) 
                   :const Icon(Icons.notifications),
                 label: "알림"
               ),

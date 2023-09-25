@@ -26,33 +26,34 @@ class _HomeScreenState extends State<HomeScreen> {
   DateTime today = DateTime.now();
   DateTime? sortStartDate;
   DateTime? sortEndDate;
-  List sortDetails = [];
+  // List sortDetails = [];
 
   void setSortDate(DateTime selectStartDate, DateTime selectEndDate){
     setState((){
-      sortStartDate = selectStartDate;
-      sortEndDate = selectEndDate;
+      sortStartDate = selectStartDate.subtract(Duration(days: 1));
+      sortEndDate = selectEndDate.add(Duration(days: 1));
     });
   }
   void setOneMonth(){
-    DateTime monthAgo = today.subtract(Duration(days:30));
+    DateTime monthAgo = today.subtract(Duration(days:31));
     setState((){
       sortSelections = [true, false];
       (signUpDate.isAfter(monthAgo))
-        ?sortStartDate = today.subtract(Duration(days:30))
+        ?sortStartDate = monthAgo
         :sortStartDate = signUpDate;
-      sortEndDate =  today;
+      sortEndDate = today;
     });
   }
   void setSortDetails(){
     List details = controller.details;
-    sortDetails = [];
+    List sortDetails = [];
     for (int i = 0; i < details.length; i++){
       if(details[i]['date'].toDate().isAfter(sortStartDate) &&
       details[i]['date'].toDate().isBefore(sortEndDate)){
         sortDetails.add(details[i]);
       }
     }
+    controller.setSortDetails(sortDetails);
     setState(() {});
   }
 
@@ -60,8 +61,8 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState(){
     super.initState();
     setState(() {
-      setOneMonth();
       signUpDate = controller.myProfile().createdTime!;
+      setOneMonth();
       hasNewNotice = controller.hasNewNotice;
       setSortDetails();
     });
@@ -92,32 +93,24 @@ class _HomeScreenState extends State<HomeScreen> {
                             Row(children: [
                               const Icon(Icons.account_balance_wallet, color: Colors.white, size: 32),
                               const SizedBox(width: 12),
-                                Obx(() => 
-                                  Text("${controller.myProfile().point ?? 0} P", 
-                                  style: const TextStyle(
-                                    color: Colors.white, 
-                                    fontWeight: FontWeight.bold, 
-                                    fontSize: 30)))
+                              Obx(() => Text("${controller.myProfile().point ?? 0} P", 
+                                style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 30)))
                             ])
                         ]),
-                        Container(
-                          height: 40, 
-                          width: 40,
+                        Container(height: 40, width: 40,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
                             color: const Color.fromRGBO(255, 255, 255, 1),),
                             child: const Icon(Icons.analytics, color: Colors.deepPurple, size: 28))
                     ]),
                     const SizedBox(height: 8),
-                    ElevatedButton(
-                      onPressed: () => navPush(context, WithdrawScreen()),
+                    ElevatedButton( onPressed: () => navPush(context, WithdrawScreen()),
                       child: const SizedBox(width: 120, height: 44,
                         child: Row(mainAxisAlignment: MainAxisAlignment.center,
                           children:[
                             Icon(Icons.toll,), SizedBox(width: 4),
                             Text("출금신청"), SizedBox(width: 8),
-                          ],
-                        ),
+                        ])
                     )),
                   ],
                 ),
@@ -127,22 +120,21 @@ class _HomeScreenState extends State<HomeScreen> {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20),),
+                    topRight: Radius.circular(20)),
                   color: const Color.fromARGB(255, 245, 245, 245),
                   boxShadow: [BoxShadow(
                     color: const Color.fromRGBO(0, 0, 0, 1).withOpacity(.6),
                     blurRadius: 6,
-                    spreadRadius: 1,
-                  )]
+                    spreadRadius: 1)]
                 ),
                 child: Column(children: [
-                  const SizedBox(height: 28,),
+                  const SizedBox(height: 28),
                   ToggleButtons(
                     isSelected: sortSelections,
                     onPressed: (index){
                       setState((){
-                      sortSelections = [false, false];
-                      sortSelections[index] = !sortSelections[index];
+                        sortSelections = [false, false];
+                        sortSelections[index] = !sortSelections[index];
                       });
                       if (index == 1) {
                         showDatePickerDialog();
@@ -150,32 +142,32 @@ class _HomeScreenState extends State<HomeScreen> {
                         setOneMonth();
                         setSortDetails();
                       }
-                    },              
+                    },
                     children: const [
                       SizedBox(width: 120, child: Text("1개월", textAlign: TextAlign.center)),
                       SizedBox(width: 120, child: Text("직접입력", textAlign: TextAlign.center)),
                     ],
                   ),
                   const SizedBox(height: 8),
-                
+
                   if(sortSelections[1])
                     Text(
                       '검색기간 : ${sortStartDate.toString().split(' ')[0]} ~ ${sortEndDate.toString().split(' ')[0]}', 
                       style: fontSmallGrey),
                   const SizedBox(height: 12,),
                   ////
-                  if(sortDetails.isEmpty)
+                  if(controller.sortDetails.isEmpty)
                     Row(children: const[
                       SizedBox(height:30, width:24),
                       Text("기록이 없습니다."),
                     ])
                   else 
-                    for(int i = sortDetails.length-1; i > -1; i--)
+                    for(int i = controller.sortDetails.length-1; i > -1; i--)
                       DetailCard(
-                        title: sortDetails[i]['title'], 
-                        date: sortDetails[i]['date'].toDate(),
-                        point: sortDetails[i]['point'],
-                        onTap: (){detailDialog(context, sortDetails[i]);}
+                        title: controller.sortDetails[i]['title'], 
+                        date: controller.sortDetails[i]['date'].toDate(),
+                        point: controller.sortDetails[i]['point'],
+                        onTap: (){detailDialog(context, controller.sortDetails[i]);}
                       ),
                   /////////////////test btns
                   Row(mainAxisAlignment: MainAxisAlignment.center,
@@ -190,7 +182,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         onPressed: () async{
                           controller.pointCtrl(10000);
                           await controller.testCreateDetail();
-                          setState((){});
+                          setState(() => setSortDetails());
                         },
                         child: const Text("/test\n+point",style: testBtnStyle)),
                       TextButton(
@@ -215,13 +207,13 @@ class _HomeScreenState extends State<HomeScreen> {
       context: context, 
       builder: (BuildContext context) => StatefulBuilder(
         builder: (BuildContext context, StateSetter setState) => Dialog(
-          child: 
-          SfDateRangePicker(
+          child: SfDateRangePicker(
             selectionMode: DateRangePickerSelectionMode.range,
             showActionButtons: true,
             maxDate: DateTime.now(),
             minDate: signUpDate,
             onCancel: (){
+              setOneMonth();
               Navigator.pop(context);
             },
             onSelectionChanged: (args) {

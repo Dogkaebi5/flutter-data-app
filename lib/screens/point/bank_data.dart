@@ -98,7 +98,7 @@ class _BankDataScreenState extends State<BankDataScreen> {
             ElevatedButton(
               style: btnStyle,
               onPressed: (bank != null && acc!= null)
-                ?() {
+                ?(){
                   setState(() => isHasAcc = true);
                   ctrl.setBank(bank!, acc!);
                   Navigator.pop(context, [bank, acc]);

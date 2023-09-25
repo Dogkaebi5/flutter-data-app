@@ -104,7 +104,11 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: const Icon(Icons.analytics, color: Colors.deepPurple, size: 28))
                     ]),
                     const SizedBox(height: 8),
-                    ElevatedButton( onPressed: () => navPush(context, WithdrawScreen()),
+                    ElevatedButton( 
+                      onPressed: () async{
+                        final a = await navPush(context, WithdrawScreen());
+                        setState(() => setSortDetails());
+                      },
                       child: const SizedBox(width: 120, height: 44,
                         child: Row(mainAxisAlignment: MainAxisAlignment.center,
                           children:[

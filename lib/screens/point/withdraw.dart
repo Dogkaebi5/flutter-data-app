@@ -33,8 +33,8 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
     return (val > 0) ? val : 0; 
   }
 
-  void withdraw(){
-    ctrl.withdraw(inputPoint, fee, tax);
+  void withdraw() async{
+    await ctrl.withdraw(inputPoint, fee, tax);
     Navigator.pop(context);
   }
 
@@ -50,20 +50,16 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 240, 240, 240),
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Colors.black87),
         backgroundColor: const Color.fromARGB(255, 240, 240, 240),
         shadowColor: const Color.fromARGB(0, 0, 0, 0),
-        title: const Text("출금신청", style: TextStyle(color: Colors.black87,),),
-        centerTitle: true,
-      ), 
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 28),
-        child: Column(
-          children: [
+        title: const Text("출금신청", style: TextStyle(color: Colors.black87)),
+        centerTitle: true), 
+      body: Padding(padding: const EdgeInsets.symmetric(horizontal: 28),
+        child: Column(children: [
             const SizedBox(height: 30),
             InkWell(
               onTap: () async{

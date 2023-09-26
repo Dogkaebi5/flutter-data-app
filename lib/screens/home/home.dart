@@ -26,7 +26,6 @@ class _HomeScreenState extends State<HomeScreen> {
   DateTime today = DateTime.now();
   DateTime? sortStartDate;
   DateTime? sortEndDate;
-  // List sortDetails = [];
 
   void setSortDate(DateTime selectStartDate, DateTime selectEndDate){
     setState((){
@@ -41,20 +40,21 @@ class _HomeScreenState extends State<HomeScreen> {
       (signUpDate.isAfter(monthAgo))
         ?sortStartDate = monthAgo
         :sortStartDate = signUpDate;
-      sortEndDate = today;
+      sortEndDate = today.add(Duration(days: 1));
     });
   }
   void setSortDetails(){
     List details = controller.details;
     List sortDetails = [];
-    for (int i = 0; i < details.length; i++){
-      if(details[i]['date'].toDate().isAfter(sortStartDate) &&
-      details[i]['date'].toDate().isBefore(sortEndDate)){
-        sortDetails.add(details[i]);
+    setState(() {
+      for (int i = 0; i < details.length; i++){
+        if(details[i]['date'].toDate().isAfter(sortStartDate) &&
+        details[i]['date'].toDate().isBefore(sortEndDate)){
+          sortDetails.add(details[i]);
+        }
       }
-    }
+    });
     controller.setSortDetails(sortDetails);
-    setState(() {});
   }
 
   @override
@@ -158,8 +158,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     Text(
                       '검색기간 : ${sortStartDate.toString().split(' ')[0]} ~ ${sortEndDate.toString().split(' ')[0]}', 
                       style: fontSmallGrey),
-                  const SizedBox(height: 12,),
-                  ////
+                  const SizedBox(height: 12),
                   if(controller.sortDetails.isEmpty)
                     Row(children: const[
                       SizedBox(height:30, width:24),
@@ -186,7 +185,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         onPressed: () async{
                           controller.pointCtrl(10000);
                           await controller.testCreateDetail();
-                          setState(() => setSortDetails());
+                          setSortDetails();
                         },
                         child: const Text("/test\n+point",style: testBtnStyle)),
                       TextButton(

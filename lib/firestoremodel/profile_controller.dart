@@ -435,6 +435,7 @@ class UserDataController extends GetxController{
     pointCtrl(-point);
     await createWithdrawDetail(point, fee, tax);
   }
+
   createWithdrawDetail(point, fee, tax)async{
     int id = await getDetailId(3);
     int amount = point - fee - tax;

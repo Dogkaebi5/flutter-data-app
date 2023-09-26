@@ -106,7 +106,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     const SizedBox(height: 8),
                     ElevatedButton( 
                       onPressed: () async{
-                        final a = await navPush(context, WithdrawScreen());
+                        await navPush(context, WithdrawScreen());
                         setState(() => setSortDetails());
                       },
                       child: const SizedBox(width: 120, height: 44,

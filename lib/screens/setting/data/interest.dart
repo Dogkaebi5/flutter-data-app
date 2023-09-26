@@ -33,9 +33,11 @@ class _InterestScreenState extends State<InterestScreen> {
     });
   }
 
-  bool canChange(i){
+  bool checkCanChange(i){
     List dates = controller.createInterestDatesMap().values.toList();
-    if (!originSelecteds.contains(interestOptions[i])){
+    if(originSelecteds.isEmpty){
+      return true;
+    }else if (!originSelecteds.contains(interestOptions[i])){
       return true;
     }else if (controller.isDurationSmallerThanNow(dates[i])){
       return true;
@@ -60,17 +62,13 @@ class _InterestScreenState extends State<InterestScreen> {
                     description: "관심사를 최대 3개 선택하세요.\n선택된 정보는 3개월간 수정 불가합니다.", 
                     icon: Icons.interests),
                   const SizedBox(height: 8),
-                  Container(
-                    padding: const EdgeInsets.all(12),
+                  Container(padding: const EdgeInsets.all(12),
                     height: 108,
                     decoration: BoxDecoration(
                       color: const Color.fromRGBO(237, 231, 246, 1),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: createInterestListText(),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.symmetric(vertical:10),
+                      borderRadius: BorderRadius.circular(10)),
+                    child: createInterestListText()),
+                  Container(margin: const EdgeInsets.symmetric(vertical:10),
                     width: double.infinity,
                     child: Wrap(alignment: WrapAlignment.center,
                       children: [
@@ -100,8 +98,9 @@ class _InterestScreenState extends State<InterestScreen> {
   }
 
   createInterstCard(i){
+    bool canChange = checkCanChange(i);
     return InkWell(
-      onTap: (!canChange(i))
+      onTap: (!canChange)
         ? (){}
         : (){
           setState(() {
@@ -123,22 +122,20 @@ class _InterestScreenState extends State<InterestScreen> {
         width: (MediaQuery.of(context).size.width > 360)
           ? MediaQuery.of(context).size.width/3 - 18
           : MediaQuery.of(context).size.width/2 - 26,
-        child: 
-        Card(
-          color: (!canChange(i))
+        child: Card(
+          color: (!canChange)
             ? Colors.deepPurple.shade200 : isSelecteds[i]
             ? Colors.deepPurple : Colors.white,
-          child: Center(
-            child:
-              isSelecteds[i] 
-                ? Row(mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Text((interestOptions[i]), 
-                      style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
-                    if(canChange(i))
-                      Icon(Icons.close, color: Colors.white, size: 16,),
-                ])
-                : Text(interestOptions[i], textAlign: TextAlign.center),
+          child: Center(child:
+            isSelecteds[i] 
+              ? Row(mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Text((interestOptions[i]), 
+                    style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+                  if(canChange)
+                    Icon(Icons.close, color: Colors.white, size: 16)
+              ])
+              : Text(interestOptions[i], textAlign: TextAlign.center),
           ),
         ),
       )
@@ -150,15 +147,14 @@ class _InterestScreenState extends State<InterestScreen> {
       return Column(mainAxisAlignment: MainAxisAlignment.start,
         children: [
           for(var i = 0; i < newSelecteds.length; i++)
-              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(2.0),
-                    child: Text(newSelecteds[i], style: const TextStyle(color: Colors.deepPurple, fontSize: 16)),
-                  ),
-                  Text('저장 유지기간 : ~ ${newDates[i].toString().split(" ")[0]}',),
-              ],),
-        ],
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Padding(padding: const EdgeInsets.all(2.0),
+                  child: Text(newSelecteds[i], 
+                    style: const TextStyle(color: Colors.deepPurple, fontSize: 16))),
+                Text('저장 유지기간 : ~ ${newDates[i].toString().split(" ")[0]}'),
+            ])
+        ]
       );
     }
   }

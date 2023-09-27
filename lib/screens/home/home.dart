@@ -18,7 +18,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final UserDataController controller = Get.put(UserDataController());
-
   int navBarSelectedIndex = 0;
   bool hasNewNotice = false;
   List<bool> sortSelections = [true, false];
@@ -46,14 +45,13 @@ class _HomeScreenState extends State<HomeScreen> {
   void setSortDetails(){
     List details = controller.details;
     List sortDetails = [];
-    setState(() {
-      for (int i = 0; i < details.length; i++){
-        if(details[i]['date'].toDate().isAfter(sortStartDate) &&
-        details[i]['date'].toDate().isBefore(sortEndDate!.add(Duration(days: 1)))){
-          sortDetails.add(details[i]);
-        }
+    for (int i = 0; i < details.length; i++){
+      if(details[i]['date'].toDate().isAfter(sortStartDate) &&
+      details[i]['date'].toDate().isBefore(sortEndDate!.add(Duration(days: 1)))){
+        sortDetails.add(details[i]);
       }
-    });
+    }
+    setState(() {});
     controller.setSortDetails(sortDetails);
   }
 
@@ -107,7 +105,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ElevatedButton( 
                       onPressed: () async{
                         await navPush(context, WithdrawScreen());
-                        setState(() => setSortDetails());
+                        setSortDetails();
                       },
                       child: const SizedBox(width: 120, height: 44,
                         child: Row(mainAxisAlignment: MainAxisAlignment.center,
@@ -230,7 +228,7 @@ class _HomeScreenState extends State<HomeScreen> {
             },
             onSubmit: (args) {
               Navigator.pop(context);
-              setState(()=> setSortDetails());
+              setSortDetails();
             }
           ),
         )

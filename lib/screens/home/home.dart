@@ -29,8 +29,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void setSortDate(DateTime selectStartDate, DateTime selectEndDate){
     setState((){
-      sortStartDate = selectStartDate.subtract(Duration(days: 1));
-      sortEndDate = selectEndDate.add(Duration(days: 1));
+      sortStartDate = selectStartDate;
+      sortEndDate = selectEndDate;
     });
   }
   void setOneMonth(){
@@ -49,7 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       for (int i = 0; i < details.length; i++){
         if(details[i]['date'].toDate().isAfter(sortStartDate) &&
-        details[i]['date'].toDate().isBefore(sortEndDate)){
+        details[i]['date'].toDate().isBefore(sortEndDate!.add(Duration(days: 1)))){
           sortDetails.add(details[i]);
         }
       }
@@ -170,7 +170,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         title: controller.sortDetails[i]['title'], 
                         date: controller.sortDetails[i]['date'].toDate(),
                         point: controller.sortDetails[i]['point'],
-                        onTap: (){detailDialog(context, controller.sortDetails[i]);}
+                        onTap: () => detailDialog(context, controller.sortDetails[i])
                       ),
                   /////////////////test btns
                   Row(mainAxisAlignment: MainAxisAlignment.center,

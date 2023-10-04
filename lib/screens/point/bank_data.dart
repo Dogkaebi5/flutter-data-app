@@ -41,8 +41,7 @@ class _BankDataScreenState extends State<BankDataScreen> {
         shadowColor: const Color.fromARGB(0, 0, 0, 0),
         title: const Text("계좌등록",
           style: TextStyle(
-          color: Colors.black87,
-          )),
+          color: Colors.black87)),
         centerTitle: true,
       ),
       body: Padding(padding: const EdgeInsets.symmetric(horizontal: 20),

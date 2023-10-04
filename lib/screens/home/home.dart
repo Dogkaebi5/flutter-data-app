@@ -120,10 +120,10 @@ class _HomeScreenState extends State<HomeScreen> {
               Container(
                 constraints: BoxConstraints(minHeight: MediaQuery.of(context).size.height - 220),
                 decoration: BoxDecoration(
+                  color: const Color.fromARGB(255, 245, 245, 245),
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(20),
                     topRight: Radius.circular(20)),
-                  color: const Color.fromARGB(255, 245, 245, 245),
                   boxShadow: [BoxShadow(
                     color: const Color.fromRGBO(0, 0, 0, 1).withOpacity(.6),
                     blurRadius: 6,

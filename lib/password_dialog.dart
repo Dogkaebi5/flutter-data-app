@@ -17,13 +17,10 @@ passwordDialog(context, callback) {
     context: context,
     builder: (context) => StatefulBuilder(
       builder: (BuildContext context, StateSetter setState) => Dialog.fullscreen(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 24, horizontal:20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+        child: Padding(padding: const EdgeInsets.symmetric(vertical: 24, horizontal:20),
+          child: Column(crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Align(
-                alignment: Alignment.topLeft,
+              Align(alignment: Alignment.topLeft,
                 child: GestureDetector(
                   onTap: (){Navigator.pop(context);},
                   child: const Icon(Icons.close),
